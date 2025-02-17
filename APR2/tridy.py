@@ -5,9 +5,12 @@ class Pes:
         self.zvuk = zvuk
         pass
 
+    def stekej(self):
+        print(f"Pes {self.jmeno} steka {self.zvuk}")
+
 
 p1 = Pes("Azor", "haf haf")
-print(p1.zvuk)
+p1.stekej()
 p2 = Pes("Jonatán", "haf vrrr haf vrrr")
-print(p2.zvuk)
+p2.stekej()
     
