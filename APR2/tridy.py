@@ -25,12 +25,18 @@ class Pes:
     def curej(self, nakoho: str) -> None:
         print(f"Pes {self.jmeno} čůrá na {nakoho}")
 
+    def __add__(self, other):
+        if isinstance(other, Pes):
+            stenata = []
+            for istene in range(random.randint(0, 12)):
+                stenata.append(Pes("self._jmeno+other.jmeno+str(istene)", "vii"))
+            return stenata
 
 p1 = Pes("Azor", "haf haf")
 # p1.stekej()
-# p2 = Pes("Jonatán", "haf vrrr haf vrrr")
+p2 = Pes("Jonatán", "haf vrrr haf vrrr")
 # p2.stekej()
 p1.jmeno = "Rex"
 print(p1.jmeno)
 p1.jmeno = "Jonatan"
-print(p1.jmeno)
+print(p1 + p2)
