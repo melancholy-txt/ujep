@@ -8,6 +8,9 @@ class Pes:
     def stekej(self):
         print(f"Pes {self.jmeno} steka {self.zvuk}")
 
+    def curej(self, nakoho: str):
+        print(f"Pes {self.jmeno} čůrá na {nakoho}")
+
 
 p1 = Pes("Azor", "haf haf")
 p1.stekej()
