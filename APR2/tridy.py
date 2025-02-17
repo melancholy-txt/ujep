@@ -29,8 +29,11 @@ class Pes:
         if isinstance(other, Pes):
             stenata = []
             for istene in range(random.randint(0, 12)):
-                stenata.append(Pes("self._jmeno+other.jmeno+str(istene)", "vii"))
+                stenata.append(Pes(self._jmeno+other.jmeno+str(istene), "vii"))
             return stenata
+        
+    def __repr__(self):
+        return f"Jmeno: {self._jmeno} \n Zvuk: {self.zvuk} \n"
 
 p1 = Pes("Azor", "haf haf")
 # p1.stekej()
