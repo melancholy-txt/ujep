@@ -9,11 +9,15 @@ class Pes:
 
     @property
     def jmeno(self):
-        return "fuck off hafhaf"
-        # if random.choice["reknu", "nereknu"] == "nereknu":
-        #     return "haf co je ti do toho haf"
-        # else:
-        #     return self._jmeno
+        # return f"fuck off hafhaf {self._jmeno}"
+        if random.choice(["reknu", "nereknu"]) == "nereknu":
+            return "haf co je ti do toho haf"
+        else:
+            return self._jmeno
+    @jmeno.setter
+    def jmeno(self, val: str):
+        if len(val) > 4: self._jmeno = val
+
 
     def stekej(self) -> None:
         print(f"Pes {self.jmeno} steka {self.zvuk}")
@@ -26,4 +30,7 @@ p1 = Pes("Azor", "haf haf")
 # p1.stekej()
 # p2 = Pes("Jonatán", "haf vrrr haf vrrr")
 # p2.stekej()
+p1.jmeno = "Rex"
+print(p1.jmeno)
+p1.jmeno = "Jonatan"
 print(p1.jmeno)
