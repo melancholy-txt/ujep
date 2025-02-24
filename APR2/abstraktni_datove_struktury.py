@@ -1,3 +1,6 @@
+import threading
+import time
+
 class Queue:
     def __init__(self):
         self._data = []
@@ -65,6 +68,57 @@ def bbp_checker(brackets: str) -> str:
             else:
                 zasob.pop()
     return "jo mas to dobre"
+
+class Cache():
+    def __init__(self):
+        self._data = []
+
+    def enque(self, item) -> str:
+        if self.size() < 5:
+            self._data.append(item)
+            return f"{item} byl přidán"
+        else:
+            return "paměť je plná :("
+
+    def start_dequeue(self):
+        while True:
+            if not self.isEmpty():
+                print(self.dequeue())
+            time.sleep(5)
+
+    def dequeue(self) -> int:
+        threading.Timer(5, self.dequeue()).start()
+        if not self._data or self.size() == 0:
+            pass
+            # raise IndexError("dequeue from an empty queue")
+        else:
+            print(f"{self._data[0]} dequeued")
+            return self._data.pop(0)
+    
+    def front(self):
+        return self._data[0]
+    
+    def rear(self):
+        return self._data[-1]
+    
+    def isEmpty(self) -> bool:
+        return False if self.size() > 0 else True
+    
+    def size(self) -> int:
+        return len(self._data)
+
+cache = Cache()
+print(cache.enque(1))
+print(cache.enque(2))
+print(cache.enque(3))
+print(cache.enque(4))
+print(cache.enque(5))
+print(cache.enque(6))
+# cache.start_dequeue()
+
+
+
+
 
 # print(bbp_checker("([{}])"))
 # print(bbp_checker("([{])"))
