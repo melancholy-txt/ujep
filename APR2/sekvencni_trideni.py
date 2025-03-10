@@ -7,8 +7,15 @@ def bubblesort(f: list, asc=True) -> list:
                 f[i-1], f[i] = f[i], f[i-1]
                 swapped = True
         if not swapped:
-            return f
-    return f
+            if asc:
+                return f
+            else:
+                return f[::-1]
+    if asc:
+        return f
+    else:
+        return f[::-1]
+
 
 f1 = [4,2,3,1]
 f2 = [4,6,3,1,9,7,5,3]
