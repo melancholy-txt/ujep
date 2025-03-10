@@ -30,12 +30,19 @@ def selectsort(f: list, asc=True) -> list:
         f.insert(isort, f[maxindex])
         f.pop(maxindex+1)
     return f
-        
+
+def insertsort(f: list) -> list:
+    for ilock in range(len(f)-1):
+        for inum in range(0, ilock+1):
+            if f[ilock+1] > f[inum]:
+                f.insert(inum, f[ilock+1])
+                f.pop(ilock+2)
+    return f        
 
 f1 = [4,2,3,1]
 f2 = [4,6,3,1,9,7,5,2,8]
 f3 = [1,2,3,4]
-print(selectsort(f2))
+print(insertsort(f2))
 # print(bubblesort(f1))
 # print(bubblesort(f2))
 # print(bubblesort(f3))
