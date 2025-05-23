@@ -95,6 +95,7 @@ class Node:
 
     @property
     def neighbor_nodes(self) -> Iterator['Node']:
+        """Return an iterator over neighboring Node objects."""
         for id in self.neighbor_ids:
             yield self.graph.node(id)
 
