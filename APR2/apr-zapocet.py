@@ -16,23 +16,15 @@ g.add_edge("B", "C", {"weight": 2.5, "type": "critical"})
 g.add_edge("A", "D", {"weight": 0.8, "type": "optional"})
 g.add_edge("D", "C", {"weight": 1.7, "type": "fallback"})
 
-# Access and update node attribute
-print("Node A color:", g.node("A")["color"])
-g.node("A")["color"] = "darkgreen"
-
-# Access edge and modify its weight
-edge = g.node("A").to("B")
-print("Edge A→B weight:", edge["weight"])
-edge["weight"] = 1.1
-
-# Iterate through the graph
-print("\nGraph structure:")
-for node_id in g.node_ids():
-    node = g.node(node_id)
-    print(f"Node {node.id}: label={node['label']}, out_degree={node.out_degree}")
-    for neighbor_id in node.neighbor_ids:
-        edge = node.to(neighbor_id)
-        print(f"  → {neighbor_id} (weight={edge['weight']}, type={edge['type']})")
+def nodes_and_neighours(g: Graph, weights: bool = False ):   
+    for node_id in g.node_ids():
+        node = g.node(node_id)
+        print(f"Node {node.id}:")
+        for neighbor_id in node.neighbor_ids:
+            edge = node.to(neighbor_id)
+            print(f"  → {neighbor_id} (váha = {edge['weight']})") if weights else print(f"  → {neighbor_id}")
 
 print("-----------------")
-print(g.to_image())
+nodes_and_neighours(g)
+print("-----------------")
+nodes_and_neighours(g, True)

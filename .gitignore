@@ -1,5 +1,5 @@
 # VS Code configuration folder
-.vscode/
+.vscode/*
 # Python cache folders
 __pycache__/
 *.py[cod]
