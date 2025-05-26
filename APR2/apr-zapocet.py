@@ -62,7 +62,7 @@ def adjacency_matrix(g: Graph):
     for row in matrix:
         print(row, "\n")
     
-def dfs(g: Graph, node_id, dest_id, visited: set = None) -> set:
+def dfs(g: Graph, node_id, dest_id, visited: set = None, cost: int = 0) -> set:
     if visited == None:
         visited = set()
 
@@ -88,6 +88,7 @@ def bfs(g: Graph, node_id, dest_id):
     queue = [node_id]
     visited = {node_id}
     parent = {node_id: None}
+    cost = 0
 
     while queue:
         current_id = queue.pop(0)
@@ -97,9 +98,13 @@ def bfs(g: Graph, node_id, dest_id):
             while current_id is not None:
                 path.append(current_id)
                 #path.append("->")
+                if parent[current_id] is not None:
+                    current_node = g.node(current_id)
+                    edge = current_node.to(parent[current_id])
+                    cost += edge["weight"]
                 current_id = parent[current_id]
             path.reverse()
-            return path
+            return (path, cost)
         
         current_node = g.node(current_id)
         for neigh_id in current_node.neighbor_ids:
@@ -119,4 +124,4 @@ adjacency_matrix(g)
 print("-----------------")
 print(g.to_dot())
 print(dfs(g, "A", "D"))
-print(bfs(g, "A", "D"))
+print(bfs(g, "A", "H"))
