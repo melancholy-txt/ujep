@@ -86,10 +86,29 @@ def dfs(g: Graph, node_id, dest_id, visited: set = None) -> set:
 
 def bfs(g: Graph, node_id, dest_id):
     queue = [node_id]
+    visited = {node_id}
+    parent = {node_id: None}
 
     while queue:
-        current = queue.pop(0)
-    ...
+        current_id = queue.pop(0)
+
+        if current_id == dest_id:
+            path = []
+            while current_id is not None:
+                path.append(current_id)
+                #path.append("->")
+                current_id = parent[current_id]
+            path.reverse()
+            return path
+        
+        current_node = g.node(current_id)
+        for neigh_id in current_node.neighbor_ids:
+            if neigh_id not in visited:
+                visited.add(neigh_id)
+                parent[neigh_id] = current_id
+                queue.append(neigh_id)
+
+    return []
 
 print("-----------------")
 nodes_and_neighours(g)
@@ -99,4 +118,5 @@ print("-----------------")
 adjacency_matrix(g)
 print("-----------------")
 print(g.to_dot())
-print(dfs(g, "A", "H"))
+print(dfs(g, "A", "D"))
+print(bfs(g, "A", "D"))
