@@ -42,9 +42,11 @@ def adjacency_matrix(g: Graph):
             continue
         # print(i, " ", node_id)
         for j, dest_id in enumerate(g.node_ids()):
+            dest = g.node(dest_id)
+            if dest.is_edge_to(node_id):
+                matrix[i][j] = -1
             if node.is_edge_to(dest_id):
-                
-                matrix[i][j] = matrix[i][j] + 1
+                matrix[i][j] = 1
                 # matrix[i][j] = "matrix[i][j] + 1"
     for row in matrix:
         print(row, "\n")
