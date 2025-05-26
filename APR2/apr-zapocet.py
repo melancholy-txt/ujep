@@ -1,5 +1,6 @@
 #import diktyonphi as dp
 from diktyonphi import Graph, GraphType, Node
+from queue import PriorityQueue
 
 # Create a directed graph
 g = Graph(GraphType.UNDIRECTED)
@@ -15,17 +16,17 @@ g.add_node("G", {"label": "Optional", "color": "blue"})
 g.add_node("H", {"label": "Optional", "color": "blue"})
 
 # Add edges with attributes
-g.add_edge("A", "B", {"weight": 1.0, "type": "normal"})
-g.add_edge("B", "C", {"weight": 2.5, "type": "critical"})
-g.add_edge("A", "D", {"weight": 0.8, "type": "optional"})
-g.add_edge("D", "C", {"weight": 1.7, "type": "fallback"})
-g.add_edge("D", "E", {"weight": 1.7, "type": "fallback"})
-g.add_edge("E", "C", {"weight": 1.7, "type": "fallback"})
-g.add_edge("F", "C", {"weight": 1.7, "type": "fallback"})
-g.add_edge("F", "G", {"weight": 1.7, "type": "fallback"})
-g.add_edge("F", "B", {"weight": 1.7, "type": "fallback"})
-g.add_edge("F", "H", {"weight": 1.7, "type": "fallback"})
-g.add_edge("E", "H", {"weight": 1.7, "type": "fallback"})
+g.add_edge("A", "B", {"weight": 1, "type": "normal"})
+g.add_edge("B", "C", {"weight": 2, "type": "critical"})
+g.add_edge("A", "D", {"weight": 1, "type": "optional"})
+g.add_edge("D", "C", {"weight": 2, "type": "fallback"})
+g.add_edge("D", "E", {"weight": 3, "type": "fallback"})
+g.add_edge("E", "C", {"weight": 4, "type": "fallback"})
+g.add_edge("F", "C", {"weight": 5, "type": "fallback"})
+g.add_edge("F", "G", {"weight": 4, "type": "fallback"})
+g.add_edge("F", "B", {"weight": 3, "type": "fallback"})
+g.add_edge("F", "H", {"weight": 2, "type": "fallback"})
+g.add_edge("E", "H", {"weight": 6, "type": "fallback"})
 
 def nodes_and_neighours(g: Graph, weights: bool = False ):   
     for node_id in g.node_ids():
@@ -115,13 +116,41 @@ def bfs(g: Graph, node_id, dest_id):
 
     return []
 
-print("-----------------")
-nodes_and_neighours(g)
-print("-----------------")
-nodes_and_neighours(g, True)
-print("-----------------")
-adjacency_matrix(g)
-print("-----------------")
-print(g.to_dot())
-print(dfs(g, "A", "D"))
-print(bfs(g, "A", "H"))
+def dijkstra(g: Graph, start_id):
+    visited = set()
+    D = {node_id:float('inf') for node_id in g.node_ids()}
+    D[start_id] = 0
+
+    
+
+    pq = PriorityQueue()
+    pq.put((0, start_id))
+
+    while not pq.empty():
+        (dist, current_node_id) = pq.get()
+        visited.add(current_node_id)
+
+        current_node = g.node(current_node_id)
+        for neighbor_id in current_node.neighbor_ids:
+            if neighbor_id not in visited:
+                distance = current_node.to(neighbor_id)["weight"]
+                old_cost = D[neighbor_id]
+                new_cost = D[current_node_id] + distance
+                if new_cost < old_cost:
+                    pq.put((new_cost, neighbor_id))
+                    D[neighbor_id] = new_cost
+
+    return D
+
+
+# print("-----------------")
+# nodes_and_neighours(g)
+# print("-----------------")
+# nodes_and_neighours(g, True)
+# print("-----------------")
+# adjacency_matrix(g)
+# print("-----------------")
+# print(g.to_dot())
+# print(dfs(g, "A", "D"))
+# print(bfs(g, "A", "H"))
+print(dijkstra(g, "A"))
