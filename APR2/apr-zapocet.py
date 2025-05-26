@@ -2,7 +2,7 @@
 from diktyonphi import Graph, GraphType
 
 # Create a directed graph
-g = Graph(GraphType.DIRECTED)
+g = Graph(GraphType.UNDIRECTED)
 
 # Add nodes with attributes
 g.add_node("A", {"label": "Start", "color": "green"})
@@ -24,7 +24,35 @@ def nodes_and_neighours(g: Graph, weights: bool = False ):
             edge = node.to(neighbor_id)
             print(f"  → {neighbor_id} (váha = {edge['weight']})") if weights else print(f"  → {neighbor_id}")
 
+def generate_matrix(l: int):
+    matrix = []
+    for i in range(l):   
+        row = []
+        for j in range(l):
+            row.append(0)    # user input for rows
+        matrix.append(row)  # adding rows to the matrix
+    return matrix
+
+def adjacency_matrix(g: Graph):
+    matrix = generate_matrix(g.__len__())
+    for i, node_id in enumerate(g.node_ids()):
+        # print(i, " ", node_id)
+        node = g.node(node_id)
+        if node.out_degree == 0:
+            continue
+        # print(i, " ", node_id)
+        for j, dest_id in enumerate(g.node_ids()):
+            if node.is_edge_to(dest_id):
+                
+                matrix[i][j] = matrix[i][j] + 1
+                # matrix[i][j] = "matrix[i][j] + 1"
+    for row in matrix:
+        print(row, "\n")
+    ...
+
 print("-----------------")
 nodes_and_neighours(g)
 print("-----------------")
 nodes_and_neighours(g, True)
+print("-----------------")
+adjacency_matrix(g)
