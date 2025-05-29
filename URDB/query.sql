@@ -50,12 +50,14 @@ LEFT JOIN seasons AS s
     ON r.season_id = s.season_id AND s.year = 2024
 WHERE t.is_active = TRUE
 GROUP BY t.team_id
+HAVING "race_entries" > 2
 ORDER BY t.championships_won DESC;
 
 -- ######################################################################################################################
 
 -- vnořené selekty místo joinu aby jsem se vyhnul duplicitním hodnotám při COUNT
 
+CREATE OR REPLACE VIEW country_statistics AS
 SELECT 
     c.country_name,
     c.continent,
@@ -66,7 +68,9 @@ FROM countries AS c
 WHERE (SELECT COUNT(*) FROM drivers d WHERE d.country_id = c.country_id) > 0
    OR (SELECT COUNT(*) FROM team_principals tp WHERE tp.country_id = c.country_id) > 0
    OR (SELECT COUNT(*) FROM tracks t WHERE t.country_id = c.country_id) > 0
-ORDER BY c.country_name ASC
+ORDER BY c.country_name ASC;
+
+SELECT * FROM country_statistics
 
 
 
