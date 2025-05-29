@@ -1,16 +1,37 @@
+CREATE OR REPLACE VIEW active_team_drivers AS
+SELECT 
+    d.driver_id,
+    d.first_name,
+    d.last_name,
+    t.team_id,
+    t.team_name,
+    td.contract_start_date,
+    td.contract_end_date
+FROM drivers AS d
+INNER JOIN team_drivers AS td
+    ON d.driver_id = td.driver_id
+INNER JOIN teams AS t
+    ON td.team_id = t.team_id
+WHERE YEAR(td.contract_start_date) = 2024  -- Show 2024 season contracts
+
+SELECT * FROM active_team_drivers;
+
+-- ######################################################################################################################
+
+
 SELECT 
     d.first_name,                     
     d.last_name,                       
-    t.team_name,                                
+    adt.team_name,                                
     SUM(rr.points_earned) AS "total_points_earned"                 
 FROM drivers AS d                       
 INNER JOIN race_results AS rr          -- INNER JOIN: pouze jezdci s výsledky
     ON d.driver_id = rr.driver_id
-LEFT JOIN teams AS t                    -- LEFT JOIN: všechny týmy (i když nemají výsledky)
-    ON rr.team_id = t.team_id
+LEFT JOIN active_team_drivers AS adt          -- LEFT JOIN: propojení jezdce s týmem ale i bez týmu
+    ON d.driver_id = adt.driver_id 
 WHERE rr.finishing_position <= 10   -- Pouze body bodující pozice (top 10)
 GROUP BY d.driver_id
-ORDER BY "total_points_earned" DESC     
+ORDER BY SUM(rr.points_earned) DESC
 
 -- ######################################################################################################################
 
@@ -28,8 +49,8 @@ LEFT JOIN engines AS e
     ON te.engine_id = e.engine_id
 LEFT JOIN seasons AS s               
     ON te.season_id = s.season_id
-RIGHT JOIN team_principals AS tp      -- RIGHT JOIN: i neaktivní ředitelé
-    on t.principal_id = tp.principal_id
+-- RIGHT JOIN team_principals AS tp      -- RIGHT JOIN: i neaktivní ředitelé
+   -- on t.principal_id = tp.principal_id
 ORDER BY t.team_name ASC;
 
 -- ######################################################################################################################
@@ -38,19 +59,17 @@ SELECT
     t.team_name,
     t.founded_year,
     t.championships_won,
-    COUNT(rr.result_id) AS "race_entries",
+    FLOOR(COUNT(rr.result_id) / 2) AS "race_entries",
     SUM(rr.points_earned) AS "total_points_2024",
     AVG(rr.finishing_position) AS "avg_position"
 FROM teams AS t
-LEFT JOIN race_results AS rr
-    ON t.team_id = rr.team_id
-LEFT JOIN races AS r
-    ON rr.race_id = r.race_id
-LEFT JOIN seasons AS s
-    ON r.season_id = s.season_id AND s.year = 2024
+LEFT JOIN active_team_drivers AS atd  -- Connect teams to active drivers (2024)
+    ON t.team_id = atd.team_id
+LEFT JOIN race_results AS rr          -- Connect drivers to race results
+    ON atd.driver_id = rr.driver_id
 WHERE t.is_active = TRUE
 GROUP BY t.team_id
-HAVING "race_entries" > 2
+HAVING COUNT(rr.result_id) > 2
 ORDER BY t.championships_won DESC;
 
 -- ######################################################################################################################
@@ -85,20 +104,31 @@ SELECT d.first_name, d.last_name FROM race_results AS rr
 JOIN drivers AS d ON rr.driver_id = d.driver_id
 WHERE race_id = ? AND starting_position = 1;
 
--- Nejrychlejší kolo
-SELECT d.first_name, d.last_name FROM race_results AS rr
-JOIN drivers AS d ON rr.driver_id = d.driver_id
-WHERE race_id = ? AND fastest_lap_time = 
-    (SELECT MIN(fastest_lap_time) FROM race_results WHERE race_id = ?);
-
--- Leader šampionátu
+-- Leader šampionátu jezdců
 SELECT 
     driver_id, 
+    CONCAT(d.first_name, ' ', d.last_name) AS driver_name,
+    atd.team_name,
     SUM(points_earned) AS total_points 
 FROM race_results AS rr 
 JOIN races AS r ON rr.race_id = r.race_id 
+JOIN drivers AS d ON rr.driver_id = d.driver_id
+JOIN active_team_drivers AS atd ON rr.driver_id = atd.driver_id 
 WHERE r.season_id = ? 
-GROUP BY driver_id 
+GROUP BY rr.driver_id 
+ORDER BY total_points DESC;
+
+-- Leader šampionátu týmů
+SELECT 
+    atd.team_id,
+    atd.team_name,
+    SUM(points_earned) AS total_points 
+FROM race_results AS rr 
+JOIN races AS r ON rr.race_id = r.race_id 
+JOIN drivers AS d ON rr.driver_id = d.driver_id
+JOIN active_team_drivers AS atd ON rr.driver_id = atd.driver_id 
+WHERE r.season_id = ? 
+GROUP BY atd.team_id
 ORDER BY total_points DESC;
 
 
