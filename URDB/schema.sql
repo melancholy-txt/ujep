@@ -1,4 +1,3 @@
--- F1 databázové schéma s 11 tabulkami (normalizované s tabulkou countries)
 USE f1;
 
 -- 1. COUNTRIES tabulka - ukládá informace o zemích
