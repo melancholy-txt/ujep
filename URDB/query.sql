@@ -72,5 +72,33 @@ ORDER BY c.country_name ASC;
 
 SELECT * FROM country_statistics
 
+-- ######################################################################################################################
+
+
+-- Kdo vyhrál závod
+SELECT d.first_name, d.last_name FROM race_results AS rr
+JOIN drivers AS d ON rr.driver_id = d.driver_id
+WHERE race_id = ? AND finishing_position = 1;
+
+-- Pole position
+SELECT d.first_name, d.last_name FROM race_results AS rr
+JOIN drivers AS d ON rr.driver_id = d.driver_id
+WHERE race_id = ? AND starting_position = 1;
+
+-- Nejrychlejší kolo
+SELECT d.first_name, d.last_name FROM race_results AS rr
+JOIN drivers AS d ON rr.driver_id = d.driver_id
+WHERE race_id = ? AND fastest_lap_time = 
+    (SELECT MIN(fastest_lap_time) FROM race_results WHERE race_id = ?);
+
+-- Leader šampionátu
+SELECT 
+    driver_id, 
+    SUM(points_earned) AS total_points 
+FROM race_results AS rr 
+JOIN races AS r ON rr.race_id = r.race_id 
+WHERE r.season_id = ? 
+GROUP BY driver_id 
+ORDER BY total_points DESC;
 
 
