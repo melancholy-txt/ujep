@@ -94,7 +94,6 @@ CREATE TABLE `team_drivers` (
   `team_driver_id` INT PRIMARY KEY AUTO_INCREMENT,
   `team_id` INT NOT NULL,
   `driver_id` INT NOT NULL,
-  `season_id` INT NOT NULL,
   `contract_start_date` DATE,
   `contract_end_date` DATE,
   `is_reserve_driver` BOOLEAN DEFAULT false,
