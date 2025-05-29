@@ -147,7 +147,7 @@ INSERT INTO races (season_id, track_id, race_name, race_date, race_time, round_n
 (1, 24, 'Abu Dhabi Grand Prix', '2024-12-08', '17:00:00', 24, 55, 'Clear');
 
 -- 2024 Team-Driver relationships (added season_id)
-INSERT INTO team_drivers (team_id, driver_id, season_id, contract_start_date, contract_end_date, is_reserve_driver) VALUES
+INSERT INTO team_drivers (team_id, driver_id, contract_start_date, contract_end_date, is_reserve_driver) VALUES
 -- Mercedes
 (1, 6, '2024-01-01', '2024-12-31', FALSE),
 (1, 2, '2024-01-01', '2024-12-31', FALSE),

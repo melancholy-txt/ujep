@@ -147,7 +147,7 @@ CREATE TABLE `team_engines` (
 
 -- Indexes
 CREATE UNIQUE INDEX `unique_season_round` ON `races` (`season_id`, `round_number`);
-CREATE UNIQUE INDEX `unique_driver_season` ON `team_drivers` (`driver_id`, `season_id`, `is_reserve_driver`);
+CREATE UNIQUE INDEX `unique_driver_season` ON `team_drivers` (`driver_id`, `is_reserve_driver`);
 CREATE UNIQUE INDEX `unique_race_driver` ON `race_results` (`race_id`, `driver_id`);
 CREATE UNIQUE INDEX `unique_team_season_engine` ON `team_engines` (`team_id`, `season_id`);
 CREATE UNIQUE INDEX `unique_incident` ON `incidents` (`race_id`, `driver_id`, `incident_type`);
@@ -161,7 +161,6 @@ ALTER TABLE `races` ADD FOREIGN KEY (`season_id`) REFERENCES `seasons` (`season_
 ALTER TABLE `races` ADD FOREIGN KEY (`track_id`) REFERENCES `tracks` (`track_id`);
 ALTER TABLE `team_drivers` ADD FOREIGN KEY (`team_id`) REFERENCES `teams` (`team_id`);
 ALTER TABLE `team_drivers` ADD FOREIGN KEY (`driver_id`) REFERENCES `drivers` (`driver_id`);
-ALTER TABLE `team_drivers` ADD FOREIGN KEY (`season_id`) REFERENCES `seasons` (`season_id`);
 ALTER TABLE `race_results` ADD FOREIGN KEY (`race_id`) REFERENCES `races` (`race_id`);
 ALTER TABLE `race_results` ADD FOREIGN KEY (`driver_id`) REFERENCES `drivers` (`driver_id`);
 ALTER TABLE `incidents` ADD FOREIGN KEY (`race_id`) REFERENCES `races` (`race_id`);
