@@ -1,0 +1,11 @@
+-- odstraněno z tabulky races:
+`fastest_lap_time`, `fastest_lap_driver_id`, `pole_position_driver_id`, `winner_driver_id`,
+
+-- tabulka diskvalifikací a nedokončených závodů konsolidována do tabulky incidentů
+
+-- `team_id` z race_results - lze získat přes jezdce
+
+-- odstraněno z tabulky seasons:
+`drivers_championship_leader_id`,
+`constructors_championship_leader_id`
+    -- lze získat od jinud
