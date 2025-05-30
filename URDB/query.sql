@@ -69,7 +69,7 @@ LEFT JOIN race_results AS rr          -- Connect drivers to race results
     ON atd.driver_id = rr.driver_id
 WHERE t.is_active = TRUE
 GROUP BY t.team_id
-HAVING COUNT(rr.result_id) > 2
+HAVING COUNT(rr.result_id) > 1 
 ORDER BY t.championships_won DESC;
 
 -- ######################################################################################################################
