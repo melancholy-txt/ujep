@@ -29,7 +29,7 @@ INNER JOIN race_results AS rr          -- INNER JOIN: pouze jezdci s výsledky
     ON d.driver_id = rr.driver_id
 LEFT JOIN active_team_drivers AS adt          -- LEFT JOIN: propojení jezdce s týmem ale i bez týmu
     ON d.driver_id = adt.driver_id 
-WHERE rr.finishing_position <= 10   -- Pouze body bodující pozice (top 10)
+WHERE rr.finishing_position <= 10   -- Pouze bodující pozice (top 10)
 GROUP BY d.driver_id
 ORDER BY SUM(rr.points_earned) DESC
 
@@ -49,8 +49,8 @@ LEFT JOIN engines AS e
     ON te.engine_id = e.engine_id
 LEFT JOIN seasons AS s               
     ON te.season_id = s.season_id
--- RIGHT JOIN team_principals AS tp      -- RIGHT JOIN: i neaktivní ředitelé
-   -- on t.principal_id = tp.principal_id
+RIGHT JOIN team_principals AS tp      -- RIGHT JOIN: i neaktivní ředitelé
+   on t.principal_id = tp.principal_id
 ORDER BY t.team_name ASC;
 
 -- ######################################################################################################################
@@ -106,7 +106,7 @@ WHERE race_id = ? AND starting_position = 1;
 
 -- Leader šampionátu jezdců
 SELECT 
-    driver_id, 
+    d.driver_id, 
     CONCAT(d.first_name, ' ', d.last_name) AS driver_name,
     atd.team_name,
     SUM(points_earned) AS total_points 
