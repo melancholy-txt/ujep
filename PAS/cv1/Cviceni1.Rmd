@@ -1,0 +1,134 @@
+---
+title: "Pravdepodobnost a statistika"
+subtitle: "Cviceni 1"
+author: "Alena Cernikova"
+date: "2025-09-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+### Populace, reprezentativni vyber
+
+Vzhledem k jake populaci byste mohli (studenti v ucebne) tvorit reprezentativni vyber?
+  Proc jste/ nejste reprezentativni vyber vzhledem ke vsem studentum VS v CR? 
+  Ke studentum UJEP? Ke studentum informatiky UJEP? Ke studentum tretiho rocniku UJEP?
+
+Nactete si datovy soubor prij.RData
+```{r}
+load("PAS/cv1/prij.RData")
+```
+   Studijni vysledky nahodne vybranych padesati studentu, kteri v roce 2000 uspesne ukoncili 
+       prvni rocnik na katedre geografie PrF UK
+   Pro jakou populaci je tento vyber reprezentativni?
+   Muze/nemuze byt reprezentativni ke vsem studentum v CR?
+     Ke vsem studentum UK v CR? Ke vsem studentum geografie na UK v CR?
+     Ke vsem studentum v CR v roce 2000? Ke vsem studentum geografie na UK?
+
+Nactete si datovy soubor Duvera_24.RData
+```{r}
+load("Duvera_24.RData")
+```
+   Vysledky dotazniku z roku 2024 tykajici se duvery obcanu v instituce
+   Pro jakou populaci je tento vyber reprezentativni?
+
+Nactete si datovy soubor Okresy03.RData
+```{r}
+load("Okresy03.RData")
+```
+   jedna se o udaje o vsech okesech v CR v roce 2003
+   Pro jakou populaci je reprezentativni tento datovy soubor?
+
+datovy soubor airquality
+```{r}
+data("airquality")
+```
+   denni data hodnotici kvalitu ovzdusi v New Yorku v roce 1973.
+   Jak mohu zobecnit vysledky ziskane na techto datech?
+   Muzu delat zavery o koncentraci ozonu v letnich mesicich v USA?
+   Muzu zobecnovat vysledky o zavislosti koncentrace ozonu na povetrnostnich podminkach?
+
+datovy soubor esoph
+```{r}
+data("esoph")
+```
+   data z pripadove studie rakoviny jicnu z roku 1980 z Francie
+   pocty lidi s rakovinou jicnu pri ruznych kombinacich veku, konzumace alkoholu a koureni
+   jake zavery mohu zobecnit? Jak zarucit, abych mohla zobecnit? 
+
+Jak bych mela udelat vyber, kdyby me zajimal prumerny prijem obyvatel CR?
+Jak bych mela udelat vyber, kdyby me zajimalo porovnani nazoru studentu PrF UJEP a FSE UJEP.
+Jakym zpusobem bych mohla porovnavat chut dvou jogurtu? Ktery lidem chutna vic.
+
+---
+### Typy promennych
+
+Jakeho typu jsou promenne v databazi prij? 
+   Mate na vyber: ciselne spojite, ciselne diskretni, nominalni, ordinalni.
+   Ze kterych promennych mohu pocitat prumer?
+
+---
+### Popis kategoricke promenne
+
+absolutni a relativni cetnosti, kumulativni absolutni a relativni cetnosti
+
+```{r}
+# Vypoctete absolutni a relativni cetnosti promenne Matur.drive
+matur <- prij$Matur.drive
+table(matur)
+  # absolutni cetnosti
+prop.table(table(matur))*100
+  # relativni cetnosti v procentech
+  round(prop.table(table(matur))*100, 2)
+  
+cbind("absolutni" = table(matur), "relativni" = round(prop.table(table(matur))*100, 2))
+  # v jedne tabulce absolutni i relativni cetnosti
+  # ma smysl resit kumulativni cetnosti?
+
+# Vypoctete absolutni a relativni cetnosti znamek ze statistiky
+stat <- prij$stat
+table(stat)
+  # absolutni cetnosti
+prop.table(table(stat))*100
+  # relativni cetnosti v procentech
+  round(prop.table(table(stat))*100, 2)
+  
+cbind("absolutni" = table(stat), "relativni" = round(prop.table(table(stat))*100, 2))
+  # v jedne tabulce absolutni i relativni cetnosti
+
+# U kategoricke usporadane promenne se pocitaji i kumulativni cetnosti
+tab <- table(stat)
+cbind("n(i)" = tab, "N(i)" = cumsum(tab), "p(i)" = round(prop.table(tab)*100, 2), "P(i)" = round(cumsum(prop.table(tab)*100), 2))
+
+```
+### Grafy
+
+Jaky graf byste pouzili pro nominalni / ordinalni promennou?
+POZOR: Kazdy graf musi mit nazev a oznaceni os!!!
+
+```{r}
+# Grafy pro maturitu drive
+
+barplot(table(matur), col = 2:3, main = "Sloupcovy graf")
+  # sloupcovy graf
+x.val <- barplot(table(matur), plot = FALSE)
+barplot(table(matur), col = 2:3, main = "Sloupcovy graf", ylim = c(0, 40))
+text(x.val, table(matur), table(matur), pos = 3)
+  # sloupcovy graf s popiskem
+
+pie(table(matur), col = 2:3, main = "Kolacovy graf")
+  # kolacovy graf
+
+leg <- levels(matur)
+rc <- round(prop.table(table(matur))*100,2)
+for(i in 1:length(leg)){
+  leg[i] <- paste(leg[i], "(",rc[i],"%)")
+}
+pie(table(matur), col=2:3, main = "Kolacovy graf", labels = leg)
+  # kolacovy graf s popisky
+
+```
+Samostatne popiste vysledky promenne obor a vysledky znamek z matematiky
