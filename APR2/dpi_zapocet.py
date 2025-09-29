@@ -385,18 +385,19 @@ if __name__ == "__main__":
     #             UKOL 2
     #################################################################################################################
 
-    g = uplny_graf(4)
-    print(g)
-    # g.add_node(5)
-    print(testuj_uplnost(g))
+    # g = uplny_graf(4)
+    # print(g)
+    # # g.add_node(5)
+    # print(testuj_uplnost(g))
 
-    print("\nGraph structure:")
-    for node_id in g.node_ids():
-        node = g.node(node_id)
-        print(f"Node {node.id}: out_degree={node.out_degree}")
-        for neighbor_id in node.neighbor_ids:
-            edge = node.to(neighbor_id)
-            print(f"  → {neighbor_id}")
+    # print("\nGraph structure:")
+    # for node_id in g.node_ids():
+    #     node = g.node(node_id)
+    #     print(f"Node {node.id}: out_degree={node.out_degree}")
+    #     for neighbor_id in node.neighbor_ids:
+    #         edge = node.to(neighbor_id)
+    #         print(f"  → {neighbor_id}")
+
 
 
     #################################################################################################################
@@ -426,6 +427,8 @@ if __name__ == "__main__":
     #         edge = node.to(neighbor_id)
     #         print(f"  → {neighbor_id} (weight={edge['weight']})")
 
+    #################################################################################################################
+    #################################################################################################################
 
 
 
@@ -465,3 +468,4 @@ if __name__ == "__main__":
 
     # print("-----------------")
     # print(g.to_image())
+    ...
