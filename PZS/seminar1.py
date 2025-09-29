@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# dodělat frekvencni modulace
+
 A0 = 1
 f = 1
 omega = 2 * np.pi * f
