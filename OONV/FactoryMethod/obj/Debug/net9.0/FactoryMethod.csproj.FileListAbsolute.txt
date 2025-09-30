@@ -1,0 +1,15 @@
+/home/visnaka/ujep/OONV/FactoryMethod/bin/Debug/net9.0/FactoryMethod
+/home/visnaka/ujep/OONV/FactoryMethod/bin/Debug/net9.0/FactoryMethod.deps.json
+/home/visnaka/ujep/OONV/FactoryMethod/bin/Debug/net9.0/FactoryMethod.runtimeconfig.json
+/home/visnaka/ujep/OONV/FactoryMethod/bin/Debug/net9.0/FactoryMethod.dll
+/home/visnaka/ujep/OONV/FactoryMethod/bin/Debug/net9.0/FactoryMethod.pdb
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/FactoryMethod.GeneratedMSBuildEditorConfig.editorconfig
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/FactoryMethod.AssemblyInfoInputs.cache
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/FactoryMethod.AssemblyInfo.cs
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/FactoryMethod.csproj.CoreCompileInputs.cache
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/FactoryMethod.sourcelink.json
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/FactoryMethod.dll
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/refint/FactoryMethod.dll
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/FactoryMethod.pdb
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/FactoryMethod.genruntimeconfig.cache
+/home/visnaka/ujep/OONV/FactoryMethod/obj/Debug/net9.0/ref/FactoryMethod.dll
