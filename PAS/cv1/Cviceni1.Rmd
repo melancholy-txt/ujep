@@ -13,13 +13,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ---
 ### Populace, reprezentativni vyber
 
-Vzhledem k jake populaci byste mohli (studenti v ucebne) tvorit reprezentativni vyber?
-  Proc jste/ nejste reprezentativni vyber vzhledem ke vsem studentum VS v CR? 
-  Ke studentum UJEP? Ke studentum informatiky UJEP? Ke studentum tretiho rocniku UJEP?
+Vzhledem k jake populaci byste mohli (studenti v učebně) tvořit reprezentativní vyber?
+  Proc jste/ nejste reprezentativně vyber vzhledem ke všem studentům VS v CR? 
+  Ke studentům UJEP? Ke studentům informatiky UJEP? Ke studentům třetího ročníku UJEP?
 
 Nactete si datovy soubor prij.RData
+
 ```{r}
-load("PAS/cv1/prij.RData")
+load("prij.RData")
 ```
    Studijni vysledky nahodne vybranych padesati studentu, kteri v roce 2000 uspesne ukoncili 
        prvni rocnik na katedre geografie PrF UK
@@ -132,3 +133,42 @@ pie(table(matur), col=2:3, main = "Kolacovy graf", labels = leg)
 
 ```
 Samostatne popiste vysledky promenne obor a vysledky znamek z matematiky
+
+```{r}
+obor <- prij$Obor
+table(obor)
+  # absolutni cetnosti
+prop.table(table(obor))*100
+# relativni cetnosti v procentech
+round(prop.table(table(obor))*100, 2)
+  
+cbind("absolutni" = table(obor), "relativni" = round(prop.table(table(obor))*100, 2))
+  # v jedne tabulce absolutni i relativni cetnosti
+  # ma smysl resit kumulativni cetnosti?
+
+
+# Vypoctete absolutni a relativni cetnosti znamek ze statistiky
+stat <- prij$geol
+table(stat)
+  # absolutni cetnosti
+prop.table(table(stat))*100
+  # relativni cetnosti v procentech
+round(prop.table(table(stat))*100, 2)
+  
+cbind("absolutni" = table(stat), "relativni" = round(prop.table(table(stat))*100, 2))
+  # v jedne tabulce absolutni i relativni cetnosti
+
+# U kategoricke usporadane promenne se pocitaji i kumulativni cetnosti
+tab <- table(stat)
+cbind("n(i)" = tab, "N(i)" = cumsum(tab), "p(i)" = round(prop.table(tab)*100, 2), "P(i)" = round(cumsum(prop.table(tab)*100), 2))
+
+leg <- 1:3
+rc <- round(prop.table(table(stat))*100,2)
+for(i in 1:length(leg)){
+  leg[i] <- paste(leg[i], "(",rc[i],"%)")
+}
+pie(table(stat), col=2:5, main = "Kolacovy graf", labels = leg)
+
+```
+
+
