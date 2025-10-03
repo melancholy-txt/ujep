@@ -5,6 +5,8 @@ services:
     environment:
       POSTGRES_USER: dbusr
       POSTGRES_PASSWORD: dbpwd
+    # ports:
+    # - "5432:5432" # runs externally on localhost:5432
     volumes:
       - postgres_data:/var/lib/postgres/data # persistent data
       - ./init:/docker-entrypoint-initdb.d # run during container first startup
