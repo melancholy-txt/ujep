@@ -1,0 +1,267 @@
+---
+title: "Pravdepodobnost a statistika"
+subtitle: "Cviceni 2"
+author: "Alena Cernikova"
+date: "2025-09-29"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Vycisteni pracovniho prostoru
+
+```{r}
+rm(list=ls())
+```
+
+## Nacteni dat
+
+databaze Policie
+
+```{r}
+load("Policie.RData")
+  # nastavte si prikaz tak, aby se Vam nacetla data
+  # databaze z vyzkumu verejneho mineni v roce 2024
+```
+## Nacteni knihoven
+
+```{r}
+library(DescTools)
+  # knihovna s popisnymi statistikami
+```
+
+## Opakovani
+
+```{r}
+# Vypoctete frekvencni rozdeleni a nakreslete frekvencni polygon
+#   pro diastolicky tlak (promenna diast)
+#   pracujte s promennou jako s ciselnou diskretni
+
+diast <- Policie$diast
+
+# Frekvencni rozdeleni
+ac <- table(diast)
+kac <- cumsum(ac)
+rc <- round(prop.table(ac), 2)
+krc <- cumsum(rc)
+cbind("n(i)" = ac, "N(i)" = kac, "f(i)" = rc, "F(i)" = krc)
+
+# Frekvencni polygon
+x <- sort(unique(diast))
+y <- table(diast)
+  # x-ova a y-ova souradnice pro graf 
+plot(x, y, type = "h", lwd = 2, col = "darkblue", main = "Frekvencni polygon", xlab = "Diastolicky tlak", ylab = "Pocty")
+lines(x, y, col = "royalblue")
+
+```
+```{r}
+# Vypoctete frekvencni rozdeleni a nakreslete histogram
+#   pro vysku (promenna height)
+#   pracujte s promennou jako s ciselnou diskretni
+
+vyska <- Policie$height
+
+# Histogram
+hist(vyska, col = "salmon", border = "darkred", xlab = "Vyska v cm")
+
+# Frekvencni rozdeleni
+deleni <- hist(vyska, plot = F)$breaks
+popis <- as.character(deleni[-1])
+  # ulozim do promennych, co potrebuji
+for(i in 1:length(popis)){
+  popis[i] <- paste("(",deleni[i], ",", deleni[i + 1],"]")
+}
+
+# frekvencni rozdeleni
+ac <- hist(vyska, plot = F)$counts
+names(ac) <- popis
+kac <- cumsum(ac)
+rc <- round(prop.table(ac), 2)
+krc <- cumsum(rc)
+cbind("n(i)" = ac, "N(i)" = kac, "f(i)" = rc, "F(i)" = krc)
+
+```
+## Samostatne
+
+spoctete frekvencni rozdeleni a nakreslete vhodny graf pro puls (promenna pulse)
+
+```{r}
+puls <- Policie$pulse
+
+```
+
+## Popisne statistiky polohy pro ciselnou promennou
+
+Krome histogramu se pro graficke znazorneni ciselne promenne 
+pouyiva krabicovy graf (boxplot)
+```{r}
+# Krabicovy graf pro vysku
+boxplot(vyska, col = "yellow", border = "orange3", main = "Krabicovy graf",
+        ylab = "Vyska v cm")
+  # samostatne body ukazuji odlehla pozorovani
+  boxplot(vyska, col = "yellow", border = "orange3", main = "Krabicovy graf",
+        ylab = "Vyska v cm", range = 3)
+    # graf bez odlehlych pozorovani
+  text(1.3, boxplot(vyska, range = 3, plot = F)$stats, label = c("min", "Q1", "median", "Q3", "max"), pos = 4, col= "darkblue")
+    # popis grafu
+```
+
+co v grafu vidite?
+
+```{r}
+# Vybrane kvantily / percentily
+min(vyska)
+max(vyska)
+  # extremy
+quantile(vyska, 0.25)
+quantile(vyska, 0.75)
+  quantile(vyska, c(1/4, 3/4))
+  # kvartily
+median(vyska)
+  # median
+fivenum(vyska)
+```
+
+
+A jak jeste mohu urcit uroven, kolem niz se ciselna promenna pohybuje?
+```{r}
+mean(vyska)
+  # prumer
+summary(vyska)
+  # vsechny zakladni popisne statistiky polohy
+  # jaka je jejich reakce na odlehle hodnoty?
+  # co Vam rika rozdil mezi prumerem a medianem?
+```
+
+## Samostatne
+
+# Nakreslete histogram hmotnosti (promenna weight) a zkuste z nej odhadnout 
+#     zakladni popisne statistiky polohy
+
+```{r}
+vaha <- Policie$weight
+
+```
+
+# Spoctete popisne statistiky polohy pro procento tuku (promenna fat)
+#   a odhadnete z nich tvar krabicoveho grafu a histogramu
+
+```{r}
+tuk <- Policie$fat
+
+```
+
+
+## Popisne statistiky variability
+
+```{r}
+## Jaka je variabilita vysky?
+# charakteristiky odvozene od prumeru
+var(vyska)
+  # vyberovy rozptyl - zakladni charakteristka variability
+  # jakou ma nevyhodu?
+sd(vyska)
+  # vyberova smerodatna odchylka - odmocnina z rozptylu
+  # v intervalu prumer +- sd se nachazi cca 2/3 pozorovani
+
+# Robustni charakteristiky
+IQR(vyska)
+  # mezikvartilove rozpeti - sirka intervalu, kde lezi prostredni polovina dat
+MAD(vyska)
+  # medianova absolutni odchylka okolo medianu
+  # srovnatelne se smerodatnou odchylkou
+CoefVar(vyska)
+  # Variacni koeficient
+  # jakou cast prumeru zabira smerodatna odchylka
+```
+
+## Samostatne
+
+Spoctete a interpretujte popisne statistiky variability vahy
+
+```{r}
+vaha <- Policie$weight
+hist(vaha, col = "salmon", border = "darkred", xlab = "Vyska v cm")
+
+# Frekvencni rozdeleni
+deleni <- hist(vaha, plot = F)$breaks
+popis <- as.character(deleni[-1])
+  # ulozim do promennych, co potrebuji
+for(i in 1:length(popis)){
+  popis[i] <- paste("(",deleni[i], ",", deleni[i + 1],"]")
+}
+
+# frekvencni rozdeleni
+ac <- hist(vaha, plot = F)$counts
+names(ac) <- popis
+kac <- cumsum(ac)
+rc <- round(prop.table(ac), 2)
+krc <- cumsum(rc)
+cbind("n(i)" = ac, "N(i)" = kac, "f(i)" = rc, "F(i)" = krc)
+
+summary(vaha)
+```
+
+
+## Popisne statistiky tvaru rozdeleni
+
+```{r}
+# popisne statistiky tvaru rozdeleni se pocitaji ze standardizovanych velicin
+# Standardizovane veliciny - z.skory
+z.val <- scale(vyska)
+  # Jak jsou velke? Co popisuji? K cemu se pouzivaji?
+
+# Charakteristiky tvaru rozdeleni
+Skew(vyska)
+Kurt(vyska)
+  # Kolik vysly a co rikaji o tvaru rozdeleni?
+  # Porovnat s histogramem?
+```
+
+# Spoctete popisne statistiky pro procento tuku (promenna fat)
+
+```{r}
+tuk <- Policie$fat
+
+```
+Co muzeme z popisnych statistik vycist?
+
+# Nakreslete histogram a boxplot pro reakcni dobu (promenna react)
+
+```{r}
+doba <- Policie$react
+
+```
+Co muzeme vycist z popisnych grafu?
+
+# Jak popisne statistiky polohy, variability a tvaru rozdeleni reaguji 
+#   na posunuti a zmenu meritka?
+
+```{r}
+# Vyzkousime na vysce
+vyska.p <- vyska + 10
+vyska.m <- vyska*10
+  # nove promenne
+vyst <- matrix(NA, 3, 4)
+vyst[1, 1] <- mean(vyska);   vyst[1, 2] <- sd(vyska);   vyst[1, 3] <- Skew(vyska);   vyst[1, 4] <- Kurt(vyska)
+vyst[2, 1] <- mean(vyska.p); vyst[2, 2] <- sd(vyska.p); vyst[2, 3] <- Skew(vyska.p); vyst[2, 4] <- Kurt(vyska.p)
+vyst[3, 1] <- mean(vyska.m); vyst[3, 2] <- sd(vyska.m); vyst[3, 3] <- Skew(vyska.m); vyst[3, 4] <- Kurt(vyska.m)
+rownames(vyst) <- c("vyska", "vyska+10", "vyska*10")
+colnames(vyst) <- c("Prumer", "Sm.odchylka", "Sikmost", "Spicatost")
+vyst
+
+oldpar <- par(mfrow = c(1,3))
+hist(vyska,   col = "lightgreen")
+hist(vyska.p, col = "lightgreen")
+hist(vyska.m, col = "lightgreen")
+par <- oldpar
+  # tri histogramy
+
+```
+
+
