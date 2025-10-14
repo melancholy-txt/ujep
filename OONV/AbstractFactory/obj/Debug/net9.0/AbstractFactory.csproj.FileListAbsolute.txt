@@ -1,0 +1,15 @@
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/AbstractFactory.GeneratedMSBuildEditorConfig.editorconfig
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/AbstractFactory.AssemblyInfoInputs.cache
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/AbstractFactory.AssemblyInfo.cs
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/AbstractFactory.csproj.CoreCompileInputs.cache
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/AbstractFactory.sourcelink.json
+/home/visnaka/ujep/OONV/AbstractFactory/bin/Debug/net9.0/AbstractFactory
+/home/visnaka/ujep/OONV/AbstractFactory/bin/Debug/net9.0/AbstractFactory.deps.json
+/home/visnaka/ujep/OONV/AbstractFactory/bin/Debug/net9.0/AbstractFactory.runtimeconfig.json
+/home/visnaka/ujep/OONV/AbstractFactory/bin/Debug/net9.0/AbstractFactory.dll
+/home/visnaka/ujep/OONV/AbstractFactory/bin/Debug/net9.0/AbstractFactory.pdb
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/AbstractFactory.dll
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/refint/AbstractFactory.dll
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/AbstractFactory.pdb
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/AbstractFactory.genruntimeconfig.cache
+/home/visnaka/ujep/OONV/AbstractFactory/obj/Debug/net9.0/ref/AbstractFactory.dll
