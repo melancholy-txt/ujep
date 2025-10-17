@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Vitej na mem websitu</h1>
-    <nav>
-        <ul>
-            <li><a href="/home">O nás</a></li>
-            <li><a href="/seznamkocek">Kočky</a></li>
-            <li><a href="/kontakt">Napiš nám</a></li>
-        </ul>
-    </nav>
-    <h2>Úvodní stránka</h2>
-    <p>Vítej na nejlepším websitu na světe</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block podnadpis %}Domů{% endblock %}
+
+{% block hlavniobsah %}
+    <h2>Vítejte na stránkách Utulkomatu</h2>
+    <p>Utulkomat je místo, kde můžete najít nový domov pro opuštěné kočky. Prozkoumejte náš seznam koček k adopci nebo nás kontaktujte pro více informací.</p>
+{% endblock %}
