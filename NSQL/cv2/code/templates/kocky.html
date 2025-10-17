@@ -1,24 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Vitej na mem websitu</h1>
-    <nav>
-        <ul>
-            <li><a href="/home">O nás</a></li>
-            <li><a href="/seznamkocek">Kočky</a></li>
-            <li><a href="/kontakt">Napiš nám</a></li>
-        </ul>
-    </nav>
+{% extends "base.html" %}
+
+{% block podnadpis %}Kočky{% endblock %}
+
+{% block hlavniobsah %}
     <h2>Seznam koček k adopci</h2>
-    <ul>
-        <li> Minda </li>
-        <li> Linda </li>
-        <li> Pinda </li>
-    </ul>
-</body>
-</html>
+    <ol>
+        {% for kocka in data %}
+        <li>
+            <ul>
+                <li> {{ kocka.jmeno }} </li>
+                <li> {{ kocka.vek }} let </li>
+                <li> {{ kocka.barva }} </li>
+            </ul>
+        </li>
+        {% endfor %}
+    </ol>
+{% endblock %}

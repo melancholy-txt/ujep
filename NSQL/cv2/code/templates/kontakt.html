@@ -1,20 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Vitej na mem websitu</h1>
-    <nav>
-        <ul>
-            <li><a href="/home">O nás</a></li>
-            <li><a href="/seznamkocek">Kočky</a></li>
-            <li><a href="/kontakt">Napiš nám</a></li>
-        </ul>
-    </nav>
-    <h2>Napiš nám</h2>
-    <p>Bude doplněno. Zatím nám pošlete poštu.</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block podnadpis %}Napiš nám{% endblock %}
+
+{% block hlavniobsah %}
+<h2>Napiš nám</h2>
+<form action="">
+    <fieldset>
+        <label for="jmenokocky">Jméno:</label>
+        <input type="text" name="jmeno" id="jmenokocky" placeholder="zadej jmeno kocky" required>
+        <br>
+        <label for="srstkocky">Srst:</label>
+        <input type="text" name="srst" id="srstkocky" placeholder="zadej barvu srsti" required> 
+        <br>
+        <label for="vekkocky">Věk:</label>
+        <input type="number" name="vek" id="vekkocky" placeholder="zadej vek kocky" required>
+    </fieldset>
+    <button type="submit">Odeslat</button>  
+</form>
+{% endblock %}

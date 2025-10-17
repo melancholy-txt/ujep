@@ -2,6 +2,29 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
+kocky = [
+    {
+        "jmeno": "Minda",
+        "barva": "Cerna s bilemi znackami",
+        "vek": 3,   
+    },
+    {
+        "jmeno": "Linda",
+        "barva": "Cerna",
+        "vek": 2,
+    },
+    {
+        "jmeno": "Pinda",
+        "barva": "Cerna s bilemi znackami",
+        "vek": 17,
+    },
+    {
+        "jmeno": "Rinda",
+        "barva": "mourovata",
+        "vek": 5,
+    }
+]
+
 @app.route("/")
 @app.route("/home")
 def zobraz_home():
@@ -9,7 +32,7 @@ def zobraz_home():
 
 @app.route("/seznamkocek")
 def zobraz_kocky():
-    return render_template("kocky.html")
+    return render_template("kocky.html", data=kocky)
 
 @app.route("/kontakt")
 def zobraz_kontaktni_formular():
