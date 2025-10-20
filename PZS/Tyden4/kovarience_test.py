@@ -2,6 +2,7 @@ import numpy as np
 import scipy as sp
 from scipy import signal
 from matplotlib import pyplot as plt
+from SignalGen import sinus, impulsy, pilovy, obdelnikovy
 
 def fun1(a, b, x):
     return a * x + b
