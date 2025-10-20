@@ -12,18 +12,22 @@ f = 2  # frekvence signálu
 delka = 1  # délka signálu v sekundách
 vzorkovaci_frekvence = 100  # vzorkovací frekvence
 
-sig_sinus = sinus(f, delka, vzorkovaci_frekvence, amplituda=2)
-sig_pilovy = pilovy(f, delka, vzorkovaci_frekvence, amplituda=2)
-sig_obdelnikovy = obdelnikovy(f, delka, vzorkovaci_frekvence, amplituda=2)
-sig_nahodny = nahodny(delka, vzorkovaci_frekvence, amplituda=2)
+sig_sinus = sinus(f, delka, vzorkovaci_frekvence, amplituda=1)
+sig_pilovy = pilovy(f, delka, vzorkovaci_frekvence, amplituda=1)
+sig_obdelnikovy = obdelnikovy(f, delka, vzorkovaci_frekvence, amplituda=1)
+sig_nahodny = nahodny(delka, vzorkovaci_frekvence, amplituda=1)
 
-cov = np.cov([sig_sinus[1], sig_pilovy[1], sig_obdelnikovy[1], sig_nahodny[1]])
-print("Kovarianční matice 4x4:")
-print(cov)
-df = pd.DataFrame(cov, 
+allfce = [sig_sinus[1], sig_pilovy[1], sig_obdelnikovy[1], sig_nahodny[1]]
+
+print("Korelační matice 4x4:")
+corr = np.corrcoef(allfce)
+# print(corr)
+df = pd.DataFrame(corr, 
              index=['Sinus', 'Pilový', 'Obdélníkový', 'Náhodný'], 
              columns=['Sinus', 'Pilový', 'Obdélníkový', 'Náhodný'])
 print(df)
+
+# záleí na trendu?'?'?'?'?!!?!?!?!?
 
 # plt.figure(figsize=(8, 6))
 # plt.title('Kovarianční matice 4x4')
