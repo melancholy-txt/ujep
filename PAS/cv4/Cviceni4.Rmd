@@ -253,10 +253,28 @@ cat("modus = ", modus <- A + h*d0/(d0 + d1), "\n")
 ```
 
 Urcete modus pro prvni hodnotu systolickeho tlaku (syst1)
-Urcete modus pro cukr
-  pokud sousedni sloupec k tomu nejvyssimu chybi, bere se jeho cetnost jako 0
+```{r}
+# modus = A + h*d0/(d0+d1)
+syst1 <- Stulong$syst1
+hist(syst1, col = "skyblue", border = "darkblue", main = "Histogram", ylab = "Absolutni cetnosti",
+     xlab = "Systolicky tlak", breaks = 30)
+meze <- hist(syst1, plot = F)$breaks
+pocty <- hist(syst1, plot = F)$counts
+
+m <- which.max(pocty)
+  # kolikaty sloupec je nejvyssi
+
+cat("A = ", (A <- meze[m]), "\n")
+cat("h = ",(h <- meze[2] - meze[1]), "\n")
+cat("d0 = ", (d0 <- pocty[m] - pocty[m - 1]), "\n")
+cat("d1 = ", (d1 <- pocty[m] - pocty[m + 1]), "\n")
+cat("modus = ", modus <- A + h*d0/(d0 + d1), "\n")
+  # modus podle vzorce
+```
 
 ## Odlehle hodnoty
+Urcete modus pro cukr
+  pokud sousedni sloupec k tomu nejvyssimu chybi, bere se jeho cetnost jako 0
 
 ```{r}
 ## Ma promenna vyska odlehle hodnoty
