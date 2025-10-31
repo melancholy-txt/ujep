@@ -7,32 +7,6 @@ app = Flask(__name__)
 # Enable automatic decoding of responses
 r = redis.Redis(host='redis', port=6379, decode_responses=True)
 
-kocky = [
-    {
-        "id": str(uuid.uuid4()),  # Add unique ID
-        "jmeno": "minda",
-        "barva srsti": "rezava",
-        "vek": 2
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "jmeno": "linda",
-        "barva srsti": "cerna",
-        "vek": 5
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "jmeno": "pinda",
-        "barva srsti": "strakata",
-        "vek": 17
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "jmeno": "zbynda",
-        "barva srsti": "bílá",
-        "vek": 10
-    }
-]
 
 # Modified Redis storage
 # for kocka in kocky:
