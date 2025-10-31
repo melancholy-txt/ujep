@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect
 import redis
-import uuid  # Add this import at the top
+import uuid
 
 app = Flask(__name__)
 
-r = redis.Redis(host='redis', port=6379)
+# Enable automatic decoding of responses
+r = redis.Redis(host='redis', port=6379, decode_responses=True)
+
 kocky = [
     {
         "id": str(uuid.uuid4()),  # Add unique ID
@@ -33,8 +35,8 @@ kocky = [
 ]
 
 # Modified Redis storage
-for kocka in kocky:
-    r.hset(f"kocka:{kocka['id']}", mapping=kocka)
+# for kocka in kocky:
+#     r.hset(f"kocka:{kocka['id']}", mapping=kocka)
 
 
 
@@ -45,20 +47,15 @@ def zobraz_home():
 
 @app.route("/seznamkocek")
 def zobraz_kocky():
-    r.hset(f"kocka:test", mapping={"jmeno": "test", "barva srsti": "modra", "vek": "3"})
     kocka_keys = r.keys("kocka:*")
-    data = {}
+    all_kocky = []
+    
     for key in kocka_keys:
-        # Get the raw data
-        raw_data = r.hgetall(key)
-        # Decode both keys and values from bytes to strings
-        decoded_data = {
-            k.decode('utf-8'): v.decode('utf-8')
-            for k, v in raw_data.items()
-        }
-        data[key.decode('utf-8')] = decoded_data
-    print(data)
-    return render_template("kocky.html", data=data)
+        kocka = r.hgetall(key)
+        kocka['kocka'] = key.split(':')[1]  # Add ID directly
+        all_kocky.append(kocka)
+    
+    return render_template("kocky.html", data=all_kocky)
 
 @app.route("/kontakt", methods=["GET", "POST"])
 def zobraz_kontaktni_formular():
@@ -80,14 +77,7 @@ def test_route():
     kocka_keys = r.keys("kocka:*")
     data = {}
     for key in kocka_keys:
-        # Get the raw data
-        raw_data = r.hgetall(key)
-        # Decode both keys and values from bytes to strings
-        decoded_data = {
-            k.decode('utf-8'): v.decode('utf-8')
-            for k, v in raw_data.items()
-        }
-        data[key.decode('utf-8')] = decoded_data
+        data[key] = r.hgetall(key)
     return str(data)
 
 @app.route("/wipe")
