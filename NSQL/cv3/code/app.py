@@ -42,7 +42,7 @@ def zobraz_kontaktni_formular():
             "barva srsti": request.form["barva srsti"],
             "vek": request.form["vek"]
         }
-        kocky.append(nova_kocka)
+        # kocky.append(nova_kocka)
         r.hset(f"kocka:{nova_kocka['id']}", mapping=nova_kocka)
         return redirect("/seznamkocek")
     
