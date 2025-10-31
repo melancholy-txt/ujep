@@ -1,7 +1,9 @@
-import redis
 import uuid
+import pymongo
 
-r = redis.Redis(host='redis', port=6379)
+mongo_client = pymongo.MongoClient("mongodb://admin:admin@mongodb:27017/")  
+db = mongo_client["kocky_db"]
+kocky_collection = db["kocky_collection"]
 
 kocky = [
     {
@@ -30,6 +32,5 @@ kocky = [
     }
 ]
 
-for kocka in kocky:
-    r.hset(f"kocka:{kocka['id']}", mapping=kocka)
+kocky_collection.insert_many(kocky)
 print("Initial data loaded!")
