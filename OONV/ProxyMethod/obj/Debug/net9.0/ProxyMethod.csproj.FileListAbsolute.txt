@@ -1,0 +1,15 @@
+/home/tovisnak/ujep/OONV/ProxyMethod/bin/Debug/net9.0/ProxyMethod
+/home/tovisnak/ujep/OONV/ProxyMethod/bin/Debug/net9.0/ProxyMethod.deps.json
+/home/tovisnak/ujep/OONV/ProxyMethod/bin/Debug/net9.0/ProxyMethod.runtimeconfig.json
+/home/tovisnak/ujep/OONV/ProxyMethod/bin/Debug/net9.0/ProxyMethod.dll
+/home/tovisnak/ujep/OONV/ProxyMethod/bin/Debug/net9.0/ProxyMethod.pdb
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/ProxyMethod.GeneratedMSBuildEditorConfig.editorconfig
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/ProxyMethod.AssemblyInfoInputs.cache
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/ProxyMethod.AssemblyInfo.cs
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/ProxyMethod.csproj.CoreCompileInputs.cache
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/ProxyMethod.sourcelink.json
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/ProxyMethod.dll
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/refint/ProxyMethod.dll
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/ProxyMethod.pdb
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/ProxyMethod.genruntimeconfig.cache
+/home/tovisnak/ujep/OONV/ProxyMethod/obj/Debug/net9.0/ref/ProxyMethod.dll
