@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace AdapterMethod;
 
@@ -18,7 +19,30 @@ class EmailNotifier : INotifier
 
     public void Send(string message)
     {
-        _emailService.SendEmail("from@example.com", "to@example.com", message);
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            Console.Error.WriteLine("Empty message received - nothing to send.");
+            return;
+        }
+
+        try
+        {
+            var emailData = JsonSerializer.Deserialize<Dictionary<string, string>>(message);
+            if (emailData == null
+                || !emailData.TryGetValue("from", out var from)
+                || !emailData.TryGetValue("to", out var to)
+                || !emailData.TryGetValue("body", out var body))
+            {
+                Console.Error.WriteLine("Invalid email data: missing required fields (from/to/body).");
+                return;
+            }
+
+            _emailService.SendEmail(from, to, body);
+        }
+        catch (JsonException ex)
+        {
+            Console.Error.WriteLine($"Failed to parse message as JSON: {ex.Message}");
+        }
     }
 }
 
@@ -34,8 +58,9 @@ class Program
 {
     static void Main(string[] args)
     {
+        var jsonMessage = "{ \"from\": \"tonda@tonda.com\", \"to\": \"netonda@netonda.com\", \"subject\": \"Test Email\", \"body\": \"Hello, this is a test email  !\" }";
         LegacyEmail legacyEmail = new LegacyEmail();
         INotifier emailNotifier = new EmailNotifier(legacyEmail);
-        emailNotifier.Send("Hello, this is a test email!");
+        emailNotifier.Send(jsonMessage);
     }
 }
