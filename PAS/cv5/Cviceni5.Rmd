@@ -1,0 +1,357 @@
+---
+title: "Pravdepodobnost a statistika"
+subtitle: "Cviceni 5"
+author: "Alena Cernikova"
+date: "2025-10-27"
+output: html_document
+---
+
+### Nacteni dat
+## Prace s databazemi z knihoven R-ka
+
+```{r}
+# vyber hodnot z databaze diamonds 
+library(ggplot2)
+data(diamonds)
+set.seed(100)
+diam <- diamonds[sample(nrow(diamonds), 500), ]
+
+# databaze z knihovny MASS 
+library(MASS)
+data(geyser)
+data(nlschools)
+
+library(DescTools)
+
+```
+
+## Opakovani
+
+Najdete modus ciselne spojite promenne
+
+```{r}
+# Ukazkove reseni pro promennou hloubka (depth) z databaze diam
+hloubka <- diam$depth
+
+# jadrovy odhad hustoty
+(jadro <- density(hloubka))
+  # kontrola parametru
+
+# zakresleni do grafu
+hist(hloubka, col = "skyblue", border = "darkblue", main = "Histogram", ylab = "Hustota",
+       xlab = "Procentualni hloubka", freq = F)
+lines(jadro, col = 2, lwd = 2)
+
+# odhad hustoty muzete nebo nemusite vyhladit zmenou parametru bw
+(jadro <- density(hloubka, bw = 0.6))
+lines(jadro, col = 4, lwd = 2)
+  # jaky bandwidth se Vam jevi jako optimalni?
+
+# kde ma odhad hustoty maximum?
+cat("\n","Modus hloubky","\n")
+jadro$x[which.max(jadro$y)]
+
+```
+
+Najdete modus promenne table z databaze diam 
+  a promenne waiting z databaze geyser
+
+```{r}
+table <- diam$table
+wait <- geyser$waiting
+```
+
+Najdete modus ciselne diskretni promenne
+
+```{r}
+# Ukazkove reseni pro vysledek jazykoveho testu (lang) z knihovny nlschool
+test <- nlschools$lang
+
+# Vypocet modu podle vzorce modus = A + h*d0/(d0+d1)
+hist(test, col= "lightgreen", main = "Histogram", xlab = "Jazykovy test")
+  # ve kterem sloupci bude modus?
+meze <- hist(test, plot = F)$breaks
+pocty <- hist(test, plot = F)$counts
+m <- which.max(pocty)
+  # kolikaty sloupec je nejvyssi
+cat("A = ", (A <- meze[m]), "\n")
+cat("h = ",(h <- meze[2] - meze[1]), "\n")
+cat("d0 = ", (d0 <- pocty[m] - pocty[m - 1]), "\n")
+cat("d1 = ", (d1 <- pocty[m] - pocty[m + 1]), "\n")
+cat("modus = ", modus <- A + h*d0/(d0 + d1), "\n")
+  # modus podle vzorce
+
+```
+
+Najdete modus pro IQ a ekonomicky status (SES) z teze databaze
+
+```{r}
+IQ <- nlschools$IQ
+SES <- nlschools$SES
+```
+
+
+
+## Odlehle hodnoty
+
+```{r}
+## Ma promenna hloubka z databaze diam odlehle hodnoty?
+hloubka <- diam$depth
+
+# Nejprve je potreba se podivat na tvar rozdeleni
+#   Je promenna symetricka nebo sesikmena? 
+#   A je jeji rozdeleni jednovrcholove nebo vicevrcholove?
+hist(hloubka, col = "skyblue", border = "darkblue", main = "Histogram",
+     xlab = "Procentualni hloubka")
+```
+
+Pro jednovrcholove priblizne symetricke rozdeleni se odlehle hodnoty 
+  urcuji podle klasickych pravidel
+Pro nesymetricka rozdeleni je treba nejprve transformace
+
+```{r}
+# A co na odlehle hodnoty rika boxplot?
+boxplot(hloubka, col = "yellow", border = "orange3", main = "Krabicovy graf",
+        ylab = "Procentualni hloubka")
+  # Vidime adepty na odlehle hodnoty
+```
+
+### Pravidla pro urcovani odlehlych hodnot
+
+```{r}
+# Nasobky mezikvartiloveho rozpeti
+
+# 1.5 nasobek mezikvartiloveho rozpeti
+cat("Dolni mez, 1.5 nasobek IQR", "\n")
+(DM <- quantile(hloubka,0.25) - 1.5*IQR(hloubka))
+cat("Adepti na dolni odlehle pozorovani", "\n")
+hloubka[hloubka < DM]
+cat("\n")
+
+cat("Horni mez, 1.5 nasobek IQR", "\n")
+(HM <- quantile(hloubka, 0.75) + 1.5*IQR(hloubka))
+cat("Adepti na horni odlehle pozorovani", "\n")
+hloubka[hloubka > HM]
+cat("\n", "\n")
+
+
+# 3 nasobek mezikvartiloveho rozpeti
+cat("Dolni mez, 3 nasobek IQR", "\n")
+(DM <- quantile(hloubka, 0.25) - 3*IQR(hloubka))
+cat("Adepti na dolni odlehle pozorovani", "\n")
+hloubka[hloubka < DM]
+cat("\n")
+
+cat("Horni mez, 3 nasobek IQR", "\n")
+(HM <- quantile(hloubka, 0.75) + 3*IQR(hloubka))
+cat("Adepti na horni odlehle pozorovani", "\n")
+hloubka[hloubka > HM]
+cat("\n")
+```
+
+```{r}
+# Nasobky smerodatne odchylky
+
+cat("Dolni mez, 3 nasobek sd", "\n")
+(DM <- mean(hloubka) - 3*sd(hloubka))
+cat("Adepti na dolni odlehle pozorovani", "\n")
+hloubka[hloubka < DM]
+cat("\n")
+
+cat("Horni mez, 3 nasobek sd", "\n")
+(HM <- mean(hloubka) + 3*sd(hloubka))
+cat("Adepti na horni odlehle pozorovani", "\n")
+hloubka[hloubka > HM]
+cat("\n", "\n")
+
+cat("Dolni mez, 4 nasobek sd", "\n")
+(DM <- mean(hloubka) - 4*sd(hloubka))
+cat("Adepti na dolni odlehle pozorovani", "\n")
+hloubka[hloubka < DM]
+cat("\n")
+
+cat("Horni mez, 4 nasobek sd", "\n")
+(HM <- mean(hloubka) + 4*sd(hloubka))
+cat("Adepti na horni odlehle pozorovani", "\n")
+hloubka[hloubka > HM]
+cat("\n")
+```
+
+
+```{r}
+# Nastaveni konkretniho pravidla pro odlehle hodnoty v grafu
+#   pomoci parametru range (prednastaveno 1.5)
+boxplot(hloubka, col = "yellow", border = "orange3", main = "Krabicovy graf",
+        ylab = "Procentualni hloubka", range = 3)
+  # Do prisnejsiho pravidla se vejdou vsechny hodnoty
+```
+
+A jak jsou na tom odlehla pozorovani pro promennou table?
+
+```{r}
+table <- diam$table
+hist(table, col = "tomato", main = "Histogram")
+```
+Co delat, kdyz rozdeleni neni symetricke?
+
+Hledejte odlehla pozorovani pro cenu diamantu
+
+```{r}
+cena <- diam$price
+hist(cena, col = "tomato", main = "Histogram")
+```
+Extremne sesikmene rozdeleni
+```{r}
+cena <- diam$price
+
+# Nejprve je treba transformovat
+# logaritmicka transformace
+l.cena <- log(cena)
+hist(l.cena, col = "tomato", main = "Histogram")
+
+# odmocnina
+o.cena <- sqrt(cena)
+hist(o.cena, col = "tomato", main = "Histogram")
+
+# Pozor, na obe transformace musite mit kladne hodnoty !!!
+```
+
+Najdete odlehle hodnoty pro promennou carat
+```{r}
+carat <- diam$carat
+```
+
+### robustni popisne statistiky ciselne promenne
+
+Charakteristiky polohy
+
+```{r}
+# pracujte s promennou hloubka
+hloubka <- diam$depth
+
+boxplot(hloubka, col = "yellow", border = "orange3", main = "Krabicovy graf",
+        ylab = "Procentualni hloubka", range = 3)
+  # promenna s odlehlymi hodnotami
+
+# Jak toto ovlivni charakteristiky polohy
+cat("\n", "Prumer = ", mean(hloubka))
+cat("\n", "Median = ", median(hloubka))
+cat("\n", "Huberuv odhad = ", HuberM(hloubka))
+  # Huberuv M-estimator (maximalne verohodny odhad stredni hodnoty)
+cat("\n", "Useknuty prumer = ", mean(hloubka, trim = 0.1))
+  # useknuty prumer, z kazde strany usekne 10% hodnot
+```
+
+Useknuty prumer
+
+Spoctete useknuty prumer promenne table tak, abyste:
+ -- usekli jen odlehle hodnoty
+ -- usekli vsechny hodnoty vetsi nez 60 
+
+Spoctete useknuty prumer promenne cena tak, abyste neuvazovali hodnoty vetsi nez 10000.
+
+```{r}
+table <- diam$table
+cena <- diam$price
+
+```
+
+Robustni odhady charakteristik tvaru rozdeleni
+
+```{r}
+# kvartilovy koeficient sikmosti (Bowley)
+Q1 <- quantile(hloubka,0.25)
+Q3 <- quantile(hloubka,0.75)
+(Q3 + Q1 - 2*median(hloubka))/(Q3 - Q1)
+  # porovnejte s klasickou sikmosti
+  Skew(hloubka)
+
+# oktilovy koeficient spicatosti (Moorse)
+Q18 <- quantile(hloubka, 1/8)
+Q28 <- quantile(hloubka, 2/8)
+Q38 <- quantile(hloubka, 3/8)
+Q48 <- quantile(hloubka, 4/8)
+Q58 <- quantile(hloubka, 5/8)
+Q68 <- quantile(hloubka, 6/8)
+Q78 <- quantile(hloubka, 7/8)
+((Q78 - Q58) + (Q38 - Q18))/(Q68 - Q28)
+  # porovnejte s klasickou spicatosti
+  Kurt(hloubka)
+```
+
+Porovnejte robustni a klasicke charakteristiky tvaru rozdeleni pro promenne table a cena
+
+```{r}
+table <- diam$table
+cena <- diam$price
+```
+
+### Vztah dvou promennych
+
+Pro popsani vztahu dvou kategorickych promennych se pouziva kontingencni tabulka
+Souvisi spolu kvalita rezu barva kamene? (promenne cut a color)
+```{r}
+rez <- diam$cut
+barva <- diam$color
+
+cat("\n", "Tabulka absolutnich cetnosti", "\n")
+(tab <- table(rez, barva))
+# mozna lepe videt z relativnich cetnosti
+
+cat("\n", "Tabulkove relativni cetnosti", "\n")
+addmargins(prop.table(tab))
+
+cat("\n", "Radkove relativni cetnosti", "\n")
+addmargins(prop.table(tab, 1))
+
+cat("\n", "Sloupcove relativni cetnosti", "\n")
+addmargins(prop.table(tab, 2))
+
+  # ktery typ relativnich cetnosti se pro popis zavislosti hodi nejvic?
+
+plot(rez ~ barva, col = 1:5)
+  # Jak byste vztah popsali?
+```
+
+Souvisi spolu barva a "cistota" kamene? (promenne color a clarity)
+
+```{r}
+cistota <- diam$clarity
+barva <- diam$color
+
+```
+
+Vztah dvou ciselnych promennych popisujeme pomoci
+   bodoveho (rozptyloveho) grafu, korelacniho koeficientu, korelacni tabulky
+   
+```{r}
+# Jaky je vztah mezi promennymi hloubka a table?
+hloubka <- diam$depth
+table <- diam$table
+plot(hloubka ~ table, pch = 19, main = "Rozptylovy graf", xlab = "table", ylab="depth")
+  # Co z grafu vidite?
+
+cat("Kovariance = ", cov(hloubka, table, use = "complete.obs"), "\n")
+  # co Vam rika kovariance
+cat("Korelace = ", cor(hloubka, table, use = "complete.obs"), "\n")
+  # a co korelace
+
+# A co je korelacni tabulka?
+hloubka.c <- factor(ifelse(hloubka <= 60, '<60', ifelse(hloubka <= 62, '60-62', 
+                    ifelse(hloubka <= 64, '62-64', ifelse(hloubka <= 66, '64-66', 
+                    ifelse(hloubka <= 68, '66-68', '>68'))))),
+                    levels=c("<60", "60-62", "62-64", "64-66", "66-68", ">68")) 
+table.c <- factor(ifelse(table <= 54, '<54', ifelse(table <= 56, '54-56', 
+                  ifelse(table <= 58, '56-58', ifelse(table <= 60, '58-60', 
+                  ifelse(table <= 62, '60-62', ifelse(table <= 64, '62-64', '>64')))))),
+                  levels=c("<54","54-56","56-58","58-60", "60-62", "62-64", ">64"))
+cat("\n", "Korelacni tabulka", "\n")
+table(hloubka.c, table.c)
+```
+
+Popiste souvislost hmotnosti a ceny kamene (promenne carat a price)
+
+
+
+
+
