@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/tovisnak/ujep/OONV/ProxyMethod/ProxyMethod.csproj",
-      "projectName": "ProxyMethod",
-      "projectPath": "/home/tovisnak/ujep/OONV/ProxyMethod/ProxyMethod.csproj",
+      "projectUniqueName": "/home/tovisnak/ujep/OONV/AdapterMethod/AdapterMethod.csproj",
+      "projectName": "AdapterMethod",
+      "projectPath": "/home/tovisnak/ujep/OONV/AdapterMethod/AdapterMethod.csproj",
       "packagesPath": "/home/tovisnak/.nuget/packages/",
-      "outputPath": "/home/tovisnak/ujep/OONV/ProxyMethod/obj/",
+      "outputPath": "/home/tovisnak/ujep/OONV/AdapterMethod/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/tovisnak/.nuget/NuGet/NuGet.Config"

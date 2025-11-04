@@ -1,0 +1,15 @@
+/home/tovisnak/ujep/OONV/AdapterMethod/bin/Debug/net9.0/AdapterMethod
+/home/tovisnak/ujep/OONV/AdapterMethod/bin/Debug/net9.0/AdapterMethod.deps.json
+/home/tovisnak/ujep/OONV/AdapterMethod/bin/Debug/net9.0/AdapterMethod.runtimeconfig.json
+/home/tovisnak/ujep/OONV/AdapterMethod/bin/Debug/net9.0/AdapterMethod.dll
+/home/tovisnak/ujep/OONV/AdapterMethod/bin/Debug/net9.0/AdapterMethod.pdb
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/AdapterMethod.GeneratedMSBuildEditorConfig.editorconfig
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/AdapterMethod.AssemblyInfoInputs.cache
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/AdapterMethod.AssemblyInfo.cs
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/AdapterMethod.csproj.CoreCompileInputs.cache
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/AdapterMethod.sourcelink.json
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/AdapterMethod.dll
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/refint/AdapterMethod.dll
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/AdapterMethod.pdb
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/AdapterMethod.genruntimeconfig.cache
+/home/tovisnak/ujep/OONV/AdapterMethod/obj/Debug/net9.0/ref/AdapterMethod.dll
