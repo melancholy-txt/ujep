@@ -13,8 +13,8 @@ __pycache__/
 filter=strip-ipynb-metadata
 
 # C# changing files
-*.csproj.user   
-*.csproj
+# *.csproj.user   
+# *.csproj
 
 .venv/
 env/
