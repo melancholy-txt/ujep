@@ -1,9 +1,10 @@
 import time
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, make_response
 import redis
 import uuid
 import pymongo
 import json
+from bson import json_util
 
 app = Flask(__name__)
 
@@ -126,6 +127,30 @@ def test_without_cache():
     
     avg_time = sum(times) / len(times)
     return f"Average time WITHOUT Redis cache: {avg_time:.2f}ms"
+
+
+#  REST API
+
+# CRUDE - Create
+@app.route("/api/kocka", methods=["POST"])
+def api_create_kocka():
+    if request.method == "POST":
+        nova_kocka = {
+                    "id": str(uuid.uuid4()),
+                    "jmeno": request.args["jmeno"],
+                    "barva srsti": request.args["barva srsti"],
+                    "vek": request.args["vek"]
+                }
+        kocky_collection.insert_one(nova_kocka)
+        
+        # Invalidate caches
+        r.delete("page:seznam")
+        r.delete("kocky_cache")
+
+        return make_response(json_util.dumps({"status": "Kocka created", "kocka": nova_kocka}), 201)
+    return make_response(json_util.dumps({"status": "Method not allowed"}), 405)
+
+# CRUDE - Read
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
