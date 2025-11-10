@@ -1,0 +1,15 @@
+# Minimal, safe lower-bound versions for the project's main dependencies
+# These are conservative minima known to work with scientific/python tooling.
+# If you want exact pinned versions, run `pip freeze > requirements.txt`
+
+numpy>=1.21
+scipy>=1.7
+pandas>=1.3
+matplotlib>=3.4
+
+# For notebooks (optional)
+jupyter>=1.0
+ipykernel>=6.0
+
+# To pin exact versions after installing, run:
+#   python -m pip freeze > requirements.txt
