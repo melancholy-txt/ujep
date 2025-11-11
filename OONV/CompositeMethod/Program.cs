@@ -62,16 +62,16 @@ class Program
     static void Main(string[] args)
     {
         CompositeCommunicator compositeCommunicator = new CompositeCommunicator();
-        CompositeCommunicator compositeCommunicator2 = new CompositeCommunicator();
-        CompositeCommunicator compositeCommunicator3 = new CompositeCommunicator();
+        CompositeCommunicator classicCommunicator = new CompositeCommunicator();
+        CompositeCommunicator internetCommunicator = new CompositeCommunicator();
 
-        compositeCommunicator.AddCommunicator(compositeCommunicator2);
-        compositeCommunicator.AddCommunicator(compositeCommunicator3);
+        compositeCommunicator.AddCommunicator(classicCommunicator);
+        compositeCommunicator.AddCommunicator(internetCommunicator);
 
-        compositeCommunicator2.AddCommunicator(new EmailCommunicator());
-        compositeCommunicator2.AddCommunicator(new SmsCommunicator());
-        compositeCommunicator3.AddCommunicator(new DiscordCommunicator());
-        compositeCommunicator3.AddCommunicator(new TeamsCommunicator());
+        classicCommunicator .AddCommunicator(new EmailCommunicator());
+        classicCommunicator.AddCommunicator(new SmsCommunicator());
+        internetCommunicator.AddCommunicator(new DiscordCommunicator());
+        internetCommunicator.AddCommunicator(new TeamsCommunicator());
 
         compositeCommunicator.Send("čau more");
     }
