@@ -11,7 +11,7 @@ class BasicCoffeeMaker() : ICoffeeMaker
 {
     public string BrewCoffee()
     {
-        return "Černá káva co vychladne";
+        return "Černá káva";
     }
 }
 
@@ -32,10 +32,22 @@ class MilkMachine(ICoffeeMaker coffeeMaker) : BaseDecorator(coffeeMaker)
     
 }
 
+class MugWarmer(ICoffeeMaker coffeeMaker) : BaseDecorator(coffeeMaker)
+{
+    public override string BrewCoffee()
+    {
+        return "Vyhřátý hrnek a v něm " + base.BrewCoffee();
+    }
+}
 class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        ICoffeeMaker kavovar = new BasicCoffeeMaker();
+        Console.WriteLine(kavovar.BrewCoffee());
+        kavovar = new MilkMachine(kavovar);
+        Console.WriteLine(kavovar.BrewCoffee());
+        kavovar = new MugWarmer(kavovar);   
+        Console.WriteLine(kavovar.BrewCoffee());
     }
 }
