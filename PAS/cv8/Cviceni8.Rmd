@@ -1,0 +1,216 @@
+---
+title: "Pravdepodobnost a statistika"
+subtitle: "Cviceni 8"
+author: "Alena Cernikova"
+date: "2025-11-24"
+output: html_document
+---
+
+### Vypocty pravdepodobnosti
+### Diskretni rozdeleni
+
+Binomicke rozdeleni: 
+  n-krat opakuji pokus, kde muze nastat uspech s pravdepodobnosti p nebo neuspech s pravdepodobnosti (1 - p)
+  dulezite je, aby pravdepodobnost uspechu byla ve vsech pokusech stejna
+  parametry: n - pocet pokusu, p - pst uspechu
+  pbinom(k, n, p) - distribucni funkce P(X <= k)
+  dbinom(k, n, p) - pravdepodobnostni funcke P(X = k)
+
+Hypergeometricke rozdeleni:
+  v osudi mam N kouli, w bilych a b cernych, vytahnu n kouli BEZ VRACENI a pocitam, kolik jich je bilych
+  pravdepodobnost tazeni bile koule je v kazdem tahu jina
+  Parametry: w - pocet bilych kouli v osudi, b - pocet cernych kouli v osudi
+    n - pocet kouli tazenych z osudi
+  phyper(k, w, b, n) - distribucni funkce P(X <= k)
+  dhyper(k, w, b, n) - pravdepodobnostni funcke P(X = k)
+
+Geometricke rozdeleni: 
+  n-krat opakuji pokus, kde muze nastat uspech s pravdepodobnosti p nebo neuspech s pravdepodobnosti (1 - p)
+  pocitam pocet tahu pred PRVNIM uspechem, pravdepodobnost p musi byt v kazdem tahu stejna
+  Parametr: p - pravdepodobnost uspechu
+  pgeom(k, p) - distribucni funkce P(X <= k)
+  dgeom(k, p) - pravdepodobnostni funcke P(X = k)
+
+Poissonovo rozdeleni: 
+  pocet jevu za casovou jednotku, kdyz znam prumerny pocet jevu za tuto jednotku
+  Parametr: lambda - stredni hodnota (prumerny pocet jevu za casovou jednotku)
+  ppois(k, lambda) - distribucni funkce P(X <= k)
+  dpois(k, lambda) - pravdepodobnostni funcke P(X = k)
+
+### Vypocty pravdepodobnosti
+
+P(X = k) ... pravdepodobnostni funkce v bode k
+P(X <= k) ... distribucni funkce v bode k
+P(X < k) = P(X <= (k - 1)) ... distribucni funkce v bode k - 1
+P(X > k) = 1 - P(X <= k) ... jedna minus distribucni funkce v bode k
+P(X >= k) = 1 - P(X <= (k - 1)) ... jedna minus distribucni funkce v bode k - 1
+P(k <= X <= l) = P(X <= k) - P(X <= (l - 1)) ... rozdil distribucnich funkci v bodech k a l - 1
+
+Priklad 1
+```{r}
+## Binomicke rozdeleni
+# Jedu na dovolenou do destinace, kde pravdepodobnost, ze bude prset, je kazdy den 0.4.
+#   Jaka je pravdepodobnost, ze z deseti dni dovolene jich bude alespon polovina bez deste?
+
+1 - pbinom(4, 10, 0.6)
+pbinom(5, 10, 0.4)  
+```
+
+Priklad 2
+```{r}
+## Hypergeometricke rozdeleni
+# Na parkovisti stoji 10 vozu znacky Skoda a 15 vozu jine znacky. 
+# Jaka je pravdepodobnost, ze kdyz 7 aut odjede, zbude na parkovisti 5 aut znacky Skoda.
+
+dhyper(5, 10, 15, 7)
+```
+
+Priklad 3 
+```{r}
+## Geometricke rozdeleni
+# Hazite sestistennou kostkou. Jaka je pravdepodobnos, ze prvni sestka Vam padne nejdrive v desatem hodu?
+# Pocita se pocet neuspechu pred prvnim uspechem.
+
+1 - pgeom(8, 1/6)
+
+
+dgeom(9, 1/6) 
+```
+
+Priklad 4
+```{r}
+## Poissonovo rozdeleni
+# Do obchudku prijde prumerne 5 lidi za hodinu. Jaka je ravdepodobnost, ze jich za hodinu prijde maximalne 7?
+
+ppois(7, 5)
+```
+
+Dalsi priklady
+```{r}
+# 5. Hraji se synem hru, kde on má před sebou 5 neprůhledných kalíšků postavených dnem vzhůru a pod jeden z nich schová kamínek. Já se nedívám a pak hádám, kam kamínek ukryl. Po každém hádání mi syn kamínek ukáže a schovává znovu. Jaká je pravděpodobnost, že poprvé najdu kamínek až na patnáctý pokus?
+
+#Geometricke rozdeleni - (p = 1/5), P(X >= 14) = 1 - P(X <= 13)
+dgeom(14, 1/5)
+
+# 6. Výrobní linka v průměru vyrobí 3 vadné výrobky za den. Jaká je pravděpodobnost, že v den kontroly vyrobí vadných výrobků více než 5?
+
+#Poissonovo rozdeleni - (lambda = 3), P(X > 5) = 1 - P(X <= 5)
+1 - ppois(5, 3)
+
+# 7. Hraji s dětmi na honěnou. Děti jsou rozdělené do dvou družstev: na čevené a modré. Červených hraje 10, modrých 12. Jaká je pravděpodobnost, že mezi sedmi dětmi, které jsem chytla a vyřadila je tím ze hry, bude vetšina modrých?
+
+#Hypergeometricke rozdeleni - (w = 12, b = 10, n = 7), P(X >= 4) = 1 - P(X <= 3)
+1 - phyper(3, 12, 10, 7)
+
+# 8. Dva stejně dobří hráči, Petr a Pavel, hrají tenis. Hrají celkem 10 utkání, přičemž neuznávají remízy, takže utkání musí skončit výhrou jednoho z nich. Jaká je pravděpodobnost, že Petr vyhraje alespoň 7 utkání?
+
+#Binomicke rozdeleni - (n = 10, p = 0.5), P(X >= 7) = 1 - P(X <= 6)
+1 - pbinom(6, 10, 0.5)
+
+# 9. Ve třídě je 30 žáků, z toho 12 hochů a 18 dívek. K tabuli zavolám 7 z nich. Jaká je pravděpodobnost, že mezi vyvolanými budou alespoň tři hoši?
+
+#Hypergeometricke rozdeleni - (w = 12, b = 18, n = 7), P(X >= 3) = 1 - P(X <= 2)  
+1 - phyper(2, 12, 18, 7)
+
+#. 10. Paní Hana má 10 párů bot z toho troje jsou červené. Ráno do práce vstává brzy a odchází ještě za tmy. Poslední týden jí v předsíni nesvítí světlo a vybírá si tedy boty na den náhodně. Jaká je pravděpodobnost, že z pěti dní, kdy odcházela do práce, odešla dvakrát v červených botech?
+
+#Binomicke rozdeleni - (n = 5, p = 3/10), P(X = 2)
+dbinom(2, 5, 3/10)
+```
+
+### Spojita rozdeleni
+
+Normalni rozdeleni: 
+  Parametry: mu - stredni hodnota, sigma - smerodatna odchylka
+  pnorm(x,mu,sigma) - distribucni funkce P(X <= x)
+  qnorm(p,mu,sigma) - kvantilova funkce: x tak, ze P(X <= x) = p
+
+```{r}
+# Grafy normalniho rozdeleni N(180, 49): vyska dospelych muzu
+
+# hustota
+curve(dnorm(x, 180, 7), from = 150, to = 210, main = "Hustota N(180, 49)", col = "red", ylab = "Hustota")
+
+# distribucni funkce
+curve(pnorm(x, 180, 7), from = 150, to = 210, main = "Distribucni funkce N(180, 49)", col = "purple", ylab = "Hustota")
+
+# pravdepodobnost, ze nahodne vybrany muz bude mensi nez 170 cm
+par(mfrow = c(1,2))
+curve(dnorm(x, 180, 7), from = 150, to = 210, main = "Hustota N(180, 49)")
+lines(c(0, 170), c(0, 0), lwd = 3, col = "green") 
+xx <- seq(150, 170, length.out = 101)
+polygon(c(150, xx, 170), c(0, dnorm(xx, 180, 7), 0), col = "green")
+  # umime-li zmerit velikost zelene plochy, mame pst :)
+
+curve(pnorm(x, 180, 7), from = 150, to = 210, main = "Distr. fce N(180, 49)")
+lines(c(170, 170), c(0, pnorm(170, 180, 7)), col = "green", lty = 2, lwd = 2)
+lines(c(0, 170), c(pnorm(170, 180, 7), pnorm(170, 180, 7)), col = "green", lty = 2, lwd = 2)
+  # hodnotu lze vycist z distribucni funkce
+par(mfrow = c(1, 1))
+```
+
+Lognormalni rozdeleni: 
+  velicina, jejich logaritmus ma normalni rozdeleni
+  Parametry: mu , sigma (velicina ln(X) ~ N(mu, sigma^2))
+  plnorm(x,mu,sigma) - distribucni funkce
+  qlnorm(q,mu,sigma) - kvantilova funkce
+  stredni hodnota exp(mu+sigma^2/2)
+  rozptyl (exp(sigma^2)+2)*exp(2*mu+sigma^2)
+
+Exponencialni rozdeleni: 
+  doba cekani do udalosti
+  Pramater: int - intenzita
+  pexp(x,int) - distribucni funkce
+  qexp(q,int) - kvantilova funkce
+  distribucni funkce P(X <= t) = 1 - exp(-int*t)
+  stredni hodnota 1/int
+  rozptyl 1/int^2
+
+### Vypocty pravdepodobnosti
+
+P(X = k) = 0 pro libovolne k!!!
+P(X <= k) = P(X < k) ... distribucni funkce v bode k
+P(X >= k) = P(X > k) = 1 - P(X <= k) ... jedna minus distribucni funkce v bode k
+P(k <= X <= l) = P(X <= k) - P(X <= l) ... rozdil distribucnich funkci v bodech k a l
+
+Priklad 1
+```{r}
+# Hmotnost bochniku chleba ma normalni rozdeleni se stredni hodnotou 1.2 kg a smerodatnou odchylkou 30 g. Jaka je pravdepodobnost, ze bochnik, ktery si prinesu domu bude mi maximalne o 50 g mene, nez je optimalni vaha.
+```
+
+Priklad 2
+```{r}
+# Nahodna velicina X ma normalni rozdeleni N(2,5). Stanovte kvartily teto veliciny a jeji mezikvartilove rozpeti.
+```
+
+Priklad 3
+```{r}
+# Pojistovna si eviduje vsechny skody, ktere musela proplacet. Zjistila, ze vyska skody sa ridi logaritmicko-normalnim rozdelenim s parametry mu = 6 a sigma-kvadrat = 2. Urcete median vysky skody.
+```
+
+Priklad 4
+```{r}
+# V promitaci mistnosti bezi stale dokola smycka 20-minutoveho filmu. Urcite pravdepodobnost, ze kdyz nahodne vejdeme do mistnosti,  nebudeme na zacatek filmu cekat vic nez 5 minut.
+```
+
+Priklad 5
+```{r}
+# Cas neprimeho bunecneho deleni (tzv. mitoza) ma normalni rozdeleni se stredni hodnotou jedna hodina a rozptylem 25. Jaka je  pravdepodobnost, ze deleni nejake bunky se uskutecni nez za za 45 minut?
+```
+
+Priklad 6
+```{r}
+# Doba zivotnosti vyrobku ma exponencialni rozdeleni se stredni hodnotou 2000 dni. Urcete pravdepodobnost, ze vyrobok bude funkcni aspon 3000 dni.
+```
+
+Priklad 7
+```{r}
+# Rychlost prenosu souboru v kb za sekundu z ma lognormalni rozdeleni LN(3.75,0.50). Urcete pravdepodobnost, ze soubor bude prenasen rychlosti 70 kb za sekundu nebo vetsi.
+```
+
+Pomoci jednovyberoveho t-testu (prikaz t.test(promenne, mu = testovane cislo, alternative = "pozadovana alternativa"), kde pozadovana alternativa muze byt "less", "greater", "both.sided" - prednastavena verze, nemusi se zadavat) rozhodnete, zda stredni hodnota promenne hp v souboru mtcars muze byt 150?
+
+```{r}
+data(mtcars)
+hp <- mtcars$hp
+```
