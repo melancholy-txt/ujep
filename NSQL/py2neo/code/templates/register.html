@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+
+{% block content %}
+<h2>Vítej na Matchomatu</h2>
+<p>Zapaluj, nech se zapalovat a nalezni si zde svou drahou polovičku se kterou budete hořet.</p>
+
+// vytvoření profilu    
+<form action="/register" method="post">
+  <div class="form-group">
+    <label for="name">Jméno:</label>
+    <input type="text" class="form-control" id="name" name="name" required>
+  </div>
+  <div class="form-group">
+    <label for="age">Věk:</label>
+    <input type="number" class="form-control" id="age" name="age" required>
+  </div>
+  <div class="form-group">
+    <label for="hobbies">Záliby (oddělené čárkou):</label>
+    <input type="text" class="form-control" id="hobbies" name="hobbies" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Vytvořit profil</button>
+</form>
+{% endblock %}

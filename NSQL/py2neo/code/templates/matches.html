@@ -1,0 +1,30 @@
+{% extends "template.html" %}
+
+{% block content %}
+<h2>Shody</h2>
+<div class="cards-container">
+{% if profiles %}
+    {% for profile in profiles %}
+        <article class="card">
+            <div class="match-indicator">Vzájemná shoda</div>
+            <section class="card-body">
+            <h3 class="card-title">{{ profile.get("friend.name") }}</h5>
+            <ul class="card-text">
+                <li>Věk: {{ profile.get("friend.age") }}</li>
+                <li>Záliby:
+                    <ul>
+                    {% for hobby in profile.get("friend.hobbies") %}
+                        <li>{{ hobby }}</li>
+                    {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            </section>
+        </article>
+    {% endfor %}
+{% else %}
+    <p class="empty-state">Bohužel nemáte žádné shody.</p>
+{% endif %}
+</div>
+
+{% endblock %}
