@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matchomat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Matchomat</h1>
+    </header>
+    <main>
+        <h2>Vítej na Matchomatu</h2>
+<p>Zapaluj, nech se zapalovat a nalezni si zde svou drahou polovičku se kterou budete hořet.</p>
+
+<div class="button-group">
+    <button onclick="location.href='/register'" class="btn btn-primary">Vytvořit profil</button> 
+    <br>   
+    <button onclick="location.href='/login'" class="btn btn-primary">Přihlásit se</button>
+</div>  
+    </main>
+    <footer>
+        <p>Matchomat, Beránek Pavel 2023</p>
+    </footer>
+</body>
+</html>

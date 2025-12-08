@@ -1,0 +1,14 @@
+{% extends "template.html" %}
+
+{% block content %}
+<h2>Vítej na Matchomatu</h2>
+<p>Zapaluj, nech se zapalovat a nalezni si zde svou drahou polovičku se kterou budete hořet.</p>
+
+<form action="/login" method="post">
+    <div class="form-group    ">
+        <label for="name">Jméno:</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Přihlásit se</button>
+</form>
+{% endblock %}  

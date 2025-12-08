@@ -1,0 +1,170 @@
+# vyber hodnot z databaze diamonds 
+library(ggplot2)
+data(diamonds)
+set.seed(123)
+diam <- diamonds[sample(nrow(diamonds), 200), ]
+
+library(DescTools)
+  # knihovna s popisnymi statistikami
+#library(TeachingDemos)
+  # knihovna s vyukovymi udelatky
+
+sirka <- diam$table
+  # promenna pro pomer sirek
+hist(sirka, col = "lightsalmon", xlab = "Pomer sirek")
+
+cat("Useknuty prumer, 10% useknutych hodnot z kazde strany", "\n")
+mean(sirka, trim = 0.1)
+  # parametr trim rika, jaky dil dat mam useknout z kazde strany
+cat("\n", "\n")
+
+cat("Pocet hodnot vetsich nez 60", "\n")
+(pocet <- sum(sirka > 60))
+cat("Procento hodnot vetsich nez 60", "\n")
+(proc <- pocet/length(sirka))
+cat("Useknuty prumer, hodnot vetsich nez 60", "\n")
+mean(sirka, trim = proc)
+cat("\n", "\n")
+
+cat("Klasicky prumer", "\n")
+mean(sirka)
+
+hloubka <- diam$depth
+hist(hloubka, col = "palegoldenrod", xlab = "Hloubka diamantu")
+
+cena <- diam$price
+hist(cena, col = "palegoldenrod", xlab = "Cena diamantu")
+
+
+# kvartilovy koeficient sikmosti (Bowley)
+Q1 <- quantile(hloubka,0.25)
+Q3 <- quantile(hloubka,0.75)
+cat("Kvartilovy koeficient sikmosti", "\n")
+(Q3 + Q1 - 2*median(hloubka))/(Q3 - Q1)
+  # v knihovne reflimR existuje funkce bowley, ktera index spocita
+  # porovnejte s klasickou sikmosti
+  cat("Klasicka sikmost", "\n")
+  Skew(hloubka)
+cat("\n", "\n")
+
+# oktilovy koeficient spicatosti (Moorse)
+Q18 <- quantile(hloubka, 1/8)
+Q28 <- quantile(hloubka, 2/8)
+Q38 <- quantile(hloubka, 3/8)
+Q48 <- quantile(hloubka, 4/8)
+Q58 <- quantile(hloubka, 5/8)
+Q68 <- quantile(hloubka, 6/8)
+Q78 <- quantile(hloubka, 7/8)
+cat("Oktilovy koeficient spicatosti", "\n")
+((Q78 - Q58) + (Q38 - Q18))/(Q68 - Q28)
+  # porovnejte s klasickou spicatosti
+  cat("Klasicka spicatost", "\n")
+  Kurt(hloubka)
+
+
+sirka <- diam$table
+cena <- diam$price
+
+rez <- diam$cut
+barva <- diam$color
+
+cat("Absolutni cetnosti obou promennych", "\n")
+cat("Kvalita rezu", "\n")
+cat("\n", "\n")
+
+table(rez)
+cat("Barva diamantu", "\n")
+table(barva)
+
+cat("Tabulka absolutnich cetnosti", "\n")
+(tab <- table(rez, barva))
+# mozna lepe videt z relativnich cetnosti
+cat("\n", "\n")
+
+cat("Tabulkove relativni cetnosti", "\n")
+addmargins(round(prop.table(tab), 4))
+cat("\n", "\n")
+
+cat("Radkove relativni cetnosti", "\n")
+addmargins(round(prop.table(tab, 1), 4))
+cat("\n", "\n")
+
+cat("Sloupcove relativni cetnosti", "\n")
+addmargins(round(prop.table(tab, 2), 4))
+
+  # ktery typ relativnich cetnosti se pro popis zavislosti hodi nejvic?
+
+plot(rez ~ barva, col = 1:5)
+  # Jak byste vztah popsali?
+
+cistota <- diam$clarity
+barva <- diam$color
+
+
+# Jaky je vztah mezi promennymi hloubka a pomer sirek?
+hloubka <- diam$depth
+sirka <- diam$table
+plot(hloubka ~ sirka, pch = 19, main = "Rozptylovy graf", xlab = "Pomer sirek", ylab="Hloubka kamene")
+  # Co z grafu vidite?
+  abline(lm(hloubka ~ sirka), col = "red", lwd = 2)
+    # prikresli do grafu primku linearni zavislosti
+
+cat("Kovariance = ", cov(hloubka, sirka, use = "complete.obs"), "\n")
+  # co Vam rika kovariance
+cat("Korelace = ", cor(hloubka, sirka, use = "complete.obs"), "\n")
+  # a co korelace
+
+# A co je korelacni tabulka?
+hloubka.c <- factor(ifelse(hloubka <= 60, '<60', ifelse(hloubka <= 62, '60-62', 
+                    ifelse(hloubka <= 64, '62-64', ifelse(hloubka <= 66, '64-66', 
+                    ifelse(hloubka <= 68, '66-68', '>68'))))),
+                    levels=c("<60", "60-62", "62-64", "64-66", "66-68", ">68")) 
+sirka.c <- factor(ifelse(sirka <= 54, '<54', ifelse(sirka <= 56, '54-56', 
+                  ifelse(sirka <= 58, '56-58', ifelse(sirka <= 60, '58-60', 
+                  ifelse(sirka <= 62, '60-62', ifelse(sirka <= 64, '62-64', '>64')))))),
+                  levels=c("<54","54-56","56-58","58-60", "60-62", "62-64", ">64"))
+cat("\n", "Korelacni tabulka", "\n")
+table(hloubka.c, sirka.c)
+
+
+hmot <- diam$carat
+cena <- diam$price
+
+
+sirka <- diam$table
+
+# histogram
+hist(sirka, main="Histogram", xlab = "Pomer sirek", ylab = "Absolutni cetnosti",
+    col = "skyblue", border = "darkblue")
+  # s hustotou normalniho rozdeleni 
+  hist(sirka ,main = "Histogram", xlab = "Pomer sirek", ylab = "Hustota",
+    col = "skyblue", border = "darkblue", freq = F)
+    # je treba vykreslit histogram prepocteny na hustotu
+  lines(x <- seq(50, 140, by = 0.2), dnorm(x, mean(sirka), sd(sirka)), col = 2)
+    # jak sloupce odpovidaji Gaussove krivce?
+
+# Graficky test: Q-Q plot - Quantile Comparison plot
+PlotQQ(sirka, pch = 19)
+  # pokud body lezi na primce, odpovida to normalnimu rozdeleni
+  # zde body lezi na oblouku, coz znaci sesikmene rozdeleni
+
+# Ciselne charakteristiky tvaru rozdeleni
+cat("Sikmost =", Skew(sirka), "\n")
+  # kladna sikmost (vetsi nez 0.3) znaci sesikmeni doprava
+cat("Spicatost =", Kurt(sirka), "\n")
+  # kladna spicatost (vetsi nez 0.5) znaci spicatejsi rozdeleni nez normalni (dlouhy chvost)
+
+# Pro "rozumne" velka data (od 50 do cca 300 pozorovani)
+#   je mozne vypocitat i ciselny test normality
+# Testujeme
+#   H0: data maji normalni rozdeleni vs. H1: data nemaji normalni rozdeleni
+shapiro.test(sirka)
+  # p-hodnota 1.038e-06 < alfa 0.05 => H0 zamitame
+  # data nemaji  rozdeleni
+  LillieTest(sirka)
+  AndersonDarlingTest(sirka, "pnorm", mean = mean(sirka), sd = sd(sirka))
+    # testu existuje vice
+
+hloubka <- diam$depth
+hmot <- diam$carat
+
