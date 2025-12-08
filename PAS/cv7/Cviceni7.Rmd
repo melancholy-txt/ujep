@@ -1,0 +1,277 @@
+---
+title: "Pravdepodobnost a statistika"
+subtitle: "Cviceni 5"
+author: "Alena Cernikova"
+date: "2025-10-27"
+output: html_document
+---
+
+### Nacteni dat a knihoven
+
+```{r}
+library(DescTools)
+  # knihovna s popisnymi statistikami
+library(TeachingDemos)
+  # knihovna s vyukovymi udelatky
+
+data(iris)
+  # data o kosatcich (meri delku a sirku okvetnich a kalisnich listku)
+data(airquality)
+  # kvalita ovzdusi
+```
+
+### Hodnoceni normality
+Jak zjistit, zda promenna ma ci nema normalni / Gaussovo rozdeleni
+
+Muze mit delka kalisniho listku kosatcu normalni rozdeleni?
+
+```{r}
+kalisni.L <- iris$Sepal.Length
+
+# histogram
+hist(kalisni.L, main="Histogram", xlab = "Delka kalisniho listku", ylab = "Absolutni cetnosti",
+    col = "skyblue", border = "darkblue")
+  # s hustotou normalniho rozdeleni 
+  hist(kalisni.L ,main = "Histogram", xlab = "Delka kalisniho listku", ylab = "Hustota",
+    col = "skyblue", border = "darkblue", freq = F, ylim = c(0, 0.5))
+    # je treba vykreslit histogram prepocteny na hustotu
+  lines(x <- seq(4, 8, by = 0.02), dnorm(x, mean(kalisni.L), sd(kalisni.L)), col = 2)
+    # jak sloupce odpovidaji Gaussove krivce?
+    # jake muzeme cekat hodnoty sikmosti a spicatosti?
+```
+Ciselne charakteristiky tvaru rozdeleni
+
+```{r}
+cat("Sikmost =", Skew(kalisni.L), "\n")
+  # hranicni kladna sikmost - mirne pravostranne sesikmeni
+cat("Spicatost =", Kurt(kalisni.L), "\n")
+  # zaporna spicatost (mensi nez -0.5) znaci rozdeleni, ktere je plozsi nez normalni (platykurticke)
+```
+Q-Q plot
+
+```{r}
+# Graficky test normality: Q-Q plot - Quantile Comparison plot
+PlotQQ(kalisni.L, pch = 19)
+  # na x-ove ose jsou teoreticke kvantily normalniho rozdeleni,
+  #   na y-ove ose jsou namerene kvantily nasi promenne
+  # pokud body lezi na primce, odpovida to normalnimu rozdeleni
+  # zde jsou do pismene S - to znaci zapornou spicatost
+  # jake dalsi tvary muze Q-Q plot mit?
+```
+
+Ciselne testy normality
+  pro "rozumne" velka data (cca od 50 do 300 pozorovani)
+
+Statisticky test:
+  testuji se proti sobe 2 hypotezy: nulova a alternativni
+    nulova hypoteza, H0: obsahuje jednu hodnotu, jednu variantu/ moznost
+    alternativni hypoteza H1: obsahuje interval hodnot, vice moznosti, nekonkretni moznost
+  testuje se na hladine vyznamnosti alfa (nejcasteji 5%)
+  testy budeme vyhodnocovat na zaklade p-hodnoty
+    POKUD JE P-HODNOTA <= ALFA, PAK H0 ZAMITAME, plati H1
+    POKUD JE P-HODNOTA > ALFA, PAK H0 NEZAMITAME
+    jak si predstavit p-hodnotu
+      pst naseho vysledku, pokud ve skutecnosti plati nulova hypoteza
+    
+```{r}
+# Testujeme
+#   H0: data maji normalni rozdeleni vs. H1: data nemaji normalni rozdeleni
+shapiro.test(kalisni.L)
+  # p-hodnota 0.01018 < alfa 0.05 => H0 zamitame
+  # data nemaji normalni rozdeleni
+  LillieTest(kalisni.L)
+  AndersonDarlingTest(kalisni.L, "pnorm", mean = mean(kalisni.L), sd = sd(kalisni.L))
+    # testu existuje vice
+```
+
+Overte normalitu pro promenne Sepal.Width a Petal.Length z databaze iris
+  a pro promenne Ozone a Temp (teplota) z databaze airquality
+
+```{r}
+kalisni.W <- iris$Sepal.Width
+
+hist(kalisni.W ,main = "Histogram", xlab = "Delka kalisniho listku", ylab = "Hustota",
+  col = "skyblue", border = "darkblue", freq = F)
+  # je treba vykreslit histogram prepocteny na hustotu
+lines(x <- seq(4, 8, by = 0.02), dnorm(x, mean(kalisni.W), sd(kalisni.W)), col = "red")
+
+PlotQQ(kalisni.W, pch = 19)
+
+LillieTest(kalisni.W)
+
+```
+
+```{r}
+korunni.L <- iris$Petal.Length
+
+hist(korunni.L ,main = "Histogram", xlab = "Delka kalisniho listku", ylab = "Hustota",
+  col = "skyblue", border = "darkblue", freq = F)
+  # je treba vykreslit histogram prepocteny na hustotu
+lines(x <- seq(4, 8, by = 0.02), dnorm(x, mean(korunni.L), sd(korunni.L)), col = 2)
+
+PlotQQ(korunni.L, pch = 19)
+
+LillieTest(korunni.L)
+
+```
+```{r}
+ozon <- airquality$Ozone
+
+hist(ozon ,main = "Histogram", xlab = "Ozon", ylab = "Hustota",
+  col = "skyblue", border = "darkblue", freq = F)
+  # je treba vykreslit histogram prepocteny na hustotu
+lines(x <- seq(0, 200, by = 1), dnorm(x, mean(ozon, na.rm=TRUE), sd(ozon, na.rm=TRUE)), col = 2)
+
+PlotQQ(ozon, pch = 19)
+
+LillieTest(ozon)
+
+```
+```{r}
+teplota <- airquality$Temp
+
+hist(teplota ,main = "Histogram", xlab = "Teplota", ylab = "Hustota",
+  col = "skyblue", border = "darkblue", freq = F)
+  # je treba vykreslit histogram prepocteny na hustotu
+lines(x <- seq(50, 100, by = 1), dnorm(x, mean(teplota, na.rm=TRUE), sd(teplota, na.rm=TRUE)), col = 2)
+
+PlotQQ(teplota, pch = 19)
+
+LillieTest(teplota)
+
+```
+
+Centralni limitni veta
+  soucet nezavislych stejne rozdelenych nahodnych velicin konverguje k normalnimu rozdeleni
+  pro pocet pozorovani rostouci nade vsechny meze
+```{r}
+clt.examp(1)
+clt.examp(2)
+clt.examp(5)
+clt.examp(10)
+clt.examp(30)
+```
+### Vypocty pravdepodobnosti
+### Diskretni rozdeleni
+
+Binomicke rozdeleni: n - pocet pokusu, p - pst uspechu
+  pbinom(k, n, p) - distribucni funkce
+  dbinom(k, n, p) - pravdepodobnostni funcke
+
+Hypergeometricke rozdeleni: w - pocet bilych kouli v osudi, b - pocet cernych kouli v osudi
+    n - pocet kouli tazenych z osudi
+  phyper(k, w, b, n) - distribucni funkce
+  dhyper(k, w, b, n) - pravdepodobnostni funcke
+
+Geometricke rozdeleni: p - pravdepodobnost uspechu
+  pgeom(k, p) - distribucni funkce
+  dgeom(k, p) - pravdepodobnostni funcke
+
+Poissonovo rozdeleni: lambda - stredni hodnota
+  ppois(k, lambda) - distribucni funkce
+  dpois(k, lambda) - pravdepodobnostni funcke
+
+```{r}
+## Binomicke rozdeleni
+# Hazim desetkrat minci, jaka je pravdepodobnost, ze mi padne x krat orel?
+
+# pravdepodobnostni funkce
+plot(0:10, dbinom(0:10, 10, 1/2), col = 3, type = "h", main = "Pravdepodobnostni funkce Bi(10, 1/2))")
+points(0:10, dbinom(0:10, 10, 1/2), col = 3, pch = 19)
+
+# distribucni funkce
+plot(0:10, pbinom(0:10, 10, 1/2), col = 3, ylim = c(0,1), pch = 20, main = "Distribucni funkce Bi(10, 1/2)")
+for(i in 0:10){
+ lines(c((i-1),i), c(pbinom(i-1, 10, 1/2), pbinom(i-1, 10, 1/2)), col = 3)
+ lines(c(i,i), c(pbinom(i-1, 10, 1/2), pbinom(i, 10, 1/2)), col = 3, lty = 3)
+}
+
+# pravdepodobnostni funkce
+# pst, ze padne 6 krat orel
+cat("P(X = 6)", dbinom(6, 10, 1/2), "\n", "\n")
+
+# pst, ze padne maximalne 3 krat orel
+cat("P(X <= 3)", pbinom(3, 10, 1/2), "\n")
+cat("P(X <= 3)", sum(dbinom(0:3, 10, 1/2)), "\n", "\n")
+
+# pst, ze padne vice nez 4 krat orel
+cat("P(X > 4)", 1 - pbinom(4, 10, 1/2), "\n")
+cat("P(X > 4)", sum(dbinom(5:10, 10, 1/2)), "\n", "\n")
+
+# pst, ze padne mene nez 6 krat orel
+cat("P(X < 6)", pbinom(5, 10, 1/2), "\n")
+cat("P(X < 6)", sum(dbinom(0:5, 10, 1/2)), "\n", "\n")
+
+# pst, ze padne alespon 7 krat orel
+cat("P(X >= 7)", 1 - pbinom(6, 10, 1/2), "\n")
+cat("P(X >= 7)", sum(dbinom(7:10, 10, 1/2)), "\n", "\n")
+
+# pst, ze padne alespon 3 krat a maximalne 6 krat orel
+cat("P(3 <= X <= 6)", pbinom(6, 10, 1/2) - pbinom(2, 10, 1/2), "\n")
+cat("P(3 <= X <= 6)", sum(dbinom(3:6, 10, 1/2)), "\n", "\n")
+
+```
+Student rano zaspi s pravdepodobnosti 0.1. Semestr ma 12 tydnu.
+Jaka je pravdepodobnost, ze z techto dnanacti prednasek zaspi presne trikrat? 
+Ze zaspi maximalne petkrat? Ze prijde na vetsinu prednasek vcas?
+
+```{r}
+## Hypergeometricke rozdeleni
+# Na parkovisti stoji 10 vozu znacky Skoda a 15 vozu jine znacky. 
+# Jaka je pravdepodobnost, ze kdyz 7 aut odjede, zbude na parkovisti xx aut znacky Skoda.
+
+# pravdepodobnostni funkce
+plot(0:11, dhyper(0:11, 10, 15, 18), col = 2, type = "h", main = "Pravdepodobnostni funkce HG(10, 15, 18))")
+points(0:11, dhyper(0:11, 10, 15, 18), col = 2, pch = 19)
+
+# distribucni funkce
+plot(0:11, phyper(0:11, 10, 15, 18), col = 2, ylim = c(0,1), pch = 20, main = "Distribucni funkce HG(10, 15, 18)")
+for(i in 0:11){
+ lines(c((i-1),i), c(phyper(i-1, 10, 15, 18), phyper(i-1, 10, 15, 18)), col = 2)
+ lines(c(i,i), c(phyper(i-1, 10, 15, 18), phyper(i, 10, 15, 18)), col = 2, lty = 3)
+}
+
+```
+Jaka je pravdepodobnost, ze zbude 8 Skodovek? Ze Skodovek vyjede maximalne 5?
+Ze zbude alespon 6 a maximalne 10 Skodovek? Ze zbude alespon 6 Skodovek?
+Ze vzjede 7 aut jine znackz nez Skoda?
+
+```{r}
+## Geometricke rozdeleni
+# Hazite sestistennou kostkou a ptate se, jaka je pst, ze sestka padne prvne v xx-tem hodu.
+# Pocita se pocet neuspechu pred prvnim uspechem.
+
+# pravdepodobnostni funkce
+plot(0:20, dgeom(0:20, 1/6), col = 4, type = "h", main = "Pravdepodobnostni funkce Geom(1/6))")
+points(0:20, dgeom(0:20, 1/6), col = 4, pch = 19)
+
+# distribucni funkce
+plot(0:20, pgeom(0:20, 1/6), col = 4, ylim = c(0,1), pch = 20, main = "Distribucni funkce Geom(1/6)")
+for(i in 0:20){
+ lines(c((i-1),i), c(pgeom(i-1, 1/6), pgeom(i-1, 1/6)), col = 4)
+ lines(c(i,i), c(pgeom(i-1, 1/6), pgeom(i, 1/6)), col = 4, lty = 3)
+}
+
+```
+Jaka je pravdepodobnost, ze sestka padne prvne ve tretim pokusu? Ze padne nejpozdeji v desatem pokusu?
+Ze padne prvne mezi ctvrtym a sestym hodem?
+
+```{r}
+## Poissonovo rozdeleni
+# Do obchudku prijde prumerne 5 lidi za hodinu. Jaka je ravdepodobnost, ze jich za hodinu prijde presne xx? 
+
+# pravdepodobnostni funkce
+plot(0:15, dpois(0:15, 5), col = 5, type = "h", main = "Pravdepodobnostni funkce Pois(5))")
+points(0:15, dpois(0:15, 5), col = 5, pch = 19)
+
+# distribucni funkce
+plot(0:15, ppois(0:15, 5), col = 5, ylim = c(0,1), pch = 20, main = "Distribucni funkce Pois(5)")
+for(i in 0:15){
+ lines(c((i-1),i), c(ppois(i-1, 5), ppois(i-1, 5)), col = 5)
+ lines(c(i,i), c(ppois(i-1, 5), ppois(i, 5)), col = 5, lty = 3)
+}
+
+```
+
+Jaka je pravdepodobnost, ze jich prijde za hodinu 8? Ze prijdou mene nez 3?
+Ze za 2 hodiny jich prijde alespon 12?
