@@ -1,0 +1,323 @@
+---
+title: "Pravdepodobnost a statistika"
+subtitle: "Cviceni 9"
+author: "Alena Cernikova"
+date: "2025-12-01"
+output: html_document
+---
+
+### Dokonceni vypoctu pravdepodobnosti - stredecni skupiny
+
+Normalni rozdeleni: 
+  Parametry: mu - stredni hodnota, sigma - smerodatna odchylka
+  pnorm(x,mu,sigma) - distribucni funkce P(X <= x)
+  qnorm(p,mu,sigma) - kvantilova funkce: x tak, ze P(X <= x) = p
+
+
+Lognormalni rozdeleni: 
+  velicina, jejich logaritmus ma normalni rozdeleni
+  Parametry: mu , sigma (velicina ln(X) ~ N(mu, sigma^2))
+  plnorm(x,mu,sigma) - distribucni funkce
+  qlnorm(q,mu,sigma) - kvantilova funkce
+  stredni hodnota exp(mu+sigma^2/2)
+  rozptyl (exp(sigma^2)+2)*exp(2*mu+sigma^2)
+
+Exponencialni rozdeleni: 
+  doba cekani do udalosti
+  Pramater: int - intenzita
+  pexp(x,int) - distribucni funkce
+  qexp(q,int) - kvantilova funkce
+  distribucni funkce P(X <= t) = 1 - exp(-int*t)
+  stredni hodnota 1/int
+  rozptyl 1/int^2
+
+### Vypocty pravdepodobnosti
+
+P(X = k) = 0 pro libovolne k!!!
+P(X <= k) = P(X < k) ... distribucni funkce v bode k
+P(X >= k) = P(X > k) = 1 - P(X <= k) ... jedna minus distribucni funkce v bode k
+P(k <= X <= l) = P(X <= k) - P(X <= l) ... rozdil distribucnich funkci v bodech k a l
+
+Priklad 1
+```{r}
+# Hmotnost bochniku chleba ma normalni rozdeleni se stredni hodnotou 1.2 kg a smerodatnou odchylkou 30 g. Jaka je pravdepodobnost, ze bochnik, ktery si prinesu domu bude mit maximalne o 50 g mene, nez je optimalni vaha.
+```
+
+Priklad 2
+```{r}
+# Nahodna velicina X ma normalni rozdeleni N(2,5). Stanovte kvartily teto veliciny a jeji mezikvartilove rozpeti.
+```
+
+Priklad 3
+```{r}
+# Pojistovna si eviduje vsechny skody, ktere musela proplacet. Zjistila, ze vyska skody sa ridi logaritmicko-normalnim rozdelenim s parametry mu = 6 a sigma-kvadrat = 2. Urcete median vysky skody.
+```
+
+Priklad 4
+```{r}
+# V promitaci mistnosti bezi stale dokola smycka 20-minutoveho filmu. Urcite pravdepodobnost, ze kdyz nahodne vejdeme do mistnosti,  nebudeme na zacatek filmu cekat vic nez 5 minut.
+```
+
+Priklad 5
+```{r}
+# Cas neprimeho bunecneho deleni (tzv. mitoza) ma normalni rozdeleni se stredni hodnotou jedna hodina a rozptylem 25. Jaka je  pravdepodobnost, ze deleni nejake bunky se uskutecni drive nez za 45 minut?
+```
+
+Priklad 6
+```{r}
+# Doba zivotnosti vyrobku ma exponencialni rozdeleni se stredni hodnotou 2000 dni. Urcete pravdepodobnost, ze vyrobek bude funkcni aspon 3000 dni.
+```
+
+Priklad 7
+```{r}
+# Rychlost prenosu souboru v kb za sekundu z ma lognormalni rozdeleni LN(3.75,0.50). Urcete pravdepodobnost, ze soubor bude prenasen rychlosti 70 kb za sekundu nebo vetsi.
+```
+
+### Odhad rozdeleni
+Jak odhadnout, jakym roydelenim se ridi nahodna velicina
+
+Nacteni knihoven a dat
+```{r}
+library(fitdistrplus)
+  # klicove funkce pro odhad rozdeleni
+library(DescTools)
+  # popisne statistiky
+
+# Nacteni databaze Stulong.RData
+load("Stulong.RData")
+names(Stulong)<-c("ID","vyska","vaha","syst1","syst2","chlst","vino","cukr","bmi",
+                  "vek","KOURrisk","Skupina","VekK")
+```
+
+Jake rozdeleni ma cholesterol? 
+```{r}
+chol <- Stulong$chlst
+hist(chol, col = "azure", border = "darkblue", main = "Histogram pro hladinu cholesterolu", xlab = "Cholesterol")
+  # histogram ukaze zakladni tvar dat
+PlotQQ(chol, pch = 19)
+  # test normality
+cat("\nSikmost =", Skew(chol))
+cat("\nSpicatost =", Kurt(chol))
+
+```
+Tvary vybranych rozdeleni
+
+```{r}
+# ----------------------------------------------------
+# 1. Normální rozdělení (N(180, 7^2))
+# Střední hodnota 180, směrodatná odchylka 7
+curve(dnorm(x, mean = 180, sd = 7), 
+      from = 150, to = 210, 
+      main = "Hustota Normálního rozdělení (dnorm)", 
+      col = "red", ylab = "Hustota", xlab = "x")
+
+# ----------------------------------------------------
+# 2. Rovnoměrné rozdělení (Uniform(1, 5))
+# Rozsah od 1 do 5
+curve(dunif(x, min = 1, max = 5), 
+      from = -1, to = 7, 
+      main = "Hustota Rovnoměrného rozdělení (dunif)", 
+      col = "blue", ylab = "Hustota", xlab = "x")
+
+# ----------------------------------------------------
+# 3. Exponenciální rozdělení (Exp(rate=0.5))
+# Parametr lambda (rate) = 0.5
+curve(dexp(x, rate = 0.5), 
+      from = 0, to = 10, 
+      main = "Hustota Exponenciálního rozdělení (dexp)", 
+      col = "darkgreen", ylab = "Hustota", xlab = "x")
+
+# ----------------------------------------------------
+# 4. Logistické rozdělení (Logis(0, 1))
+# location=0, scale=1
+curve(dlogis(x, location = 0, scale = 1), 
+      from = -6, to = 6, 
+      main = "Hustota Logistického rozdělení (dlogis)", 
+      col = "purple", ylab = "Hustota", xlab = "x")
+
+# ----------------------------------------------------
+# 5. Beta rozdělení (Beta(2, 5))
+# Parametry shape1=2, shape2=5 (vždy v rozsahu [0, 1])
+curve(dbeta(x, shape1 = 2, shape2 = 5), 
+      from = 0, to = 1, 
+      main = "Hustota Beta rozdělení (dbeta)", 
+      col = "orange", ylab = "Hustota", xlab = "x")
+
+# ----------------------------------------------------
+# 5. Beta rozdělení (Beta(0.35, 0.25))
+# Parametry shape1=0.35, shape2=0.25 (vždy v rozsahu [0, 1])
+curve(dbeta(x, shape1 = 0.35, shape2 = 0.25), 
+      from = 0, to = 1, 
+      main = "Hustota Beta rozdělení (dbeta)", 
+      col = "magenta", ylab = "Hustota", xlab = "x")
+
+# ----------------------------------------------------
+# 6. Lognormální rozdělení (LNorm(0, 0.5))
+# meanlog=0, sdlog=0.5
+curve(dlnorm(x, meanlog = 0, sdlog = 0.5), 
+      from = 0, to = 6, 
+      main = "Hustota Lognormálního rozdělení (dlnorm)", 
+      col = "brown", ylab = "Hustota", xlab = "x")
+
+# ----------------------------------------------------
+# 7. Gamma rozdělení (Gamma(3, 1.5))
+# Parametry shape=3, rate=1.5
+curve(dgamma(x, shape = 3, rate = 1.5), 
+      from = 0, to = 10, 
+      main = "Hustota Gamma rozdělení (dgamma)", 
+      col = "green", ylab = "Hustota", xlab = "x")
+
+# ----------------------------------------------------
+# 7. Gamma rozdělení (Gamma(3, 1.5))
+# Parametry shape=3, rate=1.5
+curve(dgamma(x, shape = 1.3, rate = 5), 
+      from = 0, to = 3, 
+      main = "Hustota Gamma rozdělení (dgamma)", 
+      col = "royalblue", ylab = "Hustota", xlab = "x")
+
+# ----------------------------------------------------
+# 8. Weibullovo rozdělení (Weibull(2, 1.5))
+# Parametry shape=2, scale=1.5
+curve(dweibull(x, shape = 2, scale = 1.5), 
+      from = 0, to = 5, 
+      main = "Hustota Weibullova rozdělení (dweibull)", 
+      col = "darkred", ylab = "Hustota", xlab = "x")
+```
+
+# Pomer sikmosti a spicatosti, k jakemu rozdeleni mam nejblize
+```{r}
+descdist(chol ,discrete=FALSE, boot=1000)
+```
+Hledam, ke kterym rozdelenim maji moje body nejblize
+  zde je to dost bida, nebot v oblasti, kde lezi body generovane z nasich dat,
+    neni zadne navrhovane rozdeleni
+
+
+Zkusim a porovnam normalni, logisticke, lognormalni, gamma a Weibullovo
+```{r}
+(fit1 <- fitdist(chol, "norm"))
+(fit2 <- fitdist(chol, "logis"))
+(fit3 <- fitdist(chol, "lnorm"))
+(fit4 <- fitdist(chol, "gamma"))
+(fit5 <- fitdist(chol, "weibull"))
+
+# porovnani pomoci AIC a BIC kriterii
+data.frame(distr = c("Norm", "Logis", "Lognorm", "Gamma", "Weibull"),
+           AIC = c(fit1$aic, fit2$aic, fit3$aic, fit4$aic, fit5$aic),
+           BIC = c(fit1$bic, fit2$bic, fit3$bic, fit4$bic, fit5$bic)
+)
+  # nejnizsi hodnoty AIC i BIC ma lognormalni rozdeleni
+```
+
+nejlepsi rozdeleni ma minimalni hodnoty informacnich kriterii
+
+odhad parametru vybraneho (lognormalniho) rozdeleni vcetne jejich 95%-nich intervalu spolehlivosti
+```{r}
+data.frame(estimate = coef(fit3),
+           ci0.95lo = coef(fit3) - 1.96*fit3$sd,
+           ci0.95up = coef(fit3) + 1.96*fit3$sd
+)
+```
+
+kontrola, jak jednotlivym rozdelenim sedi Q-Q plot
+```{r}
+PlotQQ(chol)
+PlotQQ(chol, qdist = function(p) qlogis(p, location = coef(fit2)[1], scale = coef(fit2)[2]))
+PlotQQ(chol, qdist = function(p) qlnorm(p, meanlog = coef(fit3)[1], sdlog = coef(fit3)[2]))
+PlotQQ(chol, qdist = function(p) qgamma(p, shape = coef(fit4)[1], rate = coef(fit4)[2]))
+PlotQQ(chol, qdist = function(p) qweibull(p, shape = coef(fit5)[1], scale = coef(fit5)[2]))
+  # lognormalni rozdeleni sedi nejlepe
+```
+
+Jakym rozdelenim se ridi systolicky tlak 1 (syst1)?
+```{r}
+syst1 <- Stulong$syst1
+
+```
+
+Jakym rozdelenim se ridi cukr?
+```{r}
+cukr <- Stulong$cukr
+
+```
+
+### Testovani hypotez
+statisticke testy funguji dobre pro rozumny pocet pozorovani
+pouzijeme pouze 200 hodnot
+
+```{r}
+set.seed(123)
+Stulong200 <- Stulong[sample(nrow(Stulong), 200), ]
+
+```
+
+Pomoci jednovyberoveho t-testu zjistete, zda populacni prumer vysky muzu 
+  stredniho veku muze byt 180 cm?
+Pouzijte prikaz
+t.test(promenna, mu = testovane cislo, alternative = "pozadovana alternativa")
+  kde pozadovana alternativa muze byt "less", "greater", "both.sided" - prednastavena verze, nemusi se zadavat
+
+Stanovene hypotezy:
+  H0:
+  H1:
+hladina vyznamnosti alpha =
+
+Pokud p-hodnota <= alpha => ZAMITAME H0, plati H1
+Pokud p-hodnota > alpha => NEZAMITAME H0
+
+Interpretace vysledku:
+
+predpokladem jednovyberoveho t-testu je normalita dat
+```{r}
+vyska <- Stulong200$vyska
+
+```
+
+Pomoci jednovyberoveho Wilcoxonova testu zjistete, zda stredni hodnota
+  hladiny cholesterolu u muzu stredniho veku je vetsi nez 210.
+Pouzijte prikaz
+wilcox.test(promenna, mu = testovane cislo, alternative = "pozadovana alternativa")
+  kde pozadovana alternativa muze byt "less", "greater", "both.sided" - prednastavena verze, nemusi se zadavat
+
+Stanovene hypotezy:
+  H0:
+  H1:
+hladina vyznamnosti alpha =
+
+Pokud p-hodnota <= alpha => ZAMITAME H0, plati H1
+Pokud p-hodnota > alpha => NEZAMITAME H0
+
+Interpretace vysledku:
+
+  
+```{r}
+chol <- Stulong200$chlst
+
+```  
+
+Pomoci jednovyberoveho t-testu zjistete, zda stredni hodnota
+  hmotnosti muzu stredniho veku je mensi nez 82 kg.
+Pouzijte prikaz
+wilcox.test(promenna, mu = testovane cislo, alternative = "pozadovana alternativa")
+  kde pozadovana alternativa muze byt "less", "greater", "both.sided" - prednastavena verze, nemusi se zadavat
+
+Stanovene hypotezy:
+  H0:
+  H1:
+hladina vyznamnosti alpha =
+
+Pokud p-hodnota <= alpha => ZAMITAME H0, plati H1
+Pokud p-hodnota > alpha => NEZAMITAME H0
+
+Interpretace vysledku:
+
+  
+```{r}
+hmot <- Stulong200$vaha
+PlotQQ(hmot)
+summary(hmot)
+
+```  
+
+
+

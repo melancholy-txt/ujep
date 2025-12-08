@@ -1,0 +1,300 @@
+---
+title: "Pravdepodobnost a statistika"
+subtitle: "Cviceni 10"
+author: "Alena Cernikova"
+date: "2025-12-08"
+output: html_document
+---
+
+### Interval spolehlivosti
+
+```{r}
+library(DescTools)
+  # knihovna popisnych statistik
+
+load("Kojeni.RData")
+  # nacte databazi Kojeni.RData
+  # databaze vytvorena pri zpracovani diplomove prace na PrF UK kolem roku 2000
+```
+### Interval spolehlivosti pro prumer
+
+Spoctete 95% interval spolehlivosti pro prumer vysky muzu (otcu) kdyz vite, 
+  ze rozptyl vysky dospelych muzu je 49.
+```{r}
+vyska <- Kojeni$vyskaO
+
+pocet <- length(vyska)
+prumer <- mean(vyska)
+sm.od <- sqrt(49) # smerodatna odchylka - variabilita
+alfa <- 1 - 0.95 # hladina významnosti, velikost chyby, velikost ze se netrefim
+kvantil <- qnorm(1 - alfa/2)
+  # pri znamem rozptylu se pouziva kvantil normalniho rozdeleni
+  # jinak kvantil t-rozdeleni o n-1 stupnich volnosti
+
+# interval spolehlivosti se pocita podle vzorce
+#   prumer +- kvantil * sd/odmocnina(n)
+
+cat("\nDolni mez =", prumer - kvantil * sm.od / sqrt(pocet))
+cat("\nHorni mez =", prumer + kvantil * sm.od / sqrt(pocet))
+
+cat("\n\nVypocet pomoci funkce v knihovne DescTools \n")
+MeanCI(vyska, sd = sqrt(49))
+MeanCI(vyska)
+```
+# Interpretace: 
+# Se spolehlivosti 95% skutecna stredni hodnota vysky otcu lezi v intervalu od 177.9 do 180.6 cm
+- interpretace začíná slovy "se spolehlivostí"
+- je v něm parametr střední hodnoty
+
+A jaky je 99% interval spolehlivosti pro vysku matky? 
+
+```{r}
+vyska <- Kojeni$vyskaM
+
+pocet <- length(vyska)
+prumer <- mean(vyska)
+sm.od <- sd(vyska)
+alfa <- 1 - 0.99
+kvantil <- qt(1 - alfa/2, pocet - 1)
+  # kdyz rozptyl neznam a odhaduji ho z dat, pouziva se kvantil t-rozdeleni o n-1 stupnich volnosti
+
+cat("\nDolni mez =", prumer - kvantil*sm.od/sqrt(pocet))
+cat("\nHorni mez =", prumer + kvantil*sm.od/sqrt(pocet))
+
+cat("\n\nVypocet pomoci funkce v knihovne DescTools \n")
+MeanCI(vyska, conf.level = 0.99)
+```
+
+# Interpretace: 
+Se spolehlivosti 99% skutecna stredni hodnota vysky matek lezi v intervalu od 165.4 do 168.6 cm
+
+### Spojitost s jednovyberovym testem
+
+Na zaklade 99%-niho intervalu spolehlivosti rozhodnete, zda stredni hodnota vysky matek muze byt:
+  160 cm, 162 cm, 165 cm, 166 cm, 168 cm, 168.5 cm, 168,7 cm, 169 cm, 180 cm?
+
+### Jednovyberovy test
+
+Pomoci jednovyberoveho t-testu zjistete, zda populacni prumer vysky matek muze byt 169 cm. 
+Pouzijte prikaz
+t.test(promenna, mu = testovane cislo, alternative = "pozadovana alternativa")
+  kde pozadovana alternativa muze byt "less", "greater", "two.sided" - prednastavena verze, nemusi se zadavat
+
+Stanovene hypotezy:
+  - H0: populacni prumer vysky matek = 169 cm
+  - H1: populacni prumer vysky matek != 169 cm
+hladina vyznamnosti alfa =
+
+Pokud p-hodnota <= alfa => ZAMITAME H0, plati H1
+Pokud p-hodnota > alfa => NEZAMITAME H0
+
+Interpretace vysledku:
+
+predpokladem jednovyberoveho t-testu je normalita dat
+
+```{r}
+vyska <- Kojeni$vyskaM
+t.test(vyska, mu = 169, conf.level = 0.99)
+```
+
+Na 5% hladine vyznamnosti rozhodnete, zda stredni hodnota porodni hmotnosti deti muze byt 3.5kg.
+  Pouzijte jednovyberovy t-test
+
+```{r}
+hmot <- Kojeni$porHmotnost
+
+t.test(hmot, mu = 3500, conf.level = 0.95)
+```
+
+p je vetsi nez 0.05 => NEZAMITAME H0 => stredni hodnota porodni hmotnosti deti muze byt 3.5 kg
+### Interpretace: 
+Se spolehlivosti 95% skutecna stredni hodnota porodni hmotnosti lezi v intervalu od 3422 g do 3473 g
+
+V jakem rozmezi by se s 90% spolehlivosti mela nachazet stredni hodnota porodni delky deti?
+```{r}
+delka <- Kojeni$porDelka
+
+MeanCI(delka, conf.level = 0.90)
+
+cat("\nTest, zda stredni hodnota je mensi nez 50.5cm\n")
+t.test(delka, mu=50.5, altenative = "less")
+```
+### Interpretace: 
+Se spolehlivosti 90% skutecna stredni hodnota porodni delky lezi v intervalu od 50.34 do 50.85 cm
+
+## Interval spolehlivosti pro rozdil prumeru
+
+Je 95%-ni interval spolehlivosti pro porodni hmotnost stejny u divek a u hochu?
+```{r}
+pohlavi <- Kojeni$Hoch
+hmot <- Kojeni$porHmotnost
+tapply(hmot, pohlavi, MeanCI)
+```
+Intervaly totozne nejsou, ale je mezi divkami a hochy vyznamny rozdil? 
+
+Muzeme resit pomoci intervalu spolehlivosti
+```{r}
+cat("\n95%-ni interval spolehlivosti \n")
+MeanDiffCI(hmot ~ pohlavi)
+  # pokud interval neobsahuje nulu, je vyznamny rozdil ve strednich hodnotach
+
+cat("\n99%-ni interval spolehlivosti \n")
+MeanDiffCI(hmot ~ pohlavi, conf.level=0.99)
+  # zjistuji, zda je rozdil vyznamny na 1%-ni hladine vyznamnosti
+```
+
+Nebo na to muzeme jit testem
+Dvouvyberovy t-test ma opet predpoklad normality a navic shodu rozptylu
+  H0: mezi hochy a divkami neni rozdil -> = 0
+  H1: mezi hochy a divkami je rozdil -> != 0
+  alfa = 0.05
+```{r}
+t.test(hmot ~ pohlavi, var.eq = T)
+```
+
+Lisi se prumerna hmotnost pulrocnich deti, ktere byly jeste
+  v pul roce kojeny a tech, co uz kojeny nebyly (promenna Koj24)?
+```{r}
+hmot <- Kojeni$hmotnost
+skupina <- Kojeni$Koj24
+tapply(hmot, skupina, MeanCI)
+MeanDiffCI(hmot ~ skupina)
+MeanDiffCI(hmot ~ skupina, conf.level = 0.99)
+t.test(hmot ~ skupina, var.eq = T)
+```
+### Nejedná se o statisticky významný rozdíl
+
+
+# Interval spolehlivosti pro pravdepodobnost (podil)
+
+Spoctete a interpretujte 95%-ni interval spolehlivosti pro 
+  podil otcu pritomnych u porodu
+```{r}
+otec <- Kojeni$Otec
+table(otec)
+  # u porodu bylo pritomno 36 otcu
+round(prop.table(table(otec)), 4) * 100
+  # coz je 36.36%
+```
+
+Vypocet intervalu spolehlivosti
+```{r}
+# rucni vypocet
+p <- prop.table(table(otec))[2]
+n <- length(otec)
+alpha <- 0.05
+q.n <- qnorm(1 - alpha/2)
+  # zde se pouziva kvantil normalniho rozdeleni vzdy
+
+cat("\nDolni mez = ", p - q.n*sqrt(p*(1-p)/n))
+cat("\nHorni mez = ", p + q.n*sqrt(p*(1-p)/n))
+  # se spolehlivosti 95% skutecny podil otcu pritomnych u porodu se nachazi mezi 26.9% a 45.8%
+
+cat("\n\n95%-ni interval spolehlivosti pomoci prednastavene funkce\n")
+BinomCI(table(otec)[2], sum(table(otec)), method = "wald")
+```
+
+Spoctete 90%-ni interval spolehlivosti pro podil deti, 
+  ktere byly jeste v pul roce kojeny (promenna Koj24)
+```{r}
+Kojene <- Kojeni$Koj24
+(tab <- table(Kojene))
+BinomCI(tab[2], sum(tab), conf.level = 0.90, method = "wald")
+```
+# Interpretace: 
+Se spolehlivosti 90% skutecny podil deti, ktere byly jeste v pul roce kojeny, se nachazi v intervalu od 20.8% do 35.7%
+
+Spojeni s testem 
+Test o hodnote podilu
+Muze byt skutecny podil kojenych deti 50%? (kod 2)
+  H0: podíl = 50%
+  H1: podíl != 50%
+  hladina vyznamnosti alfa = 0.05
+Pouzijte funkci prop.test(pocet uspechu, pocet pokusu, p = nulova hypoteza, alternative = "alternativa")
+
+```{r}
+prop.test(tab[2], sum(tab), p = 0.5)
+binom.test(tab[2], sum(tab), p = 0.5)
+```
+Intervalu spolehlivosti je vice prop.test pouziva vystupy ze score testu
+
+### Interval spolehlivosti pro rozdil podilu
+
+Jak velky je rozdil v podilu otcu pritomnych u porodu mezi Prahou a Kladnem?
+```{r}
+mesto <- Kojeni$Porodnice
+(tab <- table(otec, mesto))
+```
+Odhad rozdilu podilu a interval spolehlivosti
+```{r}
+cat("\nPodil pritomnych otcu v Praze =", tab[2,1]/(tab[1,1] + tab[2,1]))
+cat("\nPodil pritomnych otcu v Kladne =", tab[2,2]/(tab[1,2] + tab[2,2]))
+cat("\nRozdil techto podilu v Praze a na Kladne =", tab[2,1]/(tab[1,1] + tab[2,1]) - tab[2,2]/(tab[1,2] + tab[2,2]))
+
+cat("\n\n95%-ni interval spolehlivosti pomoci prednastavene funkce\n")
+BinomDiffCI(x1 = tab[2,1], n1 = tab[1,1] + tab[2,1], x2 = tab[2,2], n2 = tab[1,2] + tab[2,2], method ="wald")
+```
+
+Je rozdil mezi podilem pritomnych otcu v Praze a na Kladne vyznamny?
+Resime testem
+  H0:
+  H1:
+  hladina vyznamnosti alfa =
+```{r}
+prop.test(c(tab[2,1], tab[2,2]), c(tab[1,1] + tab[2,1], tab[1,2] + tab[2,2]))
+```
+
+Spoctete 99% interval spolehlivosti pro rozdil podilu v pul roce kojenych deti (kod 2) v Praze a na Kladne.
+```{r}
+kojene <- Kojeni$Koj24
+mesto <- Kojeni$Porodnice
+(tab <- table(kojene, mesto))
+```
+
+Bootstrapovy interval spolehlivosti pro prumer
+Vyse zmineny interval spolehlivosti pro prumer funguje dobre u dat s priblizne normalnim rozdelenim
+  u dat s vyraznymi odchylkami od normality je mozne pouzit napr. bootstrapovy interval spolehlivosti
+
+Spoctete 95%-ni interval spolehlivosti pro pocet tydnu, po ktere byly deti plne kojeny (promenna trvani)
+```{r}
+trvani <- Kojeni$trvani
+hist(trvani, col = "tomato")
+
+cat("\nKlasicky 95%-ni interval spolehlivosti pro prumer\n")
+MeanCI(trvani)
+
+cat("\n\nBootstrapovy 95%-ni interval spolehlivosti pro prumer\n")
+MeanCI(trvani, method = "boot")
+```
+Pro asymetricke rozdeleni muze byt bootstrapovy interval mirne asymetricky
+
+Pro symetricke rozdeleni se od klasickeho lisi jen minimalne
+Interval spolehlivosti pro vysku otce
+```{r}
+vyska <- Kojeni$vyskaO
+
+cat("\nKlasicky 95%-ni interval spolehlivosti pro prumer\n")
+MeanCI(vyska)
+
+cat("\n\nBootstrapovy 95%-ni interval spolehlivosti pro prumer\n")
+MeanCI(vyska, method = "boot")
+BootCI(vyska, FUN = mean)
+```
+
+Rucni vypocet pro vysku otce
+```{r}
+boots <- list()
+B <- 10000
+for(i in 1:B) boots[[i]] <- sample(vyska, replace = TRUE)
+  # bootstrapove vybery
+means <- unlist(lapply(boots, mean))
+  # bootstrapove prumery
+
+hist(means, col = "honeydew2", xlab = "vyska otce",
+     main = "Histogram bootstrapovych prumeru")
+abline(v = mean(vyska), lwd = 3, col = "navy")
+abline(v = quantile(means, probs = c(0.025, 0.975)), lwd = 3, col = "red")
+
+cat("\nBootstrapovy interval spolehlivosti\n")
+c(mean = mean(vyska), quantile(means, probs = c(0.025, 0.975)))
+```
