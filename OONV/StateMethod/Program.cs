@@ -1,0 +1,13 @@
+﻿Spooptify player = new Spooptify();
+player.ClickPause();
+player.ClickPlay();
+player.VolumeUp();
+player.ClickNext();
+player.VolumeDown();
+// player.SetState(new PlayingState());
+player.ClickPause();
+player.VolumeUp();
+player.ClickPrev();
+player.ClickPlay();
+// player.SetState(new StoppedState());
+player.VolumeDown();
