@@ -2,7 +2,7 @@ public class OrcFactory : IAbsFactory
 {
     public Ranged CreateRanged()
     {
-        return new OrcCrossbowman(100, 15, Guid.NewGuid(), 5);
+        return new OrcCrossbowman(100, 60, Guid.NewGuid(), 5);
     }
 
     public Tank CreateTank()
@@ -12,6 +12,6 @@ public class OrcFactory : IAbsFactory
 
     public Soldier CreateSoldier()
     {
-        return new OrcGrunt(150, 20, Guid.NewGuid());
+        return new OrcGrunt(150, 40, Guid.NewGuid());
     }
 }

@@ -17,7 +17,10 @@ public abstract class Unit
     public void TakeDamage(int damage)
     {
         Hp -= damage;
-        // Removed observer notifications
+        GameEventManager.Instance.NotifyDamage(this, damage);
+
+        if (!IsAlive)
+            GameEventManager.Instance.NotifyDeath(this);
     }
 
     public void Heal(int amount) => Hp += amount;

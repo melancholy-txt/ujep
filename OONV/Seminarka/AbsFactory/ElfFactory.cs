@@ -2,7 +2,7 @@ public class ElfFactory : IAbsFactory
 {
     public Ranged CreateRanged()
     {
-        return new ElfArcher(80, 20, Guid.NewGuid(), 10);
+        return new ElfArcher(80, 60, Guid.NewGuid(), 10);
     }
 
     public Tank CreateTank()
@@ -12,6 +12,6 @@ public class ElfFactory : IAbsFactory
 
     public Soldier CreateSoldier()
     {
-        return new ElfSwordsman(100, 15, Guid.NewGuid());
+        return new ElfSwordsman(100, 40, Guid.NewGuid());
     }
 }

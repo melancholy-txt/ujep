@@ -2,7 +2,7 @@ public class PlayerTurnState : IGameState
 {
     public void Enter(Game game)
     {
-        GameUI.ShowTurnHeader("Your Turn");
+        GameEventManager.Instance.NotifyTurnChanged("Your Turn");
         GameUI.ShowUnits(game.PlayerUnits, game.EnemyUnits);
     }
 

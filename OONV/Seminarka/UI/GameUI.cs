@@ -105,4 +105,12 @@ public static class GameUI
         AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
         Console.ReadKey(true);
     }
+
+    public static Faction SelectFaction(string title)
+    {
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<Faction>()
+                .Title($"[yellow]{title}[/]")
+                .AddChoices(Faction.Elves, Faction.Orcs));
+    }
 }

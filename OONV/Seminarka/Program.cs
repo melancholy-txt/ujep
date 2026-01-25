@@ -4,20 +4,23 @@ class Program
 {
     static void Main(string[] args)
     {
+        GameEventManager.Instance.Subscribe(new GameUIObserver());
+
         var game = new Game();
 
-        IAbsFactory elfFactory = new ElfFactory();
-        IAbsFactory orcFactory = new OrcFactory();
+        var playerFaction = GameUI.SelectFaction("Choose your faction");
+        var aiFaction = GameUI.SelectFaction("Choose AI faction");
 
-        // Add player units (Elves)
-        game.PlayerUnits.Add(elfFactory.CreateSoldier());
-        game.PlayerUnits.Add(elfFactory.CreateTank());
-        game.PlayerUnits.Add(elfFactory.CreateRanged());
+        IAbsFactory playerFactory = playerFaction == Faction.Elves ? new ElfFactory() : new OrcFactory();
+        IAbsFactory aiFactory = aiFaction == Faction.Elves ? new ElfFactory() : new OrcFactory();
 
-        // Add enemy units (Orcs)
-        game.EnemyUnits.Add(orcFactory.CreateSoldier());
-        game.EnemyUnits.Add(orcFactory.CreateTank());
-        game.EnemyUnits.Add(orcFactory.CreateRanged());
+        game.PlayerUnits.Add(playerFactory.CreateSoldier());
+        game.PlayerUnits.Add(playerFactory.CreateTank());
+        game.PlayerUnits.Add(playerFactory.CreateRanged());
+
+        game.EnemyUnits.Add(aiFactory.CreateSoldier());
+        game.EnemyUnits.Add(aiFactory.CreateTank());
+        game.EnemyUnits.Add(aiFactory.CreateRanged());
 
         game.Run();
     }
