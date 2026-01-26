@@ -1,5 +1,4 @@
 # ORM Example - SQLAlchemy s F1 databází
-# Instalace: pip install sqlalchemy pymysql
 
 import os
 
@@ -145,165 +144,36 @@ class RaceResult(Base):
         return f"<RaceResult(driver_id={self.driver_id}, position={self.finishing_position})>"
 
 
-# ============================================
-# PŘÍKLADY POUŽITÍ ORM
-# ============================================
-
 def example_select_all_drivers():
-    """SELECT * FROM drivers WHERE is_active = true"""
     drivers = session.query(Driver).filter(Driver.is_active == True).all()
     for driver in drivers:
         print(f"{driver.full_name} - #{driver.driver_number}")
     return drivers
 
-
-def example_select_with_join():
-    """SELECT s JOIN - piloti s jejich zeměmi"""
-    results = session.query(Driver, Country)\
-        .join(Country, Driver.country_id == Country.country_id)\
-        .filter(Driver.is_active == True)\
-        .all()
-    
-    for driver, country in results:
-        print(f"{driver.full_name} from {country.country_name}")
-    return results
-
-
-def example_select_with_relationship():
-    """Použití relationship - automatický JOIN"""
-    drivers = session.query(Driver).filter(Driver.is_active == True).all()
-    for driver in drivers:
-        # SQLAlchemy automaticky načte country díky relationship
-        print(f"{driver.full_name} from {driver.country.country_name}")
-    return drivers
-
-
-def example_aggregate():
-    """Agregační funkce - průměrné body pilotů"""
-    from sqlalchemy import func
-    
-    avg_points = session.query(func.avg(Driver.career_points)).scalar()
-    print(f"Průměrné kariérní body: {avg_points}")
-    
-    # Piloti s nadprůměrnými body
-    above_avg = session.query(Driver)\
-        .filter(Driver.career_points > avg_points)\
-        .order_by(Driver.career_points.desc())\
-        .all()
-    
-    for driver in above_avg:
-        print(f"{driver.full_name}: {driver.career_points} bodů")
-    return above_avg
-
-
-def example_insert():
-    """INSERT - vytvoření nového pilota"""
-    new_driver = Driver(
-        first_name="Test",
-        last_name="Driver",
-        country_id=1,  # Předpokládáme existující country_id
-        date_of_birth="2000-01-01",
-        driver_number=99,
-        is_active=True
-    )
-    
-    session.add(new_driver)
-    session.commit()
-    print(f"Vytvořen pilot s ID: {new_driver.driver_id}")
-    return new_driver
-
-
-def example_update():
-    """UPDATE - aktualizace pilota"""
-    driver = session.query(Driver).filter(Driver.driver_number == 99).first()
-    if driver:
-        driver.career_wins = driver.career_wins + 1
-        session.commit()
-        print(f"Aktualizován pilot: {driver.full_name}, wins: {driver.career_wins}")
-    return driver
-
-
-def example_delete():
-    """DELETE - smazání pilota"""
-    driver = session.query(Driver).filter(Driver.driver_number == 99).first()
-    if driver:
-        session.delete(driver)
-        session.commit()
-        print(f"Smazán pilot: {driver.full_name}")
-
-
-def example_transaction():
-    """Ukázka transakce s rollback"""
-    try:
-        # Začátek transakce (automaticky při první operaci)
-        driver1 = session.query(Driver).filter(Driver.driver_id == 1).first()
-        driver1.career_wins += 10
-        
-        driver2 = session.query(Driver).filter(Driver.driver_id == 2).first()
-        driver2.career_wins += 10
-        
-        # Simulace chyby
-        # raise Exception("Testovací chyba")
-        
-        session.commit()
-        print("Transakce úspěšně dokončena (COMMIT)")
-        
-    except Exception as e:
-        session.rollback()
-        print(f"Chyba - transakce vrácena zpět (ROLLBACK): {e}")
-
-
 def example_recursive_relation():
-    """Ukázka rekurzivní relace - mentor/mentee"""
     principals = session.query(TeamPrincipal).all()
     
     for principal in principals:
         mentor_name = principal.mentor.full_name if principal.mentor else "Žádný"
         mentees = [m.full_name for m in principal.mentees]
+        print("=" * 50)
         print(f"{principal.full_name}")
         print(f"  Mentor: {mentor_name}")
         print(f"  Mentees: {mentees if mentees else 'Žádní'}")
+        print("=" * 50)
 
 
-# ============================================
-# SPUŠTĚNÍ PŘÍKLADŮ
-# ============================================
+
 
 if __name__ == "__main__":
     print("=" * 50)
     print("ORM SQLAlchemy - F1 Database Examples")
     print("=" * 50)
     
-    # Odkomentujte příklady, které chcete spustit:
-    
     # print("\n--- SELECT všech aktivních pilotů ---")
-    # example_select_all_drivers()
-    
-    # print("\n--- SELECT s JOIN ---")
-    # example_select_with_join()
-    
-    # print("\n--- SELECT pomocí relationship ---")
-    # example_select_with_relationship()
-    
-    # print("\n--- Agregační funkce ---")
-    # example_aggregate()
-    
-    # print("\n--- INSERT nového pilota ---")
-    # example_insert()
-    
-    # print("\n--- UPDATE pilota ---")
-    # example_update()
-    
-    # print("\n--- DELETE pilota ---")
-    # example_delete()
-    
-    # print("\n--- Transakce ---")
-    # example_transaction()
+    example_select_all_drivers()
     
     # print("\n--- Rekurzivní relace ---")
     # example_recursive_relation()
-    
-    print("\nOdkomentujte příklady v __main__ pro spuštění.")
-    
-    # Zavření session
+
     session.close()
