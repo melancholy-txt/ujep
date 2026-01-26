@@ -15,7 +15,7 @@ FROM (
     UNION ALL SELECT COUNT(*) FROM team_engines
 ) AS table_counts;
 
--- Piloti kteří mají více vítězství než průměr
+-- Vnořený SELECT - Piloti kteří mají více vítězství než průměr
 SELECT 
     CONCAT(first_name," ", last_name) AS name,
     career_wins
