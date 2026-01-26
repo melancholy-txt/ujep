@@ -75,10 +75,10 @@ WHERE t.is_active = true;
 SELECT * FROM v_team_overview
 ORDER BY championships_won DESC;
 
--- INDEXY
 
+-- INDEXY
 -- 1. Unikátní kompozitní index - zajistí, že pilot může mít pouze jeden aktivní kontrakt s týmem
--- (netriviální - kombinace více sloupců s podmínkou)
+-- odstranit kopii indexů
 CREATE UNIQUE INDEX idx_active_driver_contract 
 ON team_drivers (driver_id, team_id, contract_end_date);
 
@@ -130,6 +130,7 @@ ORDER BY season_points DESC;
 
 -- PROCEDURE s CURSOR, HANDLER a TRANSACTION
 -- Spočítá počet závodů a průměrné body na závod pro každý tým
+-- opavit týmy s nulovou hodnotou
 DELIMITER ;;
 
 CREATE PROCEDURE sp_team_race_stats()
@@ -400,3 +401,28 @@ SELECT COUNT(*) FROM teams;
 
 UNLOCK TABLES;
 
+
+-- SESSION 1:
+-- mysql -u root -p
+-- USE f1_database;
+-- LOCK TABLES drivers WRITE;
+--
+-- SESSION 2 :
+-- mysql -u root -p
+-- USE f1_database;
+-- SELECT * FROM drivers LIMIT 1; 
+--
+-- Zpět v SESSION 1:
+-- UNLOCK TABLES;
+
+
+-- Zobrazení aktuálních zámků (diagnostika)
+SHOW OPEN TABLES WHERE In_use > 0;
+
+-- Zobrazení čekajících procesů
+SHOW PROCESSLIST;
+
+-- Timeout pro čekání na zámek (v sekundách)
+SET SESSION innodb_lock_wait_timeout = 10;
+
+-- Pokud zámek není uvolněn do 10 sekund, vrátí chybu

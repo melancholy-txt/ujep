@@ -30,9 +30,7 @@ session = Session()
 
 Base = declarative_base()
 
-# ============================================
 # DEFINICE MODELŮ (ORM MAPOVÁNÍ)
-# ============================================
 
 class Country(Base):
     """Model pro tabulku countries"""
@@ -175,17 +173,25 @@ def update_driver_points(driver_id, additional_points):
     else:
         print("Driver not found.")
 
+def drop_database():
+    Base.metadata.drop_all(engine)
+    print("All tables dropped.")   
 
+def drop_drivers_table():
+    Driver.__table__.drop(engine)
+    print("Drivers table dropped.") 
 
 if __name__ == "__main__":
     print("=" * 50)
     print("ORM SQLAlchemy - F1 Database Examples")
     print("=" * 50)
     
-    select_all_drivers()
+    # select_all_drivers()
 
-    update_driver_points(driver_id=1, additional_points=10)
+    # update_driver_points(driver_id=1, additional_points=10)
 
     # recursive_relation()
+
+    drop_drivers_table()
 
     session.close()

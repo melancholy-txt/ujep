@@ -1,6 +1,3 @@
--- Simplified F1 Database Schema
--- Removed unnecessary relations and redundancies
-
 CREATE TABLE `countries` (
   `country_id` INT PRIMARY KEY AUTO_INCREMENT,
   `country_name` VARCHAR(100) UNIQUE NOT NULL,
