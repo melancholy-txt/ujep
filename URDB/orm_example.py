@@ -1,6 +1,8 @@
 # ORM Example - SQLAlchemy s F1 databází
 # Instalace: pip install sqlalchemy pymysql
 
+import os
+
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, Date, ForeignKey, DECIMAL, Text, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
@@ -9,9 +11,15 @@ from sqlalchemy.orm import sessionmaker, relationship
 # KONFIGURACE PŘIPOJENÍ
 # ============================================
 
-# Připojení k MySQL databázi
+# Připojení k MySQL/MariaDB databázi
 # Formát: mysql+pymysql://user:password@host:port/database
-DATABASE_URL = "mysql+pymysql://root:password@localhost:3306/f1_database"
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = os.getenv("DB_PORT", "3306")
+DB_NAME = os.getenv("DB_NAME", "f1_database")
+
+DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = create_engine(DATABASE_URL, echo=True)  # echo=True pro logování SQL
 Session = sessionmaker(bind=engine)
