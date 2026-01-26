@@ -317,8 +317,8 @@ SELECT * FROM drivers_audit_log ORDER BY changed_at DESC;
 -- USER & ROLE MANAGEMENT
 
 -- Vytvoření uživatele
-CREATE USER 'f1_viewer'@'localhost' IDENTIFIED BY 'heslo123';
-CREATE USER 'f1_editor'@'localhost' IDENTIFIED BY 'heslo456';
+CREATE USER 'f1_viewer'@'%' IDENTIFIED BY 'heslo123';
+CREATE USER 'f1_editor'@'%' IDENTIFIED BY 'heslo456';
 
 -- Zobrazení existujících uživatelů
 SELECT User, Host FROM mysql.user WHERE User LIKE 'f1_%';
@@ -335,32 +335,29 @@ GRANT SELECT ON f1_database.* TO 'role_readonly';
 GRANT SELECT, INSERT, UPDATE, DELETE ON f1_database.* TO 'role_editor';
 
 -- Přiřazení rolí uživatelům
-GRANT 'role_readonly' TO 'f1_viewer'@'localhost';
-GRANT 'role_editor' TO 'f1_editor'@'localhost';
+GRANT 'role_readonly' TO 'f1_viewer'@'%';
+GRANT 'role_editor' TO 'f1_editor'@'%';
 
 -- Aktivace výchozí role pro uživatele
-SET DEFAULT ROLE 'role_readonly' TO 'f1_viewer'@'localhost';
-SET DEFAULT ROLE 'role_editor' TO 'f1_editor'@'localhost';
+SET DEFAULT ROLE 'role_readonly' TO 'f1_viewer'@'%';
+SET DEFAULT ROLE 'role_editor' TO 'f1_editor'@'%';
 
--- Alternativa - přímé přidělení oprávnění (bez rolí)
 -- GRANT SELECT ON f1_database.* TO 'f1_viewer'@'localhost';
 -- GRANT SELECT, INSERT, UPDATE, DELETE ON f1_database.* TO 'f1_editor'@'localhost';
 
 -- Zobrazení oprávnění uživatele
-SHOW GRANTS FOR 'f1_viewer'@'localhost';
-SHOW GRANTS FOR 'f1_editor'@'localhost';
+SHOW GRANTS FOR 'f1_viewer'@'%';
+SHOW GRANTS FOR 'f1_editor'@'%';
 
 -- Odebrání oprávnění
-REVOKE 'role_readonly' FROM 'f1_viewer'@'localhost';
-
+REVOKE 'role_readonly' FROM 'f1_viewer'@'%';
 -- Odstranění role
 DROP ROLE 'role_readonly';
 DROP ROLE 'role_editor';
 
 -- Odstranění uživatele
-DROP USER 'f1_viewer'@'localhost';
-DROP USER 'f1_editor'@'localhost';
-
+DROP USER 'f1_viewer'@'%';
+DROP USER 'f1_editor'@'%';
 -- Ověření smazání
 SELECT User, Host FROM mysql.user WHERE User LIKE 'f1_%';
 

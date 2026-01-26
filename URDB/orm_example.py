@@ -12,8 +12,12 @@ from sqlalchemy.orm import sessionmaker, relationship
 
 # Připojení k MySQL/MariaDB databázi
 # Formát: mysql+pymysql://user:password@host:port/database
-DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
+# DB_USER = os.getenv("DB_USER", "root")
+# DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
+# DB_USER = os.getenv("DB_USER", "f1_viewer")
+# DB_PASSWORD = os.getenv("DB_PASSWORD", "heslo123")      
+DB_USER = os.getenv("DB_USER", "f1_editor")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "heslo456")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "3306")
 DB_NAME = os.getenv("DB_NAME", "f1_database")
@@ -144,13 +148,13 @@ class RaceResult(Base):
         return f"<RaceResult(driver_id={self.driver_id}, position={self.finishing_position})>"
 
 
-def example_select_all_drivers():
+def select_all_drivers():
     drivers = session.query(Driver).filter(Driver.is_active == True).all()
     for driver in drivers:
         print(f"{driver.full_name} - #{driver.driver_number}")
     return drivers
 
-def example_recursive_relation():
+def recursive_relation():
     principals = session.query(TeamPrincipal).all()
     
     for principal in principals:
@@ -162,6 +166,14 @@ def example_recursive_relation():
         print(f"  Mentees: {mentees if mentees else 'Žádní'}")
         print("=" * 50)
 
+def update_driver_points(driver_id, additional_points):
+    driver = session.query(Driver).filter(Driver.driver_id == driver_id).first()
+    if driver:
+        driver.career_points += additional_points
+        session.commit()
+        print(f"Updated {driver.full_name}'s points to {driver.career_points}")
+    else:
+        print("Driver not found.")
 
 
 
@@ -170,10 +182,10 @@ if __name__ == "__main__":
     print("ORM SQLAlchemy - F1 Database Examples")
     print("=" * 50)
     
-    # print("\n--- SELECT všech aktivních pilotů ---")
-    example_select_all_drivers()
-    
-    # print("\n--- Rekurzivní relace ---")
-    # example_recursive_relation()
+    select_all_drivers()
+
+    update_driver_points(driver_id=1, additional_points=10)
+
+    # recursive_relation()
 
     session.close()
