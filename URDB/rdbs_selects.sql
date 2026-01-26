@@ -117,13 +117,13 @@ END //
 DELIMITER ;
 
 -- Příklady použití funkce
--- Získání bodů konkrétního pilota v sezóně 2024
-SELECT fn_driver_season_points(1, 2024) AS driver_1_points_2024;
+-- Získání bodů konkrétního pilota v sezóně 2025
+SELECT fn_driver_season_points(1, 2025) AS driver_1_points_2025;
 
 -- Použití funkce ve výpisu všech pilotů
 SELECT 
     CONCAT(d.first_name, ' ', d.last_name) AS driver_name,
-    fn_driver_season_points(d.driver_id, 2024) AS season_points
+    fn_driver_season_points(d.driver_id, 2025) AS season_points
 FROM drivers d
 WHERE d.is_active = true
 ORDER BY season_points DESC;
@@ -369,14 +369,13 @@ SELECT User, Host FROM mysql.user WHERE User LIKE 'f1_%';
 
 
 -- Zamčení tabulky pro čtení (READ LOCK)
--- Ostatní mohou číst, ale nikdo (ani my) nemůže zapisovat
+-- Ostatní mohou číst, ale nikdo nemůže zapisovat
 LOCK TABLES drivers READ;
 
--- Test - čtení funguje
+-- Test 
 SELECT * FROM drivers LIMIT 3;
 
--- Test - zápis NEFUNGUJE (ani pro nás)
--- UPDATE drivers SET career_wins = 0 WHERE driver_id = 1;  -- Toto by vyhodilo chybu
+UPDATE drivers SET career_wins = 0 WHERE driver_id = 1; 
 
 -- Odemčení
 UNLOCK TABLES;
@@ -404,35 +403,3 @@ SELECT COUNT(*) FROM teams;
 
 UNLOCK TABLES;
 
-
--- ============================================
--- TEST ZAMYKÁNÍ ZE DVOU SESSIONS
--- ============================================
--- 
--- SESSION 1 (první terminál):
--- mysql -u root -p
--- USE f1_database;
--- LOCK TABLES drivers WRITE;
--- SELECT 'Tabulka drivers je zamčená' AS status;
--- -- Nechte toto okno otevřené (nezadávejte UNLOCK)
---
--- SESSION 2 (druhý terminál):
--- mysql -u root -p
--- USE f1_database;
--- SELECT * FROM drivers LIMIT 1;  -- Toto ČEKÁ, dokud Session 1 neuvolní zámek
---
--- Zpět v SESSION 1:
--- UNLOCK TABLES;  -- Session 2 nyní dostane odpověď
---
--- ============================================
-
--- Zobrazení aktuálních zámků (diagnostika)
-SHOW OPEN TABLES WHERE In_use > 0;
-
--- Zobrazení čekajících procesů
-SHOW PROCESSLIST;
-
--- Timeout pro čekání na zámek (v sekundách)
-SET SESSION innodb_lock_wait_timeout = 10;
-
--- Pokud zámek není uvolněn do 10 sekund, vrátí chybu
