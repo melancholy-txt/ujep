@@ -15,7 +15,7 @@ FROM (
     UNION ALL SELECT COUNT(*) FROM team_engines
 ) AS table_counts;
 
--- Piloti kteří mají více vítězství než průměr
+-- Vnořený SELECT - Piloti kteří mají více vítězství než průměr
 SELECT 
     CONCAT(first_name," ", last_name) AS name,
     career_wins
@@ -75,10 +75,10 @@ WHERE t.is_active = true;
 SELECT * FROM v_team_overview
 ORDER BY championships_won DESC;
 
--- INDEXY
 
+-- INDEXY
 -- 1. Unikátní kompozitní index - zajistí, že pilot může mít pouze jeden aktivní kontrakt s týmem
--- (netriviální - kombinace více sloupců s podmínkou)
+-- odstranit kopii indexů
 CREATE UNIQUE INDEX idx_active_driver_contract 
 ON team_drivers (driver_id, team_id, contract_end_date);
 
@@ -118,7 +118,7 @@ DELIMITER ;
 
 -- Příklady použití funkce
 -- Získání bodů konkrétního pilota v sezóně 2025
-SELECT fn_driver_season_points(6, 2025) AS driver_6_points_2025;
+SELECT fn_driver_season_points(1, 2025) AS driver_1_points_2025;
 
 -- Použití funkce ve výpisu všech pilotů
 SELECT 
@@ -130,6 +130,7 @@ ORDER BY season_points DESC;
 
 -- PROCEDURE s CURSOR, HANDLER a TRANSACTION
 -- Spočítá počet závodů a průměrné body na závod pro každý tým
+-- opavit týmy s nulovou hodnotou
 DELIMITER ;;
 
 CREATE PROCEDURE sp_team_race_stats()
@@ -317,8 +318,8 @@ SELECT * FROM drivers_audit_log ORDER BY changed_at DESC;
 -- USER & ROLE MANAGEMENT
 
 -- Vytvoření uživatele
-CREATE USER 'f1_viewer'@'localhost' IDENTIFIED BY 'heslo123';
-CREATE USER 'f1_editor'@'localhost' IDENTIFIED BY 'heslo456';
+CREATE USER 'f1_viewer'@'%' IDENTIFIED BY 'heslo123';
+CREATE USER 'f1_editor'@'%' IDENTIFIED BY 'heslo456';
 
 -- Zobrazení existujících uživatelů
 SELECT User, Host FROM mysql.user WHERE User LIKE 'f1_%';
@@ -335,32 +336,29 @@ GRANT SELECT ON f1_database.* TO 'role_readonly';
 GRANT SELECT, INSERT, UPDATE, DELETE ON f1_database.* TO 'role_editor';
 
 -- Přiřazení rolí uživatelům
-GRANT 'role_readonly' TO 'f1_viewer'@'localhost';
-GRANT 'role_editor' TO 'f1_editor'@'localhost';
+GRANT 'role_readonly' TO 'f1_viewer'@'%';
+GRANT 'role_editor' TO 'f1_editor'@'%';
 
 -- Aktivace výchozí role pro uživatele
-SET DEFAULT ROLE 'role_readonly' TO 'f1_viewer'@'localhost';
-SET DEFAULT ROLE 'role_editor' TO 'f1_editor'@'localhost';
+SET DEFAULT ROLE 'role_readonly' TO 'f1_viewer'@'%';
+SET DEFAULT ROLE 'role_editor' TO 'f1_editor'@'%';
 
--- Alternativa - přímé přidělení oprávnění (bez rolí)
 -- GRANT SELECT ON f1_database.* TO 'f1_viewer'@'localhost';
 -- GRANT SELECT, INSERT, UPDATE, DELETE ON f1_database.* TO 'f1_editor'@'localhost';
 
 -- Zobrazení oprávnění uživatele
-SHOW GRANTS FOR 'f1_viewer'@'localhost';
-SHOW GRANTS FOR 'f1_editor'@'localhost';
+SHOW GRANTS FOR 'f1_viewer'@'%';
+SHOW GRANTS FOR 'f1_editor'@'%';
 
 -- Odebrání oprávnění
-REVOKE 'role_readonly' FROM 'f1_viewer'@'localhost';
-
+REVOKE 'role_readonly' FROM 'f1_viewer'@'%';
 -- Odstranění role
 DROP ROLE 'role_readonly';
 DROP ROLE 'role_editor';
 
 -- Odstranění uživatele
-DROP USER 'f1_viewer'@'localhost';
-DROP USER 'f1_editor'@'localhost';
-
+DROP USER 'f1_viewer'@'%';
+DROP USER 'f1_editor'@'%';
 -- Ověření smazání
 SELECT User, Host FROM mysql.user WHERE User LIKE 'f1_%';
 
@@ -369,14 +367,13 @@ SELECT User, Host FROM mysql.user WHERE User LIKE 'f1_%';
 
 
 -- Zamčení tabulky pro čtení (READ LOCK)
--- Ostatní mohou číst, ale nikdo (ani my) nemůže zapisovat
+-- Ostatní mohou číst, ale nikdo nemůže zapisovat
 LOCK TABLES drivers READ;
 
--- Test - čtení funguje
+-- Test 
 SELECT * FROM drivers LIMIT 3;
 
--- Test - zápis NEFUNGUJE (ani pro nás)
--- UPDATE drivers SET career_wins = 0 WHERE driver_id = 1;  -- Toto by vyhodilo chybu
+UPDATE drivers SET career_wins = 0 WHERE driver_id = 1; 
 
 -- Odemčení
 UNLOCK TABLES;
@@ -405,26 +402,19 @@ SELECT COUNT(*) FROM teams;
 UNLOCK TABLES;
 
 
--- ============================================
--- TEST ZAMYKÁNÍ ZE DVOU SESSIONS
--- ============================================
--- 
--- SESSION 1 (první terminál):
+-- SESSION 1:
 -- mysql -u root -p
 -- USE f1_database;
 -- LOCK TABLES drivers WRITE;
--- SELECT 'Tabulka drivers je zamčená' AS status;
--- -- Nechte toto okno otevřené (nezadávejte UNLOCK)
 --
--- SESSION 2 (druhý terminál):
+-- SESSION 2 :
 -- mysql -u root -p
 -- USE f1_database;
--- SELECT * FROM drivers LIMIT 1;  -- Toto ČEKÁ, dokud Session 1 neuvolní zámek
+-- SELECT * FROM drivers LIMIT 1; 
 --
 -- Zpět v SESSION 1:
--- UNLOCK TABLES;  -- Session 2 nyní dostane odpověď
---
--- ============================================
+-- UNLOCK TABLES;
+
 
 -- Zobrazení aktuálních zámků (diagnostika)
 SHOW OPEN TABLES WHERE In_use > 0;
