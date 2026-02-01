@@ -117,13 +117,13 @@ END //
 DELIMITER ;
 
 -- Příklady použití funkce
--- Získání bodů konkrétního pilota v sezóně 2024
-SELECT fn_driver_season_points(1, 2024) AS driver_1_points_2024;
+-- Získání bodů konkrétního pilota v sezóně 2025
+SELECT fn_driver_season_points(6, 2025) AS driver_6_points_2025;
 
 -- Použití funkce ve výpisu všech pilotů
 SELECT 
     CONCAT(d.first_name, ' ', d.last_name) AS driver_name,
-    fn_driver_season_points(d.driver_id, 2024) AS season_points
+    fn_driver_season_points(d.driver_id, 2025) AS season_points
 FROM drivers d
 WHERE d.is_active = true
 ORDER BY season_points DESC;
