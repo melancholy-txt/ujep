@@ -11,13 +11,17 @@ from sqlalchemy.orm import sessionmaker, relationship
 # ============================================
 
 # Připojení k MySQL/MariaDB databázi
-# Formát: mysql+pymysql://user:password@host:port/database
+# mysql+pymysql://user:password@host:port/database
+
 # DB_USER = os.getenv("DB_USER", "root")
 # DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
+
 # DB_USER = os.getenv("DB_USER", "f1_viewer")
-# DB_PASSWORD = os.getenv("DB_PASSWORD", "heslo123")      
+# DB_PASSWORD = os.getenv("DB_PASSWORD", "heslo123")     
+#  
 DB_USER = os.getenv("DB_USER", "f1_editor")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "heslo456")
+
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "3306")
 DB_NAME = os.getenv("DB_NAME", "f1_database")
@@ -30,7 +34,7 @@ session = Session()
 
 Base = declarative_base()
 
-# DEFINICE MODELŮ (ORM MAPOVÁNÍ)
+# DEFINICE MODELŮ
 
 class Country(Base):
     """Model pro tabulku countries"""
