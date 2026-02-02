@@ -3,8 +3,8 @@
 import os
 
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, Date, ForeignKey, DECIMAL, Text, Enum
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+# from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 
 # ============================================
 # KONFIGURACE PŘIPOJENÍ
@@ -13,14 +13,14 @@ from sqlalchemy.orm import sessionmaker, relationship
 # Připojení k MySQL/MariaDB databázi
 # mysql+pymysql://user:password@host:port/database
 
-# DB_USER = os.getenv("DB_USER", "root")
-# DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
 
 # DB_USER = os.getenv("DB_USER", "f1_viewer")
 # DB_PASSWORD = os.getenv("DB_PASSWORD", "heslo123")     
 #  
-DB_USER = os.getenv("DB_USER", "f1_editor")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "heslo456")
+# DB_USER = os.getenv("DB_USER", "f1_editor")
+# DB_PASSWORD = os.getenv("DB_PASSWORD", "heslo456")
 
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "3306")
@@ -196,6 +196,8 @@ if __name__ == "__main__":
 
     # recursive_relation()
 
-    drop_drivers_table()
+    # drop_drivers_table() 
+    # drop_database()
+    # pro test oprávnění
 
     session.close()
