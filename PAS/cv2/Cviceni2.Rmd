@@ -1,0 +1,276 @@
+---
+title: "Pravdepodobnost a statistika"
+subtitle: "Cviceni 2"
+author: "Alena Cernikova"
+date: "2025-09-29"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Vycisteni pracovniho prostoru
+
+```{r}
+rm(list=ls())
+```
+
+## Nacteni dat
+
+databaze Duvera
+
+```{r}
+load("Duvera_24.RData")
+  # nastavte si prikaz tak, aby se Vam nacetla data
+  # databaze z vyzkumu verejneho mineni v roce 2024
+```
+
+## Opakovani z minula
+
+Popisne statistiky pro kategorickou promennou
+
+```{r}
+# popiste promennou Region - NUTS2
+nuts2 <- factor(Duvera$NUTS2, labels = c("Praha", "Stredni Cechy", "Jihozapad", "Severozapad",
+                                         "Severovychod", "Jihovychod", "Stredni Morava", "Moravskoslezsko"))
+unique(nuts2)
+
+```
+
+jedna se o promennou nominalni nebo ordinalni?
+jake popisne statistiky a grafy pro ni zvolit?
+
+```{r}
+# Popisne statistiky a grafy pro nominalni promennou
+ac <- table(nuts2)
+rc <- prop.table(table(nuts2))
+data.frame(cbind("Absolutni" = ac, "Relativni" = round(rc*100,2)))
+
+barplot(ac, col=8:1, main = "Cetnosti regionu CR", ylab = "Absolutni cetnosti", ylim = c(0, max(ac) + 2))
+x <- barplot(ac, plot = F)[,1]
+text(x, ac, labels = ac, pos = 3)
+popis <- paste(sort(unique(nuts2)), "(", round(rc*100,2),"%)")
+pie(rc, lab = popis,col = 8:1, main = "Relativni cetnosti regionu CR")
+
+```
+
+Co z tabulky a grafu vidite?
+Jak byste je popsali?
+
+```{r}
+# Popiste spokojenost se zivotem (promenna OV_1)
+ov_1 <- factor(Duvera$OV_1, labels = c("velmi spokojen", "spíše spokojen", "ani spokojen, ani nespokojen",
+                                       "spíše nespokojen", "velmi nespokojen"))
+unique(ov_1)
+
+```
+
+jedna se o promennou nominalni nebo ordinalni?
+jake popisne statistiky a grafy pro ni zvolit?
+
+```{r}
+# Popisne statistiky a grafy pro ordinalni promennou
+ac <- table(ov_1)
+kac <- cumsum(ac)
+rc <- round(prop.table(table(ov_1)),2)
+krc <- cumsum(rc)
+cbind("n(i)" = ac, "N(i)" = kac, "f(i)" = rc, "F(i)" = krc)
+
+barplot(ac, col=2:7, main = "Spokojenost se zivotem", ylab = "Absolutni cetnosti", ylim = c(0, max(ac) + 2))
+x <- barplot(ac, plot = F)[,1]
+text(x, ac, labels = ac, pos = 3)
+popis <- paste(sort(unique(ov_1)), "(", round(rc*100,2),"%)")
+pie(rc, lab = popis,col = 2:7, main = "Spokojenost se zivotem")
+
+```
+
+Co z tabulky a grafu vidite?
+Jak byste je popsali?
+
+```{r}
+# Porovnejte duveru v media podle pohlavi
+pohlavi <- factor(Duvera$IDE_8, labels = c("Muz", "Zena"))
+pi_1z <- factor(ifelse(Duvera$PI_1z > 4, NA, Duvera$PI_1z), labels = c("rozhodně důvěřuji", "spíše důvěřuji",
+                                                                       "spíše nedůvěřuji", "rozhodně nedůvěřuji"))
+
+(tab <- table(pohlavi, pi_1z))
+prop.table(table(pohlavi, pi_1z), 1)
+
+plot(pi_1z ~ pohlavi, col=2:7, main = "Duvera mediim")
+
+```
+Vystup komentujte
+
+databaze Cars93
+```{r}
+library(MASS)
+data("Cars93")
+```
+
+## Ciselne promenne
+
+Popisne statistiky pro kategorickou promennou
+
+```{r}
+# popiste, kolik mely vozy valcu (Cylinders)
+valce <- Cars93$Cylinders
+(ac <- table(valce))
+
+```
+
+ciselna promenna s jednou "spatnou" hodnotou "rotary"
+
+```{r}
+# Vypocitam frekvencni rozdeleni
+valce2 <- droplevels(valce[valce != "rotary"])
+    # zajimaji me jen pocty valcu, ne kategorie "rotary"
+ac <- table(valce2)
+kac <- cumsum(ac)
+rc <- round(prop.table(table(valce2)),2)
+krc <- cumsum(rc)
+cbind("n(i)" = ac, "N(i)" = kac, "f(i)" = rc, "F(i)" = krc)
+
+```
+
+Co z tabulky vidite?
+Jaky graf se pouziva pro pois ciselne diskretni promenne?
+
+```{r}
+# Frekvencni polygon  
+x.val <- as.numeric(as.character(names(ac)))
+ac.n <- as.numeric(ac)
+  # zmena typu promenne kvuli popiskum na y-ove ose v grafu
+plot(x.val, ac.n, type = "h", lwd = 3,col = "darkgreen", main = "Frekvencni polygon",
+     xlab = "Pocet valcu", ylab = "Absolutni cetnosti")
+x.val2 <- min(x.val) : max(x.val)
+ac2 <- rep(0,length(x.val2))
+for(i in 1:length(x.val2)){
+  for(j in 1:length(x.val)){if(x.val2[i] == x.val[j]){ac2[i] <- ac[j]}}
+}
+lines(x.val2,ac2,col="red")
+
+```
+
+Jak byste komentovali graf?
+
+```{r}
+# Spocitejte frekvencni rozdeleni a nakreslete frekvencni polygon pro
+#   pocet otecek za minutu, promenna RPM
+RPM <- Cars93$RPM
+
+```
+Jak byste vysledky komentovali?
+
+```{r}
+# Nabyva-li ciselna diskretni promenna mnoha hodnot, je mozne ji zobrazit
+#   pomoci histogramu
+hist(RPM, col = "skyblue", border = "darkblue", main = "Histogram",
+     xlab = "Pocet otacek", ylab = "Absolutni cetnosti")
+```
+Porovnejte s predchozim grafem.
+
+Frekvencni rozdeleni pro ciselne spojite promenne
+
+```{r}
+# spoctete frekvencni rozdeleni a nakreslete histogram pro silu vozu (Horse power)
+hp <- Cars93$Horsepower
+hist(hp, col = "skyblue", border = "darkblue", main = "Histogram",
+     xlab = "Sila vozu", ylab = "Absolutni cetnosti")
+  hist(hp, col = "skyblue", border = "darkblue", main = "Histogram",
+     xlab = "Sila vozu", ylab = "Absolutni cetnosti", breaks = 10)
+    # pomoci parametru "breaks" je mozne nastavit i jemnejsi deleni
+```
+
+  
+deleni pro frekvencni rozdeleni nastavime podle grafu  
+```{r}
+hist(hp, plot = F)
+  # vypise hodnoty vykreslovane do grafu
+
+deleni <- hist(hp, plot = F)$breaks
+popis <- as.character(deleni[-1])
+  # ulozim do promennych, co potrebuji
+for(i in 1:length(popis)){
+  popis[i] <- paste("(",deleni[i], ",", deleni[i + 1],"]")
+}
+
+# frekvencni rozdeleni
+ac <- hist(hp, plot = F)$counts
+kac <- cumsum(ac)
+rc <- round(ac/sum(ac), 3)
+krc <- cumsum(rc)
+names(ac) <- popis
+data.frame("n(i)"=ac,"N(i)"=kac,"f(i)"=rc,"F(i)"=krc)
+
+```
+```{r}
+# Spoctete frekvencni rozdeleni pro delku vozu
+delka <- Cars93$Length
+
+```
+Vysledky komentujte
+
+
+Krabicovy graf pro ciselnou promennou
+```{r}
+# Krabicovy graf
+boxplot(hp,col="yellow",border="orange3",main="Krabicovy graf",
+        ylab="Sila vozu")
+  # samostatne body ukazuji odlehla pozorovani
+  boxplot(hp,col="yellow",border="orange3",main="Krabicovy graf",
+        ylab="Sila vozu",range = 3)
+    # graf bez odlehlych pozorovani
+```
+
+co v grafu vidite
+
+Popisne statistiky polohy pro ciselnou promennou   
+
+```{r}
+# Vybrane kvantily / percentily
+min(hp)
+max(hp)
+  # extremy
+quantile(hp,0.25)
+quantile(hp,0.75)
+  # kvartily
+median(hp)
+  # median
+fivenum(hp)
+  # Jak byste promennou popsali na zaklade tohoto grafu?
+```
+
+
+A co jeste muzu pro ciselnou promennou spocitat?
+```{r}
+mean(hp)
+  # prumer
+summary(hp)
+  # zakladni popisne statistiky polohy
+
+```
+
+```{r}
+# Spoctete popisne statistiky polohy a nakreslete vhodne grafy pro dalsi ciselne promenne.
+#   Vysledky komentujte
+
+delka <- Cars93$Length
+cena <- Cars93$Price
+vaha <- Cars93$Weight
+```
+
+Porovnani skupin
+```{r}
+# Porovnejte cenu americkych a neamerickych aut
+puvod <- Cars93$Origin
+cena <- Cars93$Price
+
+tapply(cena, puvod, summary)
+
+
+```
+

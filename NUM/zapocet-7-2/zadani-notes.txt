@@ -1,0 +1,14 @@
+- metoda nejmensich cvtercu
+- nejdrive linearizovat
+  - napr logaritmizace
+  
+# načtení dat
+data <- read.table("NUM-26-02-07-data.txt", header = TRUE, sep = "\t")
+p <- data$p
+L <- data$L
+
+# model Lorenzovy křivky
+L <- p^a*beta^(p-1)
+
+# Giniho koeficient
+G <- 1-2*integruj(L)

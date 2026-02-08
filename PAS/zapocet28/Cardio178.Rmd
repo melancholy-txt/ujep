@@ -1,0 +1,181 @@
+---
+title: "Cardio178"
+output: html_document
+date: "2026-01-08"
+---
+
+# Nacteni dat a aktivace knihoven
+
+```{r}
+# setwd("D:\\UJEP_PrF\\PAS_prezencni\\Zadani_zapocty")
+load("Cardio178.RData")
+library(DescTools)
+```
+
+
+```{r}
+# regresni primka pro linearni zavislost diastolickeho tlaku na tlaku systolickem (diast ~ syst)
+plot(diast ~ syst, data = cardio178, pch=19, xlab="Systolicky tlak", ylab="Diastolicky tlak", main="Bodovy graf diastolickeho a systolickeho tlaku")
+abline(lm(diast ~ syst, data = cardio178), col=2, lwd=2)
+model <- lm(diast ~ syst, data = cardio178)
+summary(model)
+plot(model)
+confint(model)
+```
+
+```{r}
+testres <- chisq.test(table(cardio178$kardio, cardio178$cholesterol))
+plot(cardio178$cholesterol ~ cardio178$kardio, xlab="Kardio onemocneni", ylab="Cholesterol")
+```
+```{r}
+boxplot(cardio178$syst, main = "Krabicový graf pro systolický tlak", ylab = "Systolický tlak")
+outliers <- boxplot(cardio178$syst, main = "Krabicový graf pro systolický tlak", ylab = "Systolický tlak")$out
+print(outliers)
+```
+
+
+Medicinska data tykajici se vyzkumu Kardiovaskularnich onemocneni
+
+# Popisne statistiky ciselnych promennych
+
+```{r}
+ind.num <- c(2,4, 5, 17, 6, 7)
+ciselne <- cardio178[,ind.num]
+# pouze ciselne promenne
+vystup.num <- matrix(NA,length(ind.num),14)
+for(i in 1:length(ind.num)){
+  vystup.num[i,1] <- sum(is.na(ciselne[,i]) == F)
+  vystup.num[i,2] <- mean(ciselne[,i], na.rm = T)
+  vystup.num[i,3] <- HuberM(ciselne[,i], na.rm = T)
+  vystup.num[i,4:8] <- fivenum(ciselne[,i], na.rm = T)
+  vystup.num[i,9] <- sd(ciselne[,i], na.rm = T)
+  vystup.num[i,10] <- IQR(ciselne[,i], na.rm = T)
+  vystup.num[i,11] <- MAD(ciselne[,i], center = median(ciselne[,i], na.rm = T), na.rm = TRUE)
+  vystup.num[i,12] <- CoefVar(ciselne[,i], na.rm = T)
+  vystup.num[i,13] <- Skew(ciselne[,i], na.rm = T)
+  vystup.num[i,14] <- Kurt(ciselne[,i], na.rm = T)
+} 
+rownames(vystup.num) <- names(cardio178)[ind.num]
+colnames(vystup.num) <- c("n","Mean","Huber","Min","1st Qu","Median","3rd Qu","Max","SD","IQR","MAD","CoefVar","Skew","Kurt")
+data.frame(vystup.num)
+```
+
+# Histogramy ciselnych promennych spolu s jadrovymi odhady hustoty
+
+```{r}
+par(mfrow = c(1,2))
+hist(cardio178$vek, col="white", xlab="Vek v rocich", ylab="Hustota", 
+     main="Histogram pro promennou vek", freq = F)
+lines(density(cardio178$vek, bw = 1.6))
+hist(cardio178$vyska, col="white", xlab="Vyska v cm", ylab="Hustota", 
+     main="Histogram pro promennou vyska", freq = F)
+lines(density(cardio178$vyska, bw = 3.5))
+hist(cardio178$vaha,  col="white", xlab="Vaha v kg", ylab="Hustota", 
+     main="Histogram pro promennou vaha", freq = F)
+lines(density(cardio178$vaha, bw = 5))
+hist(cardio178$bmi,  col="white", xlab="Body mass index", ylab="Hustota", 
+     main="Histogram pro promennou bmi", ylim = c(0, 0.08), freq = F)
+lines(density(cardio178$bmi, bw = 3))
+hist(cardio178$syst, col="white", xlab="Systolicky tlak", ylab="Hustota", 
+     main="Histogram pro promennou syst", ylim = c(0, 0.035), freq = F)
+lines(density(cardio178$syst, bw = 5.5))
+hist(cardio178$diast, col="white", xlab="Diastolicky tlak", ylab="Hustota", 
+     main="Histogram pro promennou diast", freq = F)
+lines(density(cardio178$diast, bw = 3))
+```
+
+# Krabicove grafy ciselnych promennych
+
+```{r}
+boxplot(cardio178$vek ~ cardio178$kardio, col ="white",  xlab = "Kardio nemoc", ylab = "Vek", main = "Krabicovy graf")
+boxplot(cardio178$vyska ~ cardio178$pohlavi, col ="white", xlab = "Pohlavi", ylab = "Vyska", main = "Krabicovy graf")
+boxplot(cardio178$vaha ~ cardio178$koureni, col ="white", xlab = "Koureni", ylab = "Vaha", main = "Krabicovy graf")
+boxplot(cardio178$bmi ~ cardio178$aktivita, col ="white", xlab = "Fyzicka aktivita", ylab = "Bmi", main = "Krabicovy graf")
+boxplot(cardio178$syst ~ cardio178$pohlavi, col ="white", xlab = "Pohlavi", ylab = "Systolicky tlak", main = "Krabicovy graf")
+boxplot(cardio178$diast ~ cardio178$kardio, col ="white", xlab = "Kardio onemocneni", ylab = "Diastolicky tlak", main = "Krabicovy graf")
+par(mfrow = c(1,1))
+```
+
+# Korelacni matice
+
+```{r}
+data.frame(round(cor(ciselne, use = "pairwise.complete"),4))
+```
+
+# Bodove grafy
+
+```{r}
+par(mfrow = c(2,2))
+plot(cardio178$bmi ~ cardio178$vek, pch=19, ylab="Bmi", xlab = "Vek")
+plot(cardio178$bmi ~ cardio178$vaha, pch=19, ylab="Bmi", xlab = "Vaha")
+plot(cardio178$vaha ~ cardio178$vyska, pch=19, ylab="Vaha", xlab = "Vyska")
+plot(cardio178$syst ~ cardio178$vaha, pch=19, ylab="Systolicky tlak", xlab = "Vaha")
+plot(cardio178$syst ~ cardio178$diast, pch=19, ylab="Systolicky tlak", xlab = "Diastolicky tlak")
+plot(cardio178$vyska ~ cardio178$vek, pch=19, ylab="Vyska", xlab = "Vek")
+plot(cardio178$syst ~ cardio178$vek, pch=19, ylab="Systolicky tlak", xlab = "Vek")
+plot(cardio178$diast ~ cardio178$vek, pch=19, ylab="Diastolicky tlak", xlab = "Vek")
+par(mfrow = c(1,1))
+```
+
+# Popisne statistiky kategorickych promennych
+
+```{r}
+# Cholesterol
+data.frame(cbind("BezneAbsCetnosti"=table(cardio178$cholesterol),"KumulAbsCetnosti"=cumsum(table(cardio178$cholesterol)),
+      "BezneRelCetnosti"=round(prop.table(table(cardio178$cholesterol)),4),"KumulRelCetnosti"=cumsum(round(prop.table(table(cardio178$cholesterol)),4))))
+# Glukoza
+data.frame(cbind("BezneAbsCetnosti"=table(cardio178$gluc),"KumulAbsCetnosti"=cumsum(table(cardio178$gluc)),
+      "BezneRelCetnosti"=round(prop.table(table(cardio178$gluc)),4),"KumulRelCetnosti"=cumsum(round(prop.table(table(cardio178$gluc)),4))))
+# Kategorialni vek
+data.frame(cbind("BezneAbsCetnosti"=table(cardio178$vek_kateg),"KumulAbsCetnosti"=cumsum(table(cardio178$vek_kateg)),
+      "BezneRelCetnosti"=round(prop.table(table(cardio178$vek_kateg)),4),"KumulRelCetnosti"=cumsum(round(prop.table(table(cardio178$vek_kateg)),4))))
+# Vek a fyzicka aktivita
+data.frame(cbind("BezneAbsCetnosti"=table(cardio178$vek_aktiv),"KumulAbsCetnosti"=cumsum(table(cardio178$vek_aktiv)),
+      "BezneRelCetnosti"=round(prop.table(table(cardio178$vek_aktiv)),4),"KumulRelCetnosti"=cumsum(round(prop.table(table(cardio178$vek_aktiv)),4))))
+# Koureni
+data.frame(cbind("BezneAbsCetnosti"=table(cardio178$koureni),"KumulAbsCetnosti"=cumsum(table(cardio178$koureni)),
+      "BezneRelCetnosti"=round(prop.table(table(cardio178$koureni)),4),"KumulRelCetnosti"=cumsum(round(prop.table(table(cardio178$koureni)),4))))
+# Alkohol
+data.frame(cbind("BezneAbsCetnosti"=table(cardio178$alkohol),"KumulAbsCetnosti"=cumsum(table(cardio178$alkohol)),
+      "BezneRelCetnosti"=round(prop.table(table(cardio178$alkohol)),4),"KumulRelCetnosti"=cumsum(round(prop.table(table(cardio178$alkohol)),4))))
+# Fyzicka aktivita
+data.frame(cbind("BezneAbsCetnosti"=table(cardio178$aktivita),"KumulAbsCetnosti"=cumsum(table(cardio178$aktivita)),
+      "BezneRelCetnosti"=round(prop.table(table(cardio178$aktivita)),4),"KumulRelCetnosti"=cumsum(round(prop.table(table(cardio178$aktivita)),4))))
+# Kardio onemocneni
+data.frame(cbind("BezneAbsCetnosti"=table(cardio178$kardio),"KumulAbsCetnosti"=cumsum(table(cardio178$kardio)),
+      "BezneRelCetnosti"=round(prop.table(table(cardio178$kardio)),4),"KumulRelCetnosti"=cumsum(round(prop.table(table(cardio178$kardio)),4))))
+# Pohlavi
+data.frame(cbind("BezneAbsCetnosti"=table(cardio178$pohlavi),"KumulAbsCetnosti"=cumsum(table(cardio178$pohlavi)),
+      "BezneRelCetnosti"=round(prop.table(table(cardio178$pohlavi)),4),"KumulRelCetnosti"=cumsum(round(prop.table(table(cardio178$pohlavi)),4))))
+```
+
+# Grafy kategorickych promennych
+
+```{r}
+par(mfrow = c(1,2))
+popis <- paste(sort(unique(cardio178$pohlavi)),"(",round(prop.table(table(cardio178$pohlavi))*100,2),"%)")
+pie(table(cardio178$pohlavi),lab=popis,col="white",main="Kolacovy graf pro pohlavi")
+popis <- paste(sort(unique(cardio178$aktivita)),"(",round(prop.table(table(cardio178$aktivita))*100,2),"%)")
+pie(table(cardio178$aktivita),lab=popis,col="white",main="Kolacovy graf pro fyzickou aktivitu")
+popis <- paste(sort(unique(cardio178$kardio)),"(",round(prop.table(table(cardio178$kardio))*100,2),"%)")
+pie(table(cardio178$kardio),lab=popis,col="white",main="Kolacovy graf pro kardio nemoc")
+popis <- paste(sort(unique(cardio178$koureni)),"(",round(prop.table(table(cardio178$koureni))*100,2),"%)")
+pie(table(cardio178$koureni),lab=popis,col="white",main="Kolacovy graf pro koureni")
+
+barplot(table(cardio178$vek_kateg),col="white",main="Kategorizovany vek",ylab="Pocty", ylim=c(0,50))
+x <- barplot(table(cardio178$vek_kateg),plot=F)[,1]; text(x,table(cardio178$vek_kateg), labels=table(cardio178$vek_kateg),pos=3)
+barplot(table(cardio178$vek_aktiv),col="white",main="Vek a fyzicka aktivita",ylab="Pocty", ylim = c(0,80))
+x <- barplot(table(cardio178$vek_aktiv),plot=F)[,1]; text(x,table(cardio178$vek_aktiv),labels=table(cardio178$vek_aktiv),pos=3)
+barplot(table(cardio178$cholesterol),col="white",main="Sloupcovy graf pro cholesterol",ylab="Pocty", ylim = c(0,150))
+x <- barplot(table(cardio178$cholesterol),plot=F)[,1]; text(x,table(cardio178$cholesterol),labels=table(cardio178$cholesterol),pos=3)
+barplot(table(cardio178$gluc),col="white",main="Sloupcovy graf pro glukozu",ylab="Pocty", ylim = c(0,180))
+x <- barplot(table(cardio178$gluc),plot=F)[,1]; text(x,table(cardio178$gluc),labels=table(cardio178$gluc),pos=3)
+par(mfrow = c(1,1))
+```
+
+# Graf pro dvojici kategorickych promennych
+
+```{r}
+plot(as.factor(cardio178$kardio) ~ cardio178$vek_aktiv, xlab ="Fyzicka aktivita s vekem", ylab = "Kardio onemocneni")
+plot(cardio178$cholesterol ~ cardio178$vek_kateg, xlab="Vek", ylab = "Cholesterol")
+```

@@ -46,6 +46,12 @@ P(X > k) = 1 - P(X <= k) ... jedna minus distribucni funkce v bode k
 P(X >= k) = 1 - P(X <= (k - 1)) ... jedna minus distribucni funkce v bode k - 1
 P(k <= X <= l) = P(X <= k) - P(X <= (l - 1)) ... rozdil distribucnich funkci v bodech k a l - 1
 
+```{r}
+# balicek 32 karet ktery ma 4 esa. pokud vytahnu 5 karet, jaka je sance ze budu mit alespon 2 esa?
+1 - phyper(1, 4, 28, 5)
+```
+
+
 Priklad 1
 ```{r}
 ## Binomicke rozdeleni

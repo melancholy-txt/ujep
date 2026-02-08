@@ -38,6 +38,14 @@ P(X <= k) = P(X < k) ... distribucni funkce v bode k
 P(X >= k) = P(X > k) = 1 - P(X <= k) ... jedna minus distribucni funkce v bode k
 P(k <= X <= l) = P(X <= k) - P(X <= l) ... rozdil distribucnich funkci v bodech k a l
 
+```{r}
+# Normalni rozdeleni 
+# mu - 190, sigma - 6
+#kolik procent hracu je v "idealnim stredu" mezi 184 a 196?
+pnorm(196, 190, 6) - pnorm(184, 190, 6)
+```
+
+
 Priklad 1
 ```{r}
 # Hmotnost bochniku chleba ma normalni rozdeleni se stredni hodnotou 1.2 kg a smerodatnou odchylkou 30 g. Jaka je pravdepodobnost, ze bochnik, ktery si prinesu domu bude mit maximalne o 50 g mene, nez je optimalni vaha.

@@ -1,0 +1,278 @@
+---
+title: "Pravdepodobnost a statistika"
+subtitle: "Cviceni 11"
+author: "Alena Cernikova"
+date: "2025-12-15"
+output: html_document
+---
+
+### Interval spolehlivosti
+
+```{r}
+library(DescTools)
+  # knihovna popisnych statistik
+
+load("../cv10/Kojeni.RData")
+  # nacte databazi Kojeni.RData
+  # databaze vytvorena pri zpracovani diplomove prace na PrF UK kolem roku 2000
+```
+
+### Interval spolehlivosti pro rozdil podilu
+
+Jak velky je rozdil v podilu otcu pritomnych u porodu mezi Prahou a Kladnem?
+```{r}
+otec <- Kojeni$Otec
+mesto <- Kojeni$Porodnice
+(tab <- table(otec, mesto))
+```
+Odhad rozdilu podilu a interval spolehlivosti
+```{r}
+cat("\nPodil pritomnych otcu v Praze =", tab[2,1]/(tab[1,1] + tab[2,1]))
+cat("\nPodil pritomnych otcu v Kladne =", tab[2,2]/(tab[1,2] + tab[2,2]))
+cat("\nRozdil techto podilu v Praze a na Kladne =", tab[2,1]/(tab[1,1] + tab[2,1]) - tab[2,2]/(tab[1,2] + tab[2,2]))
+
+cat("\n\n95%-ni interval spolehlivosti pomoci prednastavene funkce\n")
+BinomDiffCI(x1 = tab[2,1], n1 = tab[1,1] + tab[2,1], x2 = tab[2,2], n2 = tab[1,2] + tab[2,2], method ="wald")
+```
+
+Je rozdil mezi podilem pritomnych otcu v Praze a na Kladne vyznamny?
+Resime testem
+  H0: není rozdíl / jsou stejné / = 0
+  H1: je rozdíl/  / nejsou stejné / ≠ 0
+  hladina vyznamnosti alfa = 0.05
+```{r}
+prop.test(c(tab[2,1], tab[2,2]), c(tab[1,1] + tab[2,1], tab[1,2] + tab[2,2]))
+```
+
+Spoctete 99% interval spolehlivosti pro rozdil podilu v pul roce kojenych deti (kod 2) v Praze a na Kladne.
+```{r}
+kojene <- Kojeni$Koj24
+mesto <- Kojeni$Porodnice
+(tab <- table(kojene, mesto))
+cat("\nPodil v pul roce kojenych deti v Praze =", tab[2,1]/(tab[1,1] + tab[2,1]))
+cat("\nPodil v pul roce kojenych deti NA Kladne =", tab[2,2]/(tab[1,2] + tab[2,2]))
+cat("\nRozdil techto podilu v Praze a na Kladne =", tab[2,1]/(tab[1,1] + tab[2,1]) - tab[2,2]/(tab[1,2] + tab[2,2]))
+
+cat("\n\n99%-ni interval spolehlivosti pomoci prednastavene funkce\n")
+BinomDiffCI(x1 = tab[2,1], n1 = tab[1,1] + tab[2,1], x2 = tab[2,2], n2 = tab[1,2] + tab[2,2], conf.level = 0.99, method ="wald")
+```
+
+Bootstrapovy interval spolehlivosti pro prumer
+Klasicky interval spolehlivosti pro prumer funguje dobre u dat s priblizne normalnim rozdelenim,
+  u dat s vyraznymi odchylkami od normality je mozne pouzit napr. bootstrapovy interval spolehlivosti
+
+Spoctete 95%-ni interval spolehlivosti pro vek matek (promenna vekM)
+```{r}
+vek <- Kojeni$vekM
+hist(vek, col = "tomato")
+
+cat("\nKlasicky 95%-ni interval spolehlivosti pro prumer\n")
+MeanCI(vek)
+
+cat("\n\nBootstrapovy 95%-ni interval spolehlivosti pro prumer\n")
+MeanCI(vek, method = "boot")
+```
+
+Pro asymetricke rozdeleni muze byt bootstrapovy interval mirne asymetricky okolo vyberoveho prumeru
+
+Pro symetricke rozdeleni se od klasickeho lisi jen minimalne
+Interval spolehlivosti pro vysku otce
+```{r}
+vyska <- Kojeni$vyskaO
+
+cat("\nKlasicky 95%-ni interval spolehlivosti pro prumer\n")
+MeanCI(vyska)
+
+cat("\n\nBootstrapovy 95%-ni interval spolehlivosti pro prumer\n")
+MeanCI(vyska, method = "boot")
+BootCI(vyska, FUN = mean)
+```
+
+Rucni vypocet pro vysku otce
+```{r}
+boots <- list()
+B <- 10000
+for(i in 1:B) boots[[i]] <- sample(vyska, replace = TRUE)
+  # bootstrapove vybery
+means <- unlist(lapply(boots, mean))
+  # bootstrapove prumery
+
+hist(means, col = "honeydew2", xlab = "vyska otce",
+     main = "Histogram bootstrapovych prumeru")
+abline(v = mean(vyska), lwd = 3, col = "navy")
+abline(v = quantile(means, probs = c(0.025, 0.975)), lwd = 3, col = "red")
+
+cat("\nBootstrapovy interval spolehlivosti\n")
+c(mean = mean(vyska), quantile(means, probs = c(0.025, 0.975)))
+```
+
+### Linearni regrese
+Popisuje vztah dvou ciselnych promennych
+
+Souvisi spolu porodni hmotnost a delka deti?
+
+```{r}
+hmotnost <- Kojeni$porHmotnost
+delka <- Kojeni$porDelka
+
+# graficke znozorneni
+plot(hmotnost ~ delka, pch = 19, main = "Graf zavislosti dvou ciselnych promennych",
+     xlab = "Porodni delka", ylab = "Porodni hmotnost")
+  # zavislost je zrejma
+
+cat("\nKorelacni koeficient = ", cor(hmotnost, delka))
+  # silna kladna/rostouci/prima zavislost
+```
+Pouzivame Pearsonuv korelacni koeficient jehoz predpokladem je normalita obou promennych
+
+Je zavislost vyznamna?
+Zjistime pomoci testu - test o hodnote korelacniho koeficientu
+H0: neni linearni zavislot, cor = 0, B1 = 0
+H1: je linearni zavislost, cor ≠ 0, B1 ≠ 0
+hladina vyznamnosti alfa = 0.05
+```{r}
+cor.test(hmotnost, delka)
+```
+
+Tvar linearni zavislosti popisujeme pomoci linearni regrese
+```{r}
+plot(hmotnost ~ delka, pch = 19, main = "Graf zavislosti dvou ciselnych promennych",
+     xlab = "Porodni delka", ylab = "Porodni hmotnost")
+  # zavislost je zrejma
+  # je dulezite, ktera promenna je na x-ove ose a ktera na y-ove
+abline(lm(hmotnost ~ delka), col = 2, lwd = 2)
+  # Yi = Beta0 + Beta1*Xi + ei
+  # Yi = b0 + b1*x
+  # Yi - hodnota zavisle promenne (porodni hmotnost)
+  # Xi - hodnota nezavisle promenne (porodni delka)
+  # Beta0 - absolutni clen - intercept (prunik s osou y)
+  # b1 - linearni clen - koeficient u nezavisle promenne (smernice primky)
+  # ei - nahodna chyba (residuum) i-teho pozorovani
+  # grafem prolozim primku
+
+(Model1 <- lm(hmotnost ~ delka))
+  # odhad regresnich koeficientu - popis primky
+  # porodni hmotnost = -7905.8 + 224.8*porodni delka
+  # s narustem porodni delky o 1 cm naroste porodni hmotnost v promeru o 224.8 g
+
+cat("\n\nSouhrn modelu\n")
+summary(Model1)
+  # souhrn vystupu
+  # v casti Coefficients najdeme odhady regresnich koeficientu (Estimate)
+  #   a dale test o jejich nulovosti (kdyz je posledni hodnota v radku
+  #   Pr(>|t|) mensi nez 0.05, pak se koeficient vyznamne lisi od nuly,
+  #   a za posledni hodnotou se objevi alespon jedna hvezdicka)
+  # v souhrnu Multiple R-squared je procento variability zavisle promenne 
+  #   vysvetlene modelem: z variability porodni hmotnosti se vysvetlilo 62.5%
+
+cat("\n\n95%-ni intervaly spolehlivosti pro regresni koeficienty\n")
+confint(Model1)
+  # 95% intervaly spolehlivosti pro regresni koeficienty
+  # ani jeden z nich neobsahuje nulu
+```
+Jsou splnene predpoklady linearni regrese?
+Graficky test ctyr predpokladu:
+  1) linearita vztahu - cervena cara nema mit trend
+  2) normalita residui - body maji lezet na primce
+  3) stabilita rozptylu - cervena cara nema mit trend
+  4) vlivna pozorovani - vsechny body maji byt v mezich
+```{r}
+plot(Model1)
+```
+  
+## Jak zavisi hmotnost v pul roce na porodni hmotnosti?
+```{r}
+hmotnost <- Kojeni$hmotnost
+pHmot <- Kojeni$porHmotnost
+
+# graficke znozorneni
+plot(hmotnost ~ pHmot, pch = 19)
+abline(lm(hmotnost ~ pHmot), col = "red", lwd = 2)
+
+cat("\nKorelacni koeficient = ", cor(hmotnost, pHmot))
+```
+
+Linearni regrese
+```{r}
+(Model2<-lm(hmotnost ~ pHmot))
+  # hmotnost = 4839.3 + 0.8215*porodni hmotnost
+  #   na jeden gram porodni hmotnosti pripada v prumeru 0.8215 gramu hmotnosti v pul roce
+
+cat("\n\nSouhrn modelu\n")
+summary(Model2)
+  # modelem se vysvetlilo 18.4% variability hmotnosti v pul roce
+
+cat("\n\n95%-ni intervaly spolehlivosti pro regresni koeficienty\n")
+confint(Model2)
+  # linerarni koeficient se vyznamne lisi od nuly
+
+# testy predpokladu
+plot(Model2)
+```
+A co kdyz do modelu pridame jeste delku?
+Zavisi hmotnost deti v pul roce na jejich delce a na porodni hmotnosti?
+```{r}
+hmotnost <- Kojeni$hmotnost
+pHmot <- Kojeni$porHmotnost
+delka <- Kojeni$delka
+  # pro zavislost na dvou promennych nemame souhrnny graf, musi se samostatne
+
+plot(hmotnost ~ pHmot, pch = 19, main = "Zavislost na porodni hmotnosti")
+abline(lm(hmotnost ~ pHmot), col = "red", lwd = 2)
+
+plot(hmotnost ~ delka, pch = 19, main = "Zavislost na delce")
+abline(lm(hmotnost ~ delka), col = "red", lwd = 2)
+
+cat("\n\nKorelacni koeficient s porodni hmotnosti = ", cor(hmotnost, pHmot))
+cat("\nKorelacni koeficient s delkou = ", cor(hmotnost, delka))
+```
+
+Linearni model zavislosti na dvou promennych
+```{r}
+(Model3 <- lm(hmotnost ~ pHmot + delka))
+  # hmotnost = -413 + 0.5837*porodni hmotnost + 88.66*delka
+  #   na jeden gram porodni hmotnosti pripada v prumeru 0.5837 gramu hmotnosti v pul roce
+  #      pri stejne delce v pul roce
+  #   na jeden centimetr delky v pul roce pripada v prumeru 88.66 gramu hmotnosti
+  #      pri stejne porodni hmotnosti
+
+cat("\n\nSouhrn modelu\n")
+summary(Model3)
+  # modelem se vysvetlilo 28.7% variability hmotnosti v pul roce
+  # pridani dalsi promenne vyrazne pomohlo
+
+cat("\n\n95%-ni intervaly spolehlivosti pro regresni koeficienty\n")
+confint(Model3)
+  # zadny z intervalu spolehlivosti pro linearni cleny neobsahuje nulu
+  #   obe promenne jsou v modelu vyznamne
+
+# testy predpokladu
+plot(Model3)
+```
+A kdyz pridame do modelu jeste porodni delku?
+```{r}
+hmotnost <- Kojeni$hmotnost
+pHmot <- Kojeni$porHmotnost
+delka <- Kojeni$delka
+pDelka <- Kojeni$porDelka
+
+(Model4 <- lm(hmotnost ~ pHmot + delka + pDelka))
+cat("\n\nSouhrn modelu\n")
+summary(Model4)
+cat("\n\n95%-ni intervaly spolehlivosti pro regresni koeficienty\n")
+confint(Model4)
+# testy predpokladu
+plot(Model3)
+
+  # koeficienty se po pridani kazde dalsi promenne meni
+  # pridanim porodni delky do modelu jsme si uskodili
+  #  a vysvetlili jsme jen 29.3% variability hmotnosti
+```  
+
+Zavisi BMI pulrocnich deti na jejich porodni hmotnosti, delce v pul roce a veku matky?
+```{r}
+bmi <- (Kojeni$hmotnost/1000)/(Kojeni$delka/100)^2
+pHmot <- Kojeni$porHmotnost
+delka <- Kojeni$delka
+vekM <- Kojeni$vekM
+```
