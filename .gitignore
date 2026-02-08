@@ -33,3 +33,4 @@ venv/
 *.csproj.user
 *.dbmdl
 TestResults/
+OPR/17-12/.~lock.data.csv#

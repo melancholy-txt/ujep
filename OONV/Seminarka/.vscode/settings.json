@@ -1,0 +1,6 @@
+{
+	"dotnet.defaultSolution": "Seminarka.sln",
+	"[csharp]": {
+		"editor.defaultFormatter": "ms-dotnettools.csharp"
+	}
+}

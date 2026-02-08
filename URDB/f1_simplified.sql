@@ -1,6 +1,3 @@
--- Simplified F1 Database Schema
--- Removed unnecessary relations and redundancies
-
 CREATE TABLE `countries` (
   `country_id` INT PRIMARY KEY AUTO_INCREMENT,
   `country_name` VARCHAR(100) UNIQUE NOT NULL,
@@ -33,6 +30,7 @@ CREATE TABLE `team_principals` (
   `date_of_birth` DATE,
   `years_of_experience` INT DEFAULT 0,
   `previous_teams` TEXT,
+  `mentor_principal_id` INT,  -- Recursive relation: references another team principal who mentored this one
   `is_active` BOOLEAN DEFAULT true,
   `created_at` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP)
 );
@@ -155,6 +153,8 @@ CREATE UNIQUE INDEX `unique_incident` ON `incidents` (`race_id`, `driver_id`, `i
 -- Foreign Keys
 ALTER TABLE `drivers` ADD FOREIGN KEY (`country_id`) REFERENCES `countries` (`country_id`);
 ALTER TABLE `team_principals` ADD FOREIGN KEY (`country_id`) REFERENCES `countries` (`country_id`);
+-- NOVÁ REKURZIVNÍ RELACE
+ALTER TABLE `team_principals` ADD FOREIGN KEY (`mentor_principal_id`) REFERENCES `team_principals` (`principal_id`);  -- Recursive FK
 ALTER TABLE `teams` ADD FOREIGN KEY (`principal_id`) REFERENCES `team_principals` (`principal_id`);
 ALTER TABLE `tracks` ADD FOREIGN KEY (`country_id`) REFERENCES `countries` (`country_id`);
 ALTER TABLE `races` ADD FOREIGN KEY (`season_id`) REFERENCES `seasons` (`season_id`);
