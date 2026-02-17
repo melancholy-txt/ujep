@@ -32,6 +32,16 @@ plot(AirP.dec)
 
 # muzete vyzkouset na radach co2, lynx
 
+plot(co2)
+co2.dec <- decompose(co2, type = "multiplicative")
+plot(co2.dec)
+
+plot(lynx)
+# fix Error in decompose(lynx, type = "multiplicative") : time series has no or less than 2 periods
+lynx.ts <- ts(lynx, frequency = 10, start = 1820)
+lynx.dec <- decompose(lynx.ts, type = "additive")
+plot(lynx.dec)
+
 #############################
 #### Hledani trendu v ukazkovych datech
 Examples1 <- load("Examples1.txt")
