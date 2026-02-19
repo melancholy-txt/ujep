@@ -52,10 +52,10 @@ A <- matrix(0, 102, 115)
 for(i in 1:102) {
   A[i, i:(i+13)] <- p
 }
-for (i in 1:102) {
-  A[i, 102] <- sum(A[i, i:(i+13)])
-}
-# A[,102] <- rowSums(A, 102:115)
+# for (i in 1:102) {
+#   A[i, 102] <- sum(A[, i:(i+13)])
+# }
+A[,102] <- rowSums(A[, 1:102])
 A <- A[, 1:102]
 colnames(A) <- rownames(A) <- c(100:0, "Nestačí")
 View(A)
