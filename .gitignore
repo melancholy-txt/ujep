@@ -9,7 +9,7 @@ __pycache__/
 */.vscode/settings.json
 
 # Jupyter Notebook checkpoints
-*.ipynb 
+# *.ipynb 
 filter=strip-ipynb-metadata
 
 # C# changing files
