@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "Hash": "yyCZTJXadorZLLAHxv1V45582WLmaYYnyho87imq5ks=",
+  "Source": "RpgCharMaker",
+  "BasePath": "_content/RpgCharMaker",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "RpgCharMaker\\wwwroot",
+      "Source": "RpgCharMaker",
+      "ContentRoot": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\wwwroot\\",
+      "BasePath": "_content/RpgCharMaker",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\obj\\Debug\\net8.0\\scopedcss\\bundle\\RpgCharMaker.styles.css",
+      "SourceId": "RpgCharMaker",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
+      "BasePath": "_content/RpgCharMaker",
+      "RelativePath": "RpgCharMaker.styles.css",
+      "AssetKind": "All",
+      "AssetMode": "CurrentProject",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ApplicationBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\obj\\Debug\\net8.0\\scopedcss\\bundle\\RpgCharMaker.styles.css"
+    },
+    {
+      "Identity": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\RpgCharMaker.bundle.scp.css",
+      "SourceId": "RpgCharMaker",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
+      "BasePath": "_content/RpgCharMaker",
+      "RelativePath": "RpgCharMaker.bundle.scp.css",
+      "AssetKind": "All",
+      "AssetMode": "Reference",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ProjectBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\RpgCharMaker.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\wwwroot\\app.css",
+      "SourceId": "RpgCharMaker",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\wwwroot\\",
+      "BasePath": "_content/RpgCharMaker",
+      "RelativePath": "app.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\app.css"
+    }
+  ]
+}

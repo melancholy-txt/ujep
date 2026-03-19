@@ -1,0 +1,20 @@
+﻿div {
+    width: auto;
+    margin-left: 40%;
+}
+
+.list {
+    background-color: lightslategray;
+    color: mediumseagreen;
+    border: 25px double lawngreen;
+}
+
+.char_panel {
+    background-color: red;
+    color: yellow;
+}
+
+.details {
+    background-color: goldenrod;
+    color: aqua;
+}

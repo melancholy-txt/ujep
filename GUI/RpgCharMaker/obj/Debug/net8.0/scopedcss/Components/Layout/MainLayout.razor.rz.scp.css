@@ -1,0 +1,43 @@
+#blazor-error-ui[b-wxozr02cvp] {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss[b-wxozr02cvp] {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+nav[b-wxozr02cvp]  a.navlink {
+    background-color: hotpink;
+    color: white;
+    font-style: italic;
+    font-family: 'Comic Sans MS';
+    margin-left: 25%;
+}
+
+#nav[b-wxozr02cvp]{
+    width: 100%;
+    display: flex;
+
+    flex-direction: row;
+    align-items: center;
+}
+
+*[b-wxozr02cvp]{ 
+    background-color: hotpink;
+    font-family: 'Comic Sans MS';
+}
+
+div[b-wxozr02cvp]{
+    padding: 10px;
+}

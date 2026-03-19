@@ -1,0 +1,160 @@
+﻿@page "/"
+<PageTitle>Home</PageTitle>
+@rendermode InteractiveServer
+
+<h3>Character creator</h3>
+<div class="container">
+    <div class="create">
+        <div class="name_block">
+            <label>Name: </label>
+            <input @bind="charName" @bind:event="oninput" placeholder="Enter your name..." />
+        </div>
+
+        <div class="stats_block">
+            <label>Class: </label>
+            <select @bind="charClass" @bind:after="ApplyClassStats">
+                <option value="Warrior">&#x2694; Warrior</option>
+                <option value="Mage">&#129668; Mage</option>
+                <option value="Archer">&#127993; Archer</option>
+                <option value="Bard">
+                    &#127931; Bard
+                </option>
+                <option value="Druid">&#127794; Druid</option>
+            </select>
+        </div>
+
+        <div class="point_block">
+            <h4 style="color: @(availablePoints == 0 ? "red" : "green")">
+                Your stat points: @availablePoints
+            </h4>
+
+            <p>
+                &#128170; Strength: <strong>@strength</strong>
+                <button @onclick="IncStr" disabled="@(availablePoints == 0)">+</button>
+                <button @onclick="DecStr" disabled="@(strength == minStr)">-</button>
+            </p>
+
+            <p>
+                &#128075; Dexterity: <strong>@dexterity</strong>
+                <button @onclick="IncDex" disabled="@(availablePoints == 0)">+</button>
+                <button @onclick="DecDex" disabled="@(dexterity == minDex)">-</button>
+            </p>
+
+            <p>
+                &#x1f56e; Intelligence: <strong>@intelligence</strong>
+                <button @onclick="IncInt" disabled="@(availablePoints == 0)">+</button>
+                <button @onclick="DecInt" disabled="@(intelligence == minInt)">-</button>
+            </p>
+
+            <p>
+                &#129504; Wisdom: <strong>@wisdom</strong>
+                <button @onclick="IncWis" disabled="@(availablePoints == 0)">+</button>
+                <button @onclick="DecWis" disabled="@(intelligence == minInt)">-</button>
+            </p>
+
+            <p>
+                &#128511; Charisma: <strong>@charisma</strong>
+                <button @onclick="IncCha" disabled="@(availablePoints == 0)">+</button>
+                <button @onclick="DecCha" disabled="@(intelligence == minInt)">-</button>
+            </p>
+        </div>
+    </div>
+	<div class="show">
+        <h3 class="show_name">@charName</h3>
+        <p class="show_class">@charClass</p>
+        <hr />
+        <p>Strength: @strength</p>
+        <p>Dexterity: @dexterity</p>
+        <p>Intelligence: @intelligence</p>
+        <p>Wisdom: @wisdom</p>
+        <p>Charisma: @charisma</p>
+
+        @if (availablePoints == 0)
+        {
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <p class="error_mes">
+                    @errorMessage
+                </p>
+            }
+
+            <button class="button_save" @onclick="SaveChar">Save your character</button>
+        }
+    </div>
+</div>
+
+@code {
+    private string errorMessage = "";
+
+    private void SaveChar()
+    {
+        errorMessage = "";
+
+        if (string.IsNullOrWhiteSpace(charName))
+        {
+            errorMessage = "Please enter a char name!";
+            return;
+        }
+        foreach (var existingchar in Cards.Roster)
+        {
+            if (existingchar.Name.ToLower() == charName.ToLower())
+            {
+                errorMessage = "A char with this name already exists!";
+                return;
+            }
+        }
+
+        Cards.Roster.Add(new CharCard { Name = charName, Class = charClass, Str = strength, Dex = dexterity, Int = intelligence, Wis = wisdom, Cha = charisma });
+
+        charName = "";
+        ApplyClassStats();
+    }
+
+    private string charName = "Unit";
+    private string charClass = "Warrior";
+    private int availablePoints = 8;
+
+    private int strength = 5;
+    private int dexterity = 4;
+    private int intelligence = 1;
+    private int wisdom = 3;
+    private int charisma = 2;
+
+    private int minStr = 5;
+    private int minDex = 4;
+    private int minInt = 1;
+    private int minWis = 3;
+    private int minCha = 2;
+
+    private void ApplyClassStats()
+    {
+        availablePoints = 8;
+
+        if (charClass == "Warrior") { minStr = 5; minDex = 4; minInt = 1; minWis = 3; minCha = 2; }
+        else if (charClass == "Mage") { minStr = 1; minDex = 2; minInt = 5; minWis = 3; minCha = 2; }
+        else if (charClass == "Archer") { minStr = 2; minDex = 5; minInt = 1; minWis = 3; minCha = 2; }
+        else if (charClass == "Bard") { minStr = 2; minDex = 4; minInt = 1; minWis = 3; minCha = 5; }
+        else if (charClass == "Druid") { minStr = 4; minDex = 1; minInt = 2; minWis = 5; minCha = 3; }
+
+        strength = minStr;
+        dexterity = minDex;
+        intelligence = minInt;
+        charisma = minCha;
+        wisdom = minWis;
+    }
+
+    private void IncStr() { if (availablePoints > 0) { strength++; availablePoints--; } }
+    private void DecStr() { if (strength > minStr) { strength--; availablePoints++; } }
+
+    private void IncDex() { if (availablePoints > 0) { dexterity++; availablePoints--; } }
+    private void DecDex() { if (dexterity > minDex) { dexterity--; availablePoints++; } }
+
+    private void IncInt() { if (availablePoints > 0) { intelligence++; availablePoints--; } }
+    private void DecInt() { if (intelligence > minInt) { intelligence--; availablePoints++; } }
+
+    private void IncWis() { if (availablePoints > 0) { wisdom++; availablePoints--; } }
+    private void DecWis() { if (wisdom > minWis) { wisdom--; availablePoints++; } }
+
+    private void IncCha() { if (availablePoints > 0) { charisma++; availablePoints--; } }
+    private void DecCha() { if (charisma > minCha) { charisma--; availablePoints++; } }
+}

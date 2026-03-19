@@ -1,0 +1,14 @@
+﻿div{
+    width: auto;
+    margin-left: 40%;   
+}
+
+.create{
+    background-color: blueviolet;
+    color: orangered;
+}
+
+.show {
+    background-color: darkkhaki;
+    color: lawngreen;
+}
