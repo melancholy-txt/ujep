@@ -277,16 +277,38 @@ fdeaths.exp <- HoltWinters(fdeaths, beta = FALSE)
 plot(fdeaths.exp)
 fdeaths.exp
 plot(forecast(fdeaths.exp, h = 12))
+
+
 # je rada LakeHuron nahodna?
   # hladina Huronskeho jezera
 plot(LakeHuron)
-lake.exp <- HoltWinters(LakeHuron, seasonal = "multiplicative")
-plot(lake.exp)
-lake.exp
-plot(forecast(air.exp, h = 12))
+difference.sign.test(LakeHuron)
+table(sign(diff(LakeHuron,1)))
+
+index <- 1:length(LakeHuron)
+cor.test(LakeHuron, index, method="kendall")
+cor.test(LakeHuron, index, method="spearman")
+
+runs.test(lh)
 # je rada lh nahodna?
   # Luteinizing Hormone in Blood Samples
 plot(lh)
+difference.sign.test(lh)
+table(sign(diff(lh,1)))
+
+indexlh <- 1:length(lh)
+cor.test(lh, time(lh), method="kendall")
+cor.test(lh, time(lh), method="spearman")
+
+runs.test(lh)
 # je rada nhtemp nahodna?
   # Average Yearly Temperatures in New Haven
 plot(nhtemp)
+difference.sign.test(nhtemp)
+table(sign(diff(nhtemp,1)))
+
+index <- 1:length(nhtemp)
+cor.test(nhtemp, time(nhtemp), method="kendall")
+cor.test(nhtemp, time(nhtemp), method="spearman")
+
+runs.test(lh)
