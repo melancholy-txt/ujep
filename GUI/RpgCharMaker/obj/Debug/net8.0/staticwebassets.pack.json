@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\RpgCharMaker.bundle.scp.css",
+      "PackagePath": "staticwebassets\\RpgCharMaker.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\student.CPTO\\source\\repos\\RpgCharMaker\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.RpgCharMaker.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.RpgCharMaker.props",
+      "PackagePath": "build\\RpgCharMaker.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.RpgCharMaker.props",
+      "PackagePath": "buildMultiTargeting\\RpgCharMaker.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.RpgCharMaker.props",
+      "PackagePath": "buildTransitive\\RpgCharMaker.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
