@@ -63,11 +63,41 @@ pacf(discoveries, plot = F)
 
 # pomoci funkce arima.sim(n = ,list(ar = ,ma = )) nasimulujte rady typu
 #   MA(1) s parametrem theta1 = 0.75
+rada1 <- arima.sim(n = 200, list(ma = 0.75))
+plot(rada1)
+par(mfrow = c(2,1))
+acf(rada1); pacf(rada1)
+par(mfrow = c(1,1))
 #   MA(1) s parametrem theta1 = -0.75
+rada2 <- arima.sim(n = 200, list(ma = -0.75))
+plot(rada2)
+par(mfrow = c(2,1))
+acf(rada2); pacf(rada2)
+par(mfrow = c(1,1))
 #   MA(1) s parametrem theta1 = 1.5
+rada3 <- arima.sim(n = 200, list(ma = 1.5))
+plot(rada3)
+par(mfrow = c(2,1))
+acf(rada3); pacf(rada3)
+par(mfrow = c(1,1))
 #   AR(1) s parametrem phi1 = 0.75
+rada4 <- arima.sim(n = 200, list(ar = 0.75))
+plot(rada4)
+par(mfrow = c(2,1))
+acf(rada4); pacf(rada4)
+par(mfrow = c(1,1))
 #   AR(1) s parametrem phi1 = - 0.75
+rada5 <- arima.sim(n = 200, list(ar = -0.75))
+plot(rada5)
+par(mfrow = c(2,1))
+acf(rada5); pacf(rada5)
+par(mfrow = c(1,1))
 #   AR(1) s parametrem phi1 = 1.5
+rada6 <- arima.sim(n = 200, list(ar = 1.5))
+plot(rada6)
+par(mfrow = c(2,1))
+acf(rada6); pacf(rada6)
+par(mfrow = c(1,1))
 # podivejte se, jak rady vypadaji a jak vypadaji jejich autokorelacni a parcialni autokorelacni funkce
 # nasimulujte bily sum a podivejte se na jeho autokorelacni a parcialni autokorelacni funkci
 
