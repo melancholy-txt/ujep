@@ -1,0 +1,9 @@
+klasifikator, jestli bude prset
+dvoje srazky
+kdyz naprsi mene nez milimetr, neprselo, kdyz vice tak prselo
+pripravit priznaky pro model
+co muze mit vliv: 
+    chci predpovidat den do budoucnosti
+    muzeme vyzkouset co se deje kdyz budeme brat 3 4 dny zpatky
+    rocni obdobi je dulezity prediktor
+logisticka regrese
