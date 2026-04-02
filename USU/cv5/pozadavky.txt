@@ -1,0 +1,5 @@
+galaxy dataset
+dat pric identifikator a nechat pouze galaxie
+random forrest + multiple regression
+distribuce chyby
+co se stane kdyz dame dalsi tridy?
