@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This network was created in GeNIe Academic, which can be used for academic teaching and research purposes only -->
+<smile version="1.0" id="Network3" numsamples="10000" discsamples="10000">
+	<nodes>
+		<cpt id="Animal">
+			<state id="Monkey" />
+			<state id="Penguin" />
+			<state id="Platypus" />
+			<state id="Robin" />
+			<state id="Turtle" />
+			<probabilities>0.1912857142857143 0.1997142857142857 0.2062857142857143 0.2008571428571429 0.2018571428571429</probabilities>
+		</cpt>
+		<cpt id="Environment">
+			<state id="Air" />
+			<state id="Land" />
+			<state id="Water" />
+			<parents>Animal</parents>
+			<probabilities>0.0002487562189054727 0.9995024875621892 0.0002487562189054727 0.0002382654276864427 0.511317607815106 0.4884441267572076 0.0002306805074971165 0.0002306805074971165 0.9995386389850057 0.5048566690357735 0.4949064202795546 0.0002369106846718787 0.0002357378595002357 0.5051862329090052 0.4945780292314946</probabilities>
+		</cpt>
+		<cpt id="Class">
+			<state id="Bird" />
+			<state id="Mammal" />
+			<state id="Reptile" />
+			<parents>Animal</parents>
+			<probabilities>0.0002487562189054727 0.9995024875621892 0.0002487562189054727 0.9995234691446272 0.0002382654276864427 0.0002382654276864427 0.0002306805074971165 0.9995386389850058 0.0002306805074971165 0.9995261786306563 0.0002369106846718787 0.0002369106846718787 0.0002357378595002357 0.0002357378595002357 0.9995285242809995</probabilities>
+		</cpt>
+		<cpt id="BearsYoungAs">
+			<state id="Eggs" />
+			<state id="Live" />
+			<parents>Animal</parents>
+			<probabilities>0.000373134328358209 0.9996268656716418 0.9996426018584703 0.0003573981415296641 0.9996539792387543 0.0003460207612456747 0.9996446339729922 0.000355366027007818 0.9996463932107497 0.0003536067892503536</probabilities>
+		</cpt>
+		<cpt id="BodyCovering">
+			<state id="Hair" />
+			<state id="Down" />
+			<state id="Scales" />
+			<parents>Class</parents>
+			<probabilities>0.00011883541295306 0.9997623291740938 0.00011883541295306 0.9997605363984673 0.0001197318007662835 0.0001197318007662835 0.0002357378595002357 0.0002357378595002357 0.9995285242809995</probabilities>
+		</cpt>
+		<cpt id="HasShell">
+			<state id="True" />
+			<state id="False" />
+			<parents>Class</parents>
+			<probabilities>0.00017825311942959 0.9998217468805704 0.0001795977011494253 0.9998204022988506 0.9996463932107497 0.0003536067892503536</probabilities>
+		</cpt>
+		<cpt id="WarmBlooded">
+			<state id="True" />
+			<state id="False" />
+			<parents>Class</parents>
+			<probabilities>0.9998217468805704 0.00017825311942959 0.9998204022988506 0.0001795977011494253 0.0003536067892503536 0.9996463932107497</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 5.0.5310.0 ACADEMIC" name="Animals">
+			<node id="Animal">
+				<name>Animal</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>537 126 676 179</position>
+				<barchart active="true" width="128" height="108" />
+			</node>
+			<node id="Environment">
+				<name>Environment</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>364 151 435 195</position>
+				<barchart active="true" width="128" height="72" />
+			</node>
+			<node id="Class">
+				<name>Class</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>554 280 633 326</position>
+				<barchart active="true" width="128" height="72" />
+			</node>
+			<node id="BearsYoungAs">
+				<name>BearsYoungAs</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>763 154 849 207</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="BodyCovering">
+				<name>BodyCovering</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>330 293 430 357</position>
+				<barchart active="true" width="128" height="72" />
+			</node>
+			<node id="HasShell">
+				<name>HasShell</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>748 306 842 365</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="WarmBlooded">
+				<name>WarmBlooded</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>538 422 635 482</position>
+				<barchart active="true" />
+			</node>
+		</genie>
+	</extensions>
+</smile>

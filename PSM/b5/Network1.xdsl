@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This network was created in GeNIe Academic, which can be used for academic teaching and research purposes only -->
+<smile version="1.0" id="Network1" numsamples="10000" discsamples="10000">
+	<nodes>
+		<cpt id="Hypothesis">
+			<state id="H1" />
+			<state id="H2" />
+			<state id="H3" />
+			<state id="H4" />
+			<state id="H5" />
+			<probabilities>0.1 0.15 0.5 0.2 0.05</probabilities>
+		</cpt>
+		<cpt id="EyeContact">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Hypothesis</parents>
+			<probabilities>0.1 0.9 0.2 0.8 0.4 0.6 0.2 0.8 0.1 0.9</probabilities>
+		</cpt>
+		<cpt id="Smile">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Hypothesis</parents>
+			<probabilities>0.1 0.9 0.1 0.9 0.4 0.6 0.4 0.6 0.2 0.8</probabilities>
+		</cpt>
+		<cpt id="AskedForDrink">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Hypothesis</parents>
+			<probabilities>0.52 0.48 0.45 0.55 0.029 0.971 0.0009 0.9991 0.0001 0.9999</probabilities>
+		</cpt>
+		<cpt id="LooksAtOtherMen">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Hypothesis</parents>
+			<probabilities>0.3 0.7 0.4 0.6 0.2 0.8 0.008 0.992 0.02 0.98</probabilities>
+		</cpt>
+		<cpt id="ShortPhrases">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Hypothesis</parents>
+			<probabilities>0.1 0.9 0.4 0.6 0.3 0.7 0.1 0.9 0.1 0.9</probabilities>
+		</cpt>
+		<cpt id="MakeUpBathroom">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Hypothesis</parents>
+			<probabilities>0.05 0.95 0.05 0.95 0.1 0.9 0.2 0.8 0.6 0.4</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 5.0.5310.0 ACADEMIC" name="Network1">
+			<node id="Hypothesis">
+				<name>Hypothesis</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>711 77 802 128</position>
+				<barchart active="true" width="128" height="108" />
+			</node>
+			<node id="EyeContact">
+				<name>EyeContact</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>646 248 737 299</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="Smile">
+				<name>Smile</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>332 219 423 270</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="AskedForDrink">
+				<name>AskedForDrink</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>498 245 589 296</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="LooksAtOtherMen">
+				<name>LooksAtOtherMen</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1083 218 1222 269</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="ShortPhrases">
+				<name>ShortPhrases</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>949 243 1040 294</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="MakeUpBathroom">
+				<name>MakeUpBathroom</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>768 247 908 298</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+		</genie>
+	</extensions>
+</smile>
