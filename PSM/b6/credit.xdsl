@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This network was created in GeNIe Academic, which can be used for academic teaching and research purposes only -->
+<smile version="1.0" id="Network1" numsamples="10000" discsamples="10000">
+	<nodes>
+		<cpt id="Debit">
+			<state id="State0" />
+			<state id="State1" />
+			<state id="State2" />
+			<probabilities>0.356 0.345 0.299</probabilities>
+		</cpt>
+		<cpt id="Income">
+			<state id="State0" />
+			<state id="State1" />
+			<state id="State2" />
+			<probabilities>0.332 0.334 0.334</probabilities>
+		</cpt>
+		<cpt id="Assets">
+			<state id="State0" />
+			<state id="State1" />
+			<state id="State2" />
+			<probabilities>0.363 0.317 0.32</probabilities>
+		</cpt>
+		<cpt id="RatioOfDebtsToIncome">
+			<state id="State0" />
+			<state id="State1" />
+			<parents>Income Debit</parents>
+			<probabilities>0.4516129032258064 0.5483870967741935 0.004310344827586207 0.9956896551724138 0.005319148936170213 0.9946808510638298 0.8125 0.1875 0.4915254237288136 0.5084745762711864 0.08653846153846154 0.9134615384615385 0.9958677685950413 0.004132231404958678 0.8125 0.1875 0.5196078431372549 0.4803921568627451</probabilities>
+		</cpt>
+		<cpt id="PaymentHistory">
+			<state id="State0" />
+			<state id="State1" />
+			<state id="State2" />
+			<state id="State3" />
+			<probabilities>0.254 0.254 0.233 0.259</probabilities>
+		</cpt>
+		<cpt id="WorkHistory">
+			<state id="State0" />
+			<state id="State1" />
+			<state id="State2" />
+			<state id="State3" />
+			<probabilities>0.238 0.259 0.254 0.249</probabilities>
+		</cpt>
+		<cpt id="Reliability">
+			<state id="State0" />
+			<state id="State1" />
+			<parents>PaymentHistory WorkHistory</parents>
+			<probabilities>0.9692307692307693 0.03076923076923077 0.7 0.3 0.5909090909090909 0.4090909090909091 0.5238095238095237 0.4761904761904762 0.6721311475409837 0.3278688524590164 0.5942028985507246 0.4057971014492754 0.5964912280701754 0.4035087719298245 0.4626865671641791 0.5373134328358209 0.2321428571428571 0.7678571428571428 0.007936507936507936 0.992063492063492 0.01612903225806452 0.9838709677419355 0.009259259259259259 0.9907407407407407 0.6607142857142857 0.3392857142857142 0.3529411764705882 0.6470588235294118 0.5797101449275363 0.4202898550724637 0.2121212121212121 0.7878787878787878</probabilities>
+		</cpt>
+		<cpt id="Age">
+			<state id="State0" />
+			<state id="State1" />
+			<state id="State2" />
+			<probabilities>0.32 0.36 0.32</probabilities>
+		</cpt>
+		<cpt id="Profession">
+			<state id="State0" />
+			<state id="State1" />
+			<state id="State2" />
+			<probabilities>0.321 0.354 0.325</probabilities>
+		</cpt>
+		<cpt id="Worth">
+			<state id="State0" />
+			<state id="State1" />
+			<state id="State2" />
+			<parents>Income Assets</parents>
+			<probabilities>0.8683473389355744 0.1288515406162465 0.002801120448179272 0.003401360544217687 0.2993197278911564 0.6972789115646257 0.002824858757062147 0.1468926553672316 0.8502824858757062 0.9761904761904763 0.02083333333333334 0.002976190476190476 0.7212121212121213 0.2757575757575758 0.003030303030303031 0.1052631578947368 0.7719298245614035 0.1228070175438596 0.9950617283950616 0.002469135802469135 0.002469135802469135 0.8958333333333334 0.1011904761904762 0.002976190476190476 0.6370370370370371 0.3592592592592593 0.003703703703703704</probabilities>
+		</cpt>
+		<cpt id="FutureIncome">
+			<state id="State0" />
+			<state id="State1" />
+			<parents>Profession Worth</parents>
+			<probabilities>0.9844559585492229 0.0155440414507772 0.8028169014084507 0.1971830985915493 0.8596491228070176 0.1403508771929824 0.7710280373831775 0.2289719626168224 0.5394736842105263 0.4605263157894737 0.390625 0.609375 0.5454545454545454 0.4545454545454545 0.5454545454545455 0.4545454545454546 0.008064516129032258 0.9919354838709677</probabilities>
+		</cpt>
+		<cpt id="CreditWorthiness">
+			<state id="Positive" />
+			<state id="Negative" />
+			<parents>Reliability Age FutureIncome</parents>
+			<probabilities>0.8333333333333333 0.1666666666666667 0.4222222222222222 0.5777777777777778 0.8677685950413223 0.1322314049586777 0.5333333333333333 0.4666666666666667 0.7840909090909091 0.2159090909090909 0.4186046511627907 0.5813953488372093 0.5391304347826087 0.4608695652173913 0.109375 0.890625 0.6290322580645161 0.3709677419354839 0.1272727272727273 0.8727272727272727 0.3700787401574803 0.6299212598425197 0.1612903225806452 0.8387096774193548</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 5.0.5310.0 ACADEMIC" name="Network1">
+			<node id="Debit">
+				<name>Debit</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>286 89 364 149</position>
+				<barchart active="true" width="120" height="120" />
+			</node>
+			<node id="Income">
+				<name>Income</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>669 59 744 111</position>
+				<barchart active="true" width="128" height="90" />
+			</node>
+			<node id="Assets">
+				<name>Assets</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1037 98 1099 137</position>
+				<barchart active="true" width="128" height="90" />
+			</node>
+			<node id="RatioOfDebtsToIncome">
+				<name>RatioOfDebtsToIncome</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>417 248 537 323</position>
+				<barchart active="true" width="171" height="90" />
+			</node>
+			<node id="PaymentHistory">
+				<name>PaymentHistory</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1104 332 1190 385</position>
+				<barchart active="true" width="128" height="90" />
+			</node>
+			<node id="WorkHistory">
+				<name>WorkHistory</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1343 366 1414 410</position>
+				<barchart active="true" width="128" height="90" />
+			</node>
+			<node id="Reliability">
+				<name>Reliability</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1102 517 1178 564</position>
+				<barchart active="true" width="128" height="90" />
+			</node>
+			<node id="Age">
+				<name>Age</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>336 716 393 756</position>
+				<barchart active="true" width="123" height="130" />
+			</node>
+			<node id="Profession">
+				<name>Profession</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>426 476 492 517</position>
+				<barchart active="true" width="120" height="126" />
+			</node>
+			<node id="Worth">
+				<name>Worth</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>776 298 838 334</position>
+				<barchart active="true" width="128" height="90" />
+			</node>
+			<node id="FutureIncome">
+				<name>FutureIncome</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>771 481 847 528</position>
+				<barchart active="true" width="128" height="90" />
+			</node>
+			<node id="CreditWorthiness">
+				<name>CreditWorthiness</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>722 730 1003 855</position>
+				<barchart active="true" width="341" height="95" />
+			</node>
+		</genie>
+	</extensions>
+</smile>
