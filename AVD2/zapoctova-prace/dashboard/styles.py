@@ -1,28 +1,41 @@
 import streamlit as st
 
+from .constants import PRF_GREY, PRF_PRIMARY, PRF_SECONDARY, PRF_TEXT
+
 
 def inject_styles() -> None:
+    # Keep a stable light rendering because static custom CSS is tuned for light surfaces.
     st.markdown(
-        """
+        f"""
         <style>
             :root {
-                --brand-main: #005b96;
-                --brand-accent: #00897b;
-                --brand-highlight: #f4a259;
-                --surface: rgba(255, 255, 255, 0.86);
+                --brand-primary: {PRF_PRIMARY};
+                --brand-secondary: {PRF_SECONDARY};
+                --brand-text: {PRF_TEXT};
+                --brand-grey: {PRF_GREY};
+                --surface: #ffffff;
             }
 
             html, body, [data-testid="stAppViewContainer"] {
+                color-scheme: light !important;
                 font-family: "Helvetica CE", Helvetica, Arial, sans-serif;
-                color: #102a43;
+                color: var(--brand-text);
                 background:
-                    radial-gradient(circle at 10% 20%, rgba(0, 137, 123, 0.20), transparent 28%),
-                    radial-gradient(circle at 85% 0%, rgba(0, 91, 150, 0.24), transparent 25%),
-                    linear-gradient(145deg, #f8fcff 0%, #ecf6ff 55%, #f5fbf9 100%);
+                    radial-gradient(circle at 90% -5%, rgba(111, 189, 199, 0.28), transparent 26%),
+                    linear-gradient(160deg, #ffffff 0%, #f6fafb 48%, #f2f6f7 100%);
             }
 
             [data-testid="stHeader"] {
                 background: rgba(0, 0, 0, 0);
+            }
+
+            [data-testid="stSidebar"] {
+                background: #f7fbfc;
+                border-right: 1px solid rgba(28, 21, 41, 0.10);
+            }
+
+            [data-testid="stSidebar"] * {
+                color: var(--brand-text);
             }
 
             .main .block-container {
@@ -36,35 +49,65 @@ def inject_styles() -> None:
                 font-weight: 800;
                 line-height: 1.1;
                 letter-spacing: 0.02em;
-                color: var(--brand-main);
+                color: var(--brand-secondary);
                 margin-bottom: 0.35rem;
             }
 
             .dashboard-subtitle {
                 font-size: 1.03rem;
-                color: #3f5873;
+                color: rgba(28, 21, 41, 0.78);
                 margin-bottom: 1rem;
             }
 
             .panel-card {
                 background: var(--surface);
-                border-radius: 16px;
-                border: 1px solid rgba(0, 91, 150, 0.12);
-                box-shadow: 0 7px 24px rgba(17, 68, 92, 0.08);
+                border-radius: 8px;
+                border: 1px solid rgba(28, 21, 41, 0.10);
+                box-shadow: 0 3px 12px rgba(28, 21, 41, 0.06);
                 padding: 0.8rem 1rem 0.4rem 1rem;
                 margin-bottom: 0.8rem;
             }
 
             [data-testid="stMetric"] {
-                background: rgba(255, 255, 255, 0.72);
-                border-radius: 12px;
-                border: 1px solid rgba(0, 91, 150, 0.14);
+                background: #ffffff;
+                border-radius: 8px;
+                border: 1px solid rgba(28, 21, 41, 0.10);
                 padding: 0.25rem 0.4rem;
             }
 
+            [data-baseweb="select"] > div,
+            [data-baseweb="input"] > div,
+            [data-baseweb="textarea"] > div {
+                border-radius: 8px !important;
+                border-color: rgba(28, 21, 41, 0.18) !important;
+            }
+
+            [data-baseweb="tag"] {
+                border-radius: 6px !important;
+                border: 1px solid rgba(1, 114, 128, 0.32) !important;
+                background: rgba(111, 189, 199, 0.22) !important;
+            }
+
+            [data-baseweb="tag"] span {
+                color: var(--brand-text) !important;
+            }
+
+            hr {
+                border: 0;
+                border-top: 1px solid rgba(28, 21, 41, 0.14);
+            }
+
+            .stTabs [role="tab"] {
+                border-radius: 6px;
+            }
+
             .note {
-                color: #3f5873;
+                color: rgba(28, 21, 41, 0.78);
                 font-size: 0.95rem;
+            }
+
+            a {
+                color: var(--brand-secondary);
             }
         </style>
         """,

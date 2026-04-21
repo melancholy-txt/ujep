@@ -5,11 +5,14 @@ import streamlit as st
 from .charts import build_wordcloud_figure
 from .constants import (
     CITY_COL,
-    FAVICON_PATH,
     GENDER_COL,
     IMPORTANT_COL,
     LOGO_PATH,
     PET_COL,
+    PRF_GREY,
+    PRF_PRIMARY,
+    PRF_SECONDARY,
+    PRF_TEXT,
     PROGRAM_COL,
     SCHOOL_COL,
     SHOE_COL,
@@ -19,6 +22,10 @@ from .constants import (
     VISITOR_COL,
 )
 from .text_processing import extract_keywords
+
+PRF_PALETTE = [PRF_PRIMARY, PRF_SECONDARY, PRF_TEXT, PRF_GREY, "#9ECFD6", "#4D9FAA"]
+PRF_CONTINUOUS = [(0.0, PRF_GREY), (0.45, PRF_PRIMARY), (1.0, PRF_SECONDARY)]
+PRF_HEATMAP = [(0.0, "#FFFFFF"), (0.5, PRF_PRIMARY), (1.0, PRF_SECONDARY)]
 
 
 def render_header() -> None:
@@ -80,7 +87,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
             y="Počet návštěvníků",
             markers=True,
             template="plotly_white",
-            color_discrete_sequence=["#005b96"],
+            color_discrete_sequence=[PRF_SECONDARY],
         )
         fig_time.update_layout(
             xaxis_title="Čas",
@@ -104,7 +111,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
             y="Počet",
             template="plotly_white",
             color="Pohlaví",
-            color_discrete_sequence=px.colors.qualitative.Set2,
+            color_discrete_sequence=PRF_PALETTE,
         )
         fig_gender.update_layout(showlegend=False, height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10})
         st.plotly_chart(fig_gender, use_container_width=True)
@@ -119,7 +126,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
             orientation="h",
             template="plotly_white",
             color="Počet",
-            color_continuous_scale="Tealgrn",
+            color_continuous_scale=PRF_CONTINUOUS,
         )
         fig_city.update_layout(height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10}, coloraxis_showscale=False)
         st.plotly_chart(fig_city, use_container_width=True)
@@ -133,7 +140,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
             y="Počet",
             template="plotly_white",
             color="Studovaná škola",
-            color_discrete_sequence=px.colors.qualitative.Bold,
+            color_discrete_sequence=PRF_PALETTE,
         )
         fig_school.update_layout(showlegend=False, height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10})
         st.plotly_chart(fig_school, use_container_width=True)
@@ -152,7 +159,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
             values="Počet",
             hole=0.5,
             template="plotly_white",
-            color_discrete_sequence=px.colors.qualitative.Vivid,
+            color_discrete_sequence=PRF_PALETTE,
         )
         fig_source.update_layout(height=360, margin={"l": 10, "r": 10, "t": 10, "b": 10})
         st.plotly_chart(fig_source, use_container_width=True)
@@ -167,7 +174,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
             orientation="h",
             template="plotly_white",
             color="Počet",
-            color_continuous_scale="Blues",
+            color_continuous_scale=PRF_CONTINUOUS,
         )
         fig_programs.update_layout(
             height=360,
@@ -199,7 +206,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
                 labels={"x": "Obor", "y": "Škola", "color": "Počet"},
                 text_auto=True,
                 aspect="auto",
-                color_continuous_scale="Mint",
+                color_continuous_scale=PRF_HEATMAP,
             )
             fig_heatmap.update_layout(height=360, margin={"l": 10, "r": 10, "t": 10, "b": 10})
             st.plotly_chart(fig_heatmap, use_container_width=True)
@@ -217,7 +224,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
                 orientation="h",
                 template="plotly_white",
                 color="Počet",
-                color_continuous_scale="Sunset",
+                color_continuous_scale=PRF_CONTINUOUS,
             )
             fig_subjects.update_layout(
                 height=360,
@@ -249,7 +256,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
                 orientation="h",
                 template="plotly_white",
                 color="count",
-                color_continuous_scale="Emrld",
+                color_continuous_scale=PRF_CONTINUOUS,
             )
             fig_keywords.update_layout(
                 height=420,
@@ -278,7 +285,7 @@ def render_fun_section(data: pd.DataFrame) -> None:
                 x=SHOE_COL,
                 nbins=15,
                 template="plotly_white",
-                color_discrete_sequence=["#005b96"],
+                color_discrete_sequence=[PRF_SECONDARY],
             )
             fig_shoes.update_layout(
                 height=320,
@@ -297,7 +304,7 @@ def render_fun_section(data: pd.DataFrame) -> None:
             values="Počet",
             hole=0.38,
             template="plotly_white",
-            color_discrete_sequence=px.colors.qualitative.Pastel,
+            color_discrete_sequence=PRF_PALETTE,
         )
         fig_pets.update_layout(height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10})
         st.plotly_chart(fig_pets, use_container_width=True)

@@ -19,6 +19,11 @@ DATA_PATH = ROOT_DIR / "data" / "DOD_2026_data.csv"
 LOGO_PATH = ROOT_DIR / "image" / "PRF" / "LOGO_PRF_CZ_RGB_standard.jpg"
 FAVICON_PATH = ROOT_DIR / "image" / "PRF" / "PRF-favicon.png"
 
+PRF_PRIMARY = "#6FBDC7"
+PRF_SECONDARY = "#017280"
+PRF_TEXT = "#1C1529"
+PRF_GREY = "#D2D3D5"
+
 STOPWORDS_CZ = {
     "aby",
     "asi",
