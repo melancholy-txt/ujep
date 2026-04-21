@@ -28,23 +28,24 @@ PRF_CONTINUOUS = [(0.0, PRF_GREY), (0.45, PRF_PRIMARY), (1.0, PRF_SECONDARY)]
 PRF_HEATMAP = [(0.0, "#FFFFFF"), (0.5, PRF_PRIMARY), (1.0, PRF_SECONDARY)]
 
 
+def _show_plot(fig) -> None:
+    st.plotly_chart(fig, use_container_width=True, theme="streamlit")
+
+
 def render_header() -> None:
     left_col, right_col = st.columns([4.2, 1])
     with left_col:
-        st.markdown(
-            '<div class="dashboard-title">Den otevřených dveří PřF UJEP 2026</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<div class="dashboard-subtitle">Interaktivní dashboard návštěvnosti a preferencí uchazečů<br><b>Autor:</b> Antonín Višňák</div>',
-            unsafe_allow_html=True,
-        )
+        st.title("Den otevřených dveří PřF UJEP 2026")
+        st.caption("Interaktivní dashboard návštěvnosti a preferencí uchazečů")
+        st.caption("Autor: Antonín Višňák")
 
     with right_col:
         if LOGO_PATH.exists():
             st.image(str(LOGO_PATH), use_container_width=True)
         else:
             st.warning("Logo PřF UJEP nebylo nalezeno v image/PRF.")
+
+    st.divider()
 
 
 def render_kpis(data: pd.DataFrame, programs: pd.DataFrame) -> None:
@@ -74,241 +75,239 @@ def render_kpis(data: pd.DataFrame, programs: pd.DataFrame) -> None:
 
 
 def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects: pd.DataFrame) -> None:
-    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-    st.subheader("Návštěvnost v čase")
-    timeline = data.groupby("time_slot", as_index=False).size().rename(columns={"size": "Počet návštěvníků"})
-    if timeline.empty:
-        st.info("Pro vybrané filtry nejsou data o návštěvnosti.")
-    else:
-        timeline = timeline.sort_values("time_slot")
-        fig_time = px.area(
-            timeline,
-            x="time_slot",
-            y="Počet návštěvníků",
-            markers=True,
-            template="plotly_white",
-            color_discrete_sequence=[PRF_SECONDARY],
-        )
-        fig_time.update_layout(
-            xaxis_title="Čas",
-            yaxis_title="Počet návštěvníků",
-            margin={"l": 10, "r": 10, "t": 10, "b": 10},
-            height=320,
-        )
-        st.plotly_chart(fig_time, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-    st.subheader("Struktura návštěvníků")
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        gender_counts = data[GENDER_COL].value_counts().reset_index()
-        gender_counts.columns = ["Pohlaví", "Počet"]
-        fig_gender = px.bar(
-            gender_counts,
-            x="Pohlaví",
-            y="Počet",
-            template="plotly_white",
-            color="Pohlaví",
-            color_discrete_sequence=PRF_PALETTE,
-        )
-        fig_gender.update_layout(showlegend=False, height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10})
-        st.plotly_chart(fig_gender, use_container_width=True)
-
-    with col2:
-        city_counts = data[CITY_COL].value_counts().reset_index()
-        city_counts.columns = ["Místo bydliště", "Počet"]
-        fig_city = px.bar(
-            city_counts,
-            x="Počet",
-            y="Místo bydliště",
-            orientation="h",
-            template="plotly_white",
-            color="Počet",
-            color_continuous_scale=PRF_CONTINUOUS,
-        )
-        fig_city.update_layout(height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10}, coloraxis_showscale=False)
-        st.plotly_chart(fig_city, use_container_width=True)
-
-    with col3:
-        school_counts = data[SCHOOL_COL].value_counts().reset_index()
-        school_counts.columns = ["Studovaná škola", "Počet"]
-        fig_school = px.bar(
-            school_counts,
-            x="Studovaná škola",
-            y="Počet",
-            template="plotly_white",
-            color="Studovaná škola",
-            color_discrete_sequence=PRF_PALETTE,
-        )
-        fig_school.update_layout(showlegend=False, height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10})
-        st.plotly_chart(fig_school, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-    st.subheader("Zdroje informací a zájem o obory")
-    col4, col5 = st.columns([1.15, 1.85])
-
-    with col4:
-        source_counts = data["source_group"].value_counts().reset_index()
-        source_counts.columns = ["Zdroj", "Počet"]
-        fig_source = px.pie(
-            source_counts,
-            names="Zdroj",
-            values="Počet",
-            hole=0.5,
-            template="plotly_white",
-            color_discrete_sequence=PRF_PALETTE,
-        )
-        fig_source.update_layout(height=360, margin={"l": 10, "r": 10, "t": 10, "b": 10})
-        st.plotly_chart(fig_source, use_container_width=True)
-
-    with col5:
-        program_counts = programs["Obor"].value_counts().head(10).reset_index()
-        program_counts.columns = ["Obor", "Počet"]
-        fig_programs = px.bar(
-            program_counts,
-            x="Počet",
-            y="Obor",
-            orientation="h",
-            template="plotly_white",
-            color="Počet",
-            color_continuous_scale=PRF_CONTINUOUS,
-        )
-        fig_programs.update_layout(
-            height=360,
-            margin={"l": 10, "r": 10, "t": 10, "b": 10},
-            coloraxis_showscale=False,
-            yaxis={"categoryorder": "total ascending"},
-        )
-        st.plotly_chart(fig_programs, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-    st.subheader("Propojení škola × obor a zájem o učitelské předměty")
-    col6, col7 = st.columns([1.5, 1])
-
-    with col6:
-        top_program_labels = programs["Obor"].value_counts().head(6).index.tolist()
-        heatmap_data = programs[programs["Obor"].isin(top_program_labels)].pivot_table(
-            index=SCHOOL_COL,
-            columns="Obor",
-            values=VISITOR_COL,
-            aggfunc="count",
-            fill_value=0,
-        )
-        if heatmap_data.empty:
-            st.info("Pro heatmapu nejsou po filtraci k dispozici data.")
+    with st.container(border=True):
+        st.subheader("Návštěvnost v čase")
+        timeline = data.groupby("time_slot", as_index=False).size().rename(columns={"size": "Počet návštěvníků"})
+        if timeline.empty:
+            st.info("Pro vybrané filtry nejsou data o návštěvnosti.")
         else:
-            fig_heatmap = px.imshow(
-                heatmap_data,
-                labels={"x": "Obor", "y": "Škola", "color": "Počet"},
-                text_auto=True,
-                aspect="auto",
-                color_continuous_scale=PRF_HEATMAP,
+            timeline = timeline.sort_values("time_slot")
+            fig_time = px.area(
+                timeline,
+                x="time_slot",
+                y="Počet návštěvníků",
+                markers=True,
+                template="plotly_white",
+                color_discrete_sequence=[PRF_SECONDARY],
             )
-            fig_heatmap.update_layout(height=360, margin={"l": 10, "r": 10, "t": 10, "b": 10})
-            st.plotly_chart(fig_heatmap, use_container_width=True)
+            fig_time.update_layout(
+                xaxis_title="Čas",
+                yaxis_title="Počet návštěvníků",
+                margin={"l": 10, "r": 10, "t": 10, "b": 10},
+                height=320,
+            )
+            _show_plot(fig_time)
 
-    with col7:
-        if subjects.empty:
-            st.info("U učitelských oborů zatím nejsou po filtraci dostupné předměty.")
-        else:
-            subject_counts = subjects["Předmět"].value_counts().reset_index()
-            subject_counts.columns = ["Předmět", "Počet"]
-            fig_subjects = px.bar(
-                subject_counts,
+    with st.container(border=True):
+        st.subheader("Struktura návštěvníků")
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            gender_counts = data[GENDER_COL].value_counts().reset_index()
+            gender_counts.columns = ["Pohlaví", "Počet"]
+            fig_gender = px.bar(
+                gender_counts,
+                x="Pohlaví",
+                y="Počet",
+                template="plotly_white",
+                color="Pohlaví",
+                color_discrete_sequence=PRF_PALETTE,
+            )
+            fig_gender.update_layout(showlegend=False, height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10})
+            _show_plot(fig_gender)
+
+        with col2:
+            city_counts = data[CITY_COL].value_counts().reset_index()
+            city_counts.columns = ["Místo bydliště", "Počet"]
+            fig_city = px.bar(
+                city_counts,
                 x="Počet",
-                y="Předmět",
+                y="Místo bydliště",
                 orientation="h",
                 template="plotly_white",
                 color="Počet",
                 color_continuous_scale=PRF_CONTINUOUS,
             )
-            fig_subjects.update_layout(
+            fig_city.update_layout(
+                height=320,
+                margin={"l": 10, "r": 10, "t": 10, "b": 10},
+                coloraxis_showscale=False,
+            )
+            _show_plot(fig_city)
+
+        with col3:
+            school_counts = data[SCHOOL_COL].value_counts().reset_index()
+            school_counts.columns = ["Studovaná škola", "Počet"]
+            fig_school = px.bar(
+                school_counts,
+                x="Studovaná škola",
+                y="Počet",
+                template="plotly_white",
+                color="Studovaná škola",
+                color_discrete_sequence=PRF_PALETTE,
+            )
+            fig_school.update_layout(showlegend=False, height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10})
+            _show_plot(fig_school)
+
+    with st.container(border=True):
+        st.subheader("Zdroje informací a zájem o obory")
+        col4, col5 = st.columns([1.15, 1.85])
+
+        with col4:
+            source_counts = data["source_group"].value_counts().reset_index()
+            source_counts.columns = ["Zdroj", "Počet"]
+            fig_source = px.pie(
+                source_counts,
+                names="Zdroj",
+                values="Počet",
+                hole=0.5,
+                template="plotly_white",
+                color_discrete_sequence=PRF_PALETTE,
+            )
+            fig_source.update_layout(height=360, margin={"l": 10, "r": 10, "t": 10, "b": 10})
+            _show_plot(fig_source)
+
+        with col5:
+            program_counts = programs["Obor"].value_counts().head(10).reset_index()
+            program_counts.columns = ["Obor", "Počet"]
+            fig_programs = px.bar(
+                program_counts,
+                x="Počet",
+                y="Obor",
+                orientation="h",
+                template="plotly_white",
+                color="Počet",
+                color_continuous_scale=PRF_CONTINUOUS,
+            )
+            fig_programs.update_layout(
                 height=360,
                 margin={"l": 10, "r": 10, "t": 10, "b": 10},
                 coloraxis_showscale=False,
                 yaxis={"categoryorder": "total ascending"},
             )
-            st.plotly_chart(fig_subjects, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+            _show_plot(fig_programs)
 
-    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-    st.subheader("Highlights: Co je pro uchazeče důležité při výběru školy")
-    keywords = extract_keywords(data[IMPORTANT_COL], limit=40)
-    col8, col9 = st.columns([1.45, 1])
+    with st.container(border=True):
+        st.subheader("Propojení škola × obor a zájem o učitelské předměty")
+        col6, col7 = st.columns([1.5, 1])
 
-    with col8:
-        fig_cloud = build_wordcloud_figure(keywords)
-        st.plotly_chart(fig_cloud, use_container_width=True)
-
-    with col9:
-        if keywords.empty:
-            st.info("Po filtraci nejsou dostupná slova pro žebříček.")
-        else:
-            top_keywords = keywords.head(15)
-            fig_keywords = px.bar(
-                top_keywords,
-                x="count",
-                y="keyword",
-                orientation="h",
-                template="plotly_white",
-                color="count",
-                color_continuous_scale=PRF_CONTINUOUS,
+        with col6:
+            top_program_labels = programs["Obor"].value_counts().head(6).index.tolist()
+            heatmap_data = programs[programs["Obor"].isin(top_program_labels)].pivot_table(
+                index=SCHOOL_COL,
+                columns="Obor",
+                values=VISITOR_COL,
+                aggfunc="count",
+                fill_value=0,
             )
-            fig_keywords.update_layout(
-                height=420,
-                margin={"l": 10, "r": 10, "t": 10, "b": 10},
-                coloraxis_showscale=False,
-                xaxis_title="Frekvence",
-                yaxis_title="Klíčové slovo",
-                yaxis={"categoryorder": "total ascending"},
-            )
-            st.plotly_chart(fig_keywords, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+            if heatmap_data.empty:
+                st.info("Pro heatmapu nejsou po filtraci k dispozici data.")
+            else:
+                fig_heatmap = px.imshow(
+                    heatmap_data,
+                    labels={"x": "Obor", "y": "Škola", "color": "Počet"},
+                    text_auto=True,
+                    aspect="auto",
+                    color_continuous_scale=PRF_HEATMAP,
+                )
+                fig_heatmap.update_layout(height=360, margin={"l": 10, "r": 10, "t": 10, "b": 10})
+                _show_plot(fig_heatmap)
+
+        with col7:
+            if subjects.empty:
+                st.info("U učitelských oborů zatím nejsou po filtraci dostupné předměty.")
+            else:
+                subject_counts = subjects["Předmět"].value_counts().reset_index()
+                subject_counts.columns = ["Předmět", "Počet"]
+                fig_subjects = px.bar(
+                    subject_counts,
+                    x="Počet",
+                    y="Předmět",
+                    orientation="h",
+                    template="plotly_white",
+                    color="Počet",
+                    color_continuous_scale=PRF_CONTINUOUS,
+                )
+                fig_subjects.update_layout(
+                    height=360,
+                    margin={"l": 10, "r": 10, "t": 10, "b": 10},
+                    coloraxis_showscale=False,
+                    yaxis={"categoryorder": "total ascending"},
+                )
+                _show_plot(fig_subjects)
+
+    with st.container(border=True):
+        st.subheader("Highlights: Co je pro uchazeče důležité při výběru školy")
+        keywords = extract_keywords(data[IMPORTANT_COL], limit=40)
+        col8, col9 = st.columns([1.45, 1])
+
+        with col8:
+            fig_cloud = build_wordcloud_figure(keywords)
+            _show_plot(fig_cloud)
+
+        with col9:
+            if keywords.empty:
+                st.info("Po filtraci nejsou dostupná slova pro žebříček.")
+            else:
+                top_keywords = keywords.head(15)
+                fig_keywords = px.bar(
+                    top_keywords,
+                    x="count",
+                    y="keyword",
+                    orientation="h",
+                    template="plotly_white",
+                    color="count",
+                    color_continuous_scale=PRF_CONTINUOUS,
+                )
+                fig_keywords.update_layout(
+                    height=420,
+                    margin={"l": 10, "r": 10, "t": 10, "b": 10},
+                    coloraxis_showscale=False,
+                    xaxis_title="Frekvence",
+                    yaxis_title="Klíčové slovo",
+                    yaxis={"categoryorder": "total ascending"},
+                )
+                _show_plot(fig_keywords)
 
 
 def render_fun_section(data: pd.DataFrame) -> None:
-    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-    st.subheader("Doplňková sekce: vtipné sloupce")
-    col1, col2 = st.columns(2)
+    with st.container(border=True):
+        st.subheader("Doplňková sekce: vtipné sloupce")
+        col1, col2 = st.columns(2)
 
-    with col1:
-        valid_shoe_sizes = data[data[SHOE_COL].between(30, 55, inclusive="both")].copy()
-        if valid_shoe_sizes.empty:
-            st.info("Po filtraci nejsou dostupná validní data pro číslo obuvi.")
-        else:
-            fig_shoes = px.histogram(
-                valid_shoe_sizes,
-                x=SHOE_COL,
-                nbins=15,
+        with col1:
+            valid_shoe_sizes = data[data[SHOE_COL].between(30, 55, inclusive="both")].copy()
+            if valid_shoe_sizes.empty:
+                st.info("Po filtraci nejsou dostupná validní data pro číslo obuvi.")
+            else:
+                fig_shoes = px.histogram(
+                    valid_shoe_sizes,
+                    x=SHOE_COL,
+                    nbins=15,
+                    template="plotly_white",
+                    color_discrete_sequence=[PRF_SECONDARY],
+                )
+                fig_shoes.update_layout(
+                    height=320,
+                    margin={"l": 10, "r": 10, "t": 10, "b": 10},
+                    xaxis_title="Číslo obuvi",
+                    yaxis_title="Počet návštěvníků",
+                )
+                _show_plot(fig_shoes)
+
+        with col2:
+            pet_counts = data["pet_group"].value_counts().reset_index()
+            pet_counts.columns = ["Preference", "Počet"]
+            fig_pets = px.pie(
+                pet_counts,
+                names="Preference",
+                values="Počet",
+                hole=0.38,
                 template="plotly_white",
-                color_discrete_sequence=[PRF_SECONDARY],
+                color_discrete_sequence=PRF_PALETTE,
             )
-            fig_shoes.update_layout(
-                height=320,
-                margin={"l": 10, "r": 10, "t": 10, "b": 10},
-                xaxis_title="Číslo obuvi",
-                yaxis_title="Počet návštěvníků",
-            )
-            st.plotly_chart(fig_shoes, use_container_width=True)
-
-    with col2:
-        pet_counts = data["pet_group"].value_counts().reset_index()
-        pet_counts.columns = ["Preference", "Počet"]
-        fig_pets = px.pie(
-            pet_counts,
-            names="Preference",
-            values="Počet",
-            hole=0.38,
-            template="plotly_white",
-            color_discrete_sequence=PRF_PALETTE,
-        )
-        fig_pets.update_layout(height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10})
-        st.plotly_chart(fig_pets, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+            fig_pets.update_layout(height=320, margin={"l": 10, "r": 10, "t": 10, "b": 10})
+            _show_plot(fig_pets)
 
 
 def render_data_preview(data: pd.DataFrame, mode: str) -> None:
@@ -337,7 +336,4 @@ def render_data_preview(data: pd.DataFrame, mode: str) -> None:
 
 
 def render_footer_note() -> None:
-    st.markdown(
-        '<p class="note"><b>Poznámka:</b> Všechny grafy jsou propojené přes společné filtry v levém panelu.</p>',
-        unsafe_allow_html=True,
-    )
+    st.caption("Poznámka: Všechny grafy jsou propojené přes společné filtry v levém panelu.")

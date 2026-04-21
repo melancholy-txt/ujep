@@ -11,7 +11,6 @@ from .sections import (
     render_kpis,
     render_relevant_section,
 )
-from .styles import inject_styles
 
 
 def run_dashboard() -> None:
@@ -23,7 +22,6 @@ def run_dashboard() -> None:
         initial_sidebar_state="expanded",
     )
 
-    inject_styles()
     render_header()
 
     data = load_data()
