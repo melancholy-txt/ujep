@@ -34,3 +34,6 @@ venv/
 *.dbmdl
 TestResults/
 OPR/17-12/.~lock.data.csv#
+
+# buggy react gui project
+GUI/ReactTailwind/
