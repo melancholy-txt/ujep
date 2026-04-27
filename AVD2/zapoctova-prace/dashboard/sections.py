@@ -77,7 +77,8 @@ def render_kpis(data: pd.DataFrame, programs: pd.DataFrame) -> None:
 def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects: pd.DataFrame) -> None:
     with st.container(border=True):
         st.subheader("Návštěvnost v čase")
-        timeline = data.groupby("time_slot", as_index=False).size().rename(columns={"size": "Počet návštěvníků"})
+        tldata = data.loc[pd.to_datetime(data[TIME_COL], errors="coerce").dt.day.eq(12)].copy()
+        timeline = tldata.groupby("time_slot", as_index=False).size().rename(columns={"size": "Počet návštěvníků"})
         if timeline.empty:
             st.info("Pro vybrané filtry nejsou data o návštěvnosti.")
         else:
@@ -239,7 +240,7 @@ def render_relevant_section(data: pd.DataFrame, programs: pd.DataFrame, subjects
     with st.container(border=True):
         st.subheader("Highlights: Co je pro uchazeče důležité při výběru školy")
         keywords = extract_keywords(data[IMPORTANT_COL], limit=40)
-        col8, col9 = st.columns([1.45, 1])
+        col8, col9 = st.columns([1.9, 0.9])
 
         with col8:
             fig_cloud = build_wordcloud_figure(keywords)
@@ -332,6 +333,7 @@ def render_data_preview(data: pd.DataFrame, mode: str) -> None:
         else:
             preview_columns = list(dict.fromkeys(relevant_columns + fun_columns))
 
+        preview_columns = [column for column in preview_columns if column in data.columns]
         st.dataframe(data[preview_columns], use_container_width=True, hide_index=True)
 
 

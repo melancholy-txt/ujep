@@ -3,7 +3,43 @@ import re
 
 import pandas as pd
 
-from .constants import PROGRAM_TEACHING, STOPWORDS_CZ
+from .constants import PROGRAM_TEACHING, PROGRAM_TEACHING_RAW, STOPWORDS_CZ
+
+KEYWORD_ALIASES = {
+    "obor": "obor",
+    "oboru": "obor",
+    "oborem": "obor",
+    "oborech": "obor",
+    "obory": "obor",
+    "oborů": "obor",
+    "oborům": "obor",
+    "možnost": "možnost",
+    "možnosti": "možnost",
+    "možností": "možnost",
+    "možnostem": "možnost",
+    "možnostmi": "možnost",
+}
+
+KEYWORD_STOPWORDS = STOPWORDS_CZ | {
+    "abych",
+    "abys",
+    "abychom",
+    "abyste",
+    "studia",
+    "studiu",
+    "studiem",
+    "studii",
+    "výuka",
+    "výuku",
+    "výuky",
+    "výuce",
+    "výukou",
+    "vyuka",
+    "vyuku",
+    "vyuky",
+    "vyuce",
+    "vyukou",
+}
 
 
 def clean_spaces(value: str) -> str:
@@ -20,8 +56,8 @@ def split_programs(value: object) -> list[str]:
     if not text:
         return []
 
-    text = text.replace(f'"{PROGRAM_TEACHING}"', PROGRAM_TEACHING)
-    text = text.replace(PROGRAM_TEACHING, "__TEACHING__")
+    text = text.replace(f'"{PROGRAM_TEACHING_RAW}"', PROGRAM_TEACHING_RAW)
+    text = text.replace(PROGRAM_TEACHING_RAW, "__TEACHING__")
 
     programs = []
     for raw_part in text.split(","):
@@ -56,11 +92,16 @@ def extract_keywords(text_series: pd.Series, limit: int = 35) -> pd.DataFrame:
     raw_text = re.sub(r"[\d_]", " ", raw_text)
 
     tokens = [clean_spaces(token) for token in raw_text.split(" ")]
-    words = [
-        token
-        for token in tokens
-        if len(token) >= 3 and token not in STOPWORDS_CZ and not token.isdigit()
-    ]
+    words = []
+    for token in tokens:
+        if len(token) < 3 or token.isdigit():
+            continue
+
+        token = KEYWORD_ALIASES.get(token, token)
+        if token in KEYWORD_STOPWORDS:
+            continue
+
+        words.append(token)
 
     counts = Counter(words)
     if not counts:

@@ -9,6 +9,7 @@ from .constants import (
     PET_COL,
     PROGRAM_COL,
     PROGRAM_TEACHING,
+    PROGRAM_TEACHING_RAW,
     SCHOOL_COL,
     SHOE_COL,
     SOURCE_COL,
@@ -42,8 +43,8 @@ def normalize_source(value: object) -> str:
         "Doporučil mi kamarád": "Doporučení",
         "Jinde": "Jinde",
     }
-    # return mapping.get(text, text)
-    return text
+    return mapping.get(text, text)
+    # return text
 
 
 def normalize_pet(value: object) -> str:
@@ -91,6 +92,13 @@ def load_data() -> pd.DataFrame:
     data[SCHOOL_COL] = data[SCHOOL_COL].apply(normalize_school)
     data["source_group"] = data[SOURCE_COL].apply(normalize_source)
     data["pet_group"] = data[PET_COL].apply(normalize_pet)
+    data[PROGRAM_COL] = (
+        data[PROGRAM_COL]
+        .fillna("")
+        .astype(str)
+        .str.replace(PROGRAM_TEACHING_RAW, PROGRAM_TEACHING, regex=False)
+        .apply(clean_spaces)
+    )
 
     data["program_list"] = data[PROGRAM_COL].apply(split_programs)
     data["subject_list"] = data[SUBJECT_COL].apply(split_simple_list)

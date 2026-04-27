@@ -18,18 +18,18 @@ def build_wordcloud_figure(keyword_df: pd.DataFrame) -> go.Figure:
         fig.update_layout(height=420, margin={"l": 0, "r": 0, "t": 0, "b": 0})
         return fig
 
-    top_words = keyword_df.head(32).copy()
+    top_words = keyword_df.head(22).copy()
     top_words = top_words.sort_values("count", ascending=False).reset_index(drop=True)
 
     count_min = float(top_words["count"].min())
     count_max = float(top_words["count"].max())
     if count_min == count_max:
-        sizes = np.full(len(top_words), 34.0)
+        sizes = np.full(len(top_words), 30.0)
     else:
-        sizes = np.interp(top_words["count"], (count_min, count_max), (18, 54))
+        sizes = np.interp(top_words["count"], (count_min, count_max), (16, 42))
 
     angles = np.linspace(0, 8 * np.pi, len(top_words), endpoint=False)
-    radii = np.linspace(0.03, 0.44, len(top_words))
+    radii = np.linspace(0.08, 0.47, len(top_words))
     x_coords = 0.5 + radii * np.cos(angles)
     y_coords = 0.5 + radii * np.sin(angles)
 

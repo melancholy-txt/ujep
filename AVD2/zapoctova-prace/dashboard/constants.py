@@ -12,7 +12,8 @@ SHOE_COL = "Číslo obuvi"
 PET_COL = "Kočka nebo pes?"
 TIME_COL = "Čas hlasování"
 
-PROGRAM_TEACHING = "Učitelství (obory pro vzdělávání, učitelství pro SŠ)"
+PROGRAM_TEACHING = "Učitelství"
+PROGRAM_TEACHING_RAW = "Učitelství (obory pro vzdělávání, učitelství pro SŠ)"
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT_DIR / "data" / "DOD_2026_data.csv"
