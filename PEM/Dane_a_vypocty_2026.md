@@ -18,12 +18,11 @@ size: 16:9
 Pro informatiky jsou klíčové dvě hlavní skupiny daní:
 
 1.  **Daně přímé** (odvádí poplatník ze svých příjmů)
-    *   Daně z příjmů (DPFO - fyzické osoby, DPPO - právnické osoby)
-    *   Daň z nemovitých věcí, Silniční daň (pro podnikatele)
-    
+    - Daně z příjmů (DPFO - fyzické osoby, DPPO - právnické osoby)
+    - Daň z nemovitých věcí, Silniční daň (pro podnikatele)
 2.  **Daně nepřímé** (vybírány v cenách zboží a služeb)
-    *   **DPH** (Daň z přidané hodnoty)
-    *   Spotřební daně (líh, tabák, paliva)
+    - **DPH** (Daň z přidané hodnoty)
+    - Spotřební daně (líh, tabák, paliva)
 
 **Důležité:** Od roku 2026 došlo k zásadní reformě! Registrační práh se snížil z 2 mil. Kč na **1,75 mil. Kč**.
 
@@ -33,7 +32,7 @@ Pro informatiky jsou klíčové dvě hlavní skupiny daní:
 
 Nejdůležitější daň pro podnikání v IT (nákup HW, prodej služeb/licencí).
 
-*   **Princip:** Podnikatel odvede státu rozdíl mezi DPH, kterou vybral od zákazníků (výstup), a DPH, kterou zaplatil dodavatelům (vstup).
+- **Princip:** Podnikatel odvede státu rozdíl mezi DPH, kterou vybral od zákazníků (výstup), a DPH, kterou zaplatil dodavatelům (vstup).
 
 ### Sazby
 *   **Základní 21%:** Většina zboží, IT služby, software, konzultace.
@@ -41,6 +40,7 @@ Nejdůležitější daň pro podnikání v IT (nákup HW, prodej služeb/licenc�
 *   **Super-snížená 10%:** Vybrané zdravotnické služby, zdravotnické pomůcky.
 
 ### Kdy se musíte registrovat?
+
 Povinně, pokud obrat překročí **1 750 000 Kč** za 12 po sobě jdoucích měsíců.
 
 ---
@@ -81,12 +81,12 @@ $$ \text{Hruba mzda} - \text{Socialni} - \text{Zdravotni} - \text{Dan (po slevac
 **Hrubá mzda:** 50 000 Kč
 
 1.  **Pojištění (strhává se zaměstnanci):**
-    *   Soc: $50\,000 \times 0,092 = 4\,600 \text{ Kč}$
-    *   Zdr: $50\,000 \times 0,045 = 2\,250 \text{ Kč}$
+    - Soc: $50\,000 \times 0,092 = 4\,600 \text{ Kč}$
+    - Zdr: $50\,000 \times 0,045 = 2\,250 \text{ Kč}$
 2.  **Výpočet Daně (záloha):**
-    *   Hrubá daň: $50\,000 \times 0,15 = 7\,500 \text{ Kč}$
-    *   Sleva na poplatníka (základní): cca 2 600 Kč
-    *   Daň po slevě: $7\,500 - 2\,600 = 4\,900 \text{ Kč}$
+    - Hrubá daň: $50\,000 \times 0,15 = 7\,500 \text{ Kč}$
+    - Sleva na poplatníka (základní): cca 2 600 Kč
+    - Daň po slevě: $7\,500 - 2\,600 = 4\,900 \text{ Kč}$
 3.  **Čistá mzda:**
     $50\,000 - 4\,600 - 2\,250 - 4\,900 = \mathbf{38\,250 \text{ Kč}}$
 
@@ -136,6 +136,7 @@ IT specialista (OSVČ) má 3 hlavní režimy zdanění:
 ---
 
 # DPPO: Daň z příjmů právnických osob (s.r.o.)
+# DPPO: Daň z příjmů právnických osob (s.r.o.)
 
 Pokud založíte **s.r.o.** (startup, softwarová firma):
 
@@ -147,14 +148,16 @@ Pokud založíte **s.r.o.** (startup, softwarová firma):
 # DPPO: Daň z příjmů právnických osob (s.r.o.)
 
 ### Výhody s.r.o.:
-*   Omezené ručení (limitované riziko)
-*   Možnost opakovaného využití firmy (na rozdíl od OSVČ, která je vázána na fyzickou osobu)
-*   Prestiž, lepší podmínky u bank
+
+- Omezené ručení (limitované riziko)
+- Možnost opakovaného využití firmy (na rozdíl od OSVČ, která je vázána na fyzickou osobu)
+- Prestiž, lepší podmínky u bank
 
 ### Nevýhody:
-*   **Dvojí zdanění:** Zisky jsou zdaněny na úrovni s.r.o. (19%), pak když si je vyplatíte jako majitel, zdaní se znovu (15% srážková daň na podíly)
-*   Povinná účetnictví (dražší administrativu)
-*   Registr rejstříku, notář (~5 000 Kč na začátku)
+
+- **Dvojí zdanění:** Zisky jsou zdaněny na úrovni s.r.o. (19%), pak když si je vyplatíte jako majitel, zdaní se znovu (15% srážková daň na podíly)
+- Povinná účetnictví (dražší administrativu)
+- Registr rejstříku, notář (~5 000 Kč na začátku)
 
 ---
 
@@ -168,6 +171,7 @@ Pokud založíte **s.r.o.** (startup, softwarová firma):
 | **>1,75 mil** | OSVČ nebo s.r.o. | závisí na struktuře |
 
 ### 2. Timing DPH registrace
+
 - **Před 1,75 mil. Kč:** Není DPH povinný → nákupy jsou finální náklad
 - **Po 1,75 mil. Kč:** Povinný DPH → vrátí si DPH za nákupy
 
@@ -184,14 +188,14 @@ Pokud založíte **s.r.o.** (startup, softwarová firma):
 
 ### Scénář: Nový IT specialista s příjmem 60k Kč/měsíc = 720k Kč/rok
 
-| Aspekt | **Zaměstnanec** | **OSVČ (60% paušál)** | **s.r.o.** |
-| :--- | :--- | :--- | :--- |
-| **Hrubý příjem** | 60 000 | 60 000 | 60 000 |
-| **Daň + pojištění** | ~15 000 | ~5 500 | ~11 400 (daň 19%) |
-| **Čistý příjem** | ~45 000 | ~54 500 | ~48 600 |
-| **Administrativa** | Nula | Minimální | Výrazná |
-| **Riziko** | Zaměstnavatel nese | Já neru | Omezené |
-| **Flexibilita** | Nula | Vysoká | Střední |
+| Aspekt              | **Zaměstnanec**    | **OSVČ (60% paušál)** | **s.r.o.**        |
+| :------------------ | :----------------- | :-------------------- | :---------------- |
+| **Hrubý příjem**    | 60 000             | 60 000                | 60 000            |
+| **Daň + pojištění** | ~15 000            | ~5 500                | ~11 400 (daň 19%) |
+| **Čistý příjem**    | ~45 000            | ~54 500               | ~48 600           |
+| **Administrativa**  | Nula               | Minimální             | Výrazná           |
+| **Riziko**          | Zaměstnavatel nese | Já neru               | Omezené           |
+| **Flexibilita**     | Nula               | Vysoká                | Střední           |
 
 **Vítěz pro tuto výši příjmu:** OSVČ s paušálními výdaji (54 500 Kč čistého)!
 
@@ -199,14 +203,14 @@ Pokud založíte **s.r.o.** (startup, softwarová firma):
 
 # Daňový kalendář pro rok 2026
 
-| Termín | Co dělat? |
-| :--- | :--- |
-| **Každý měsíc** | Zaplatit sociální a zdravotní pojištění (OSVČ) |
-| **Každý měsíc** | Nákup HW/služeb se DPH (pokud jsi plátce) |
-| **Konec února** | Podání daňového přiznání za předchozí rok |
-| **Konec března** | Úhrada zbytku daně (pokud je splatná) |
-| **Průběžně** | Kontrolovat obrat (je-li pod/nad 1,75 mil. Kč) |
-| **Prosinci** | Plánovat optimalizaci na příští rok |
+| Termín           | Co dělat?                                      |
+| :--------------- | :--------------------------------------------- |
+| **Každý měsíc**  | Zaplatit sociální a zdravotní pojištění (OSVČ) |
+| **Každý měsíc**  | Nákup HW/služeb se DPH (pokud jsi plátce)      |
+| **Konec února**  | Podání daňového přiznání za předchozí rok      |
+| **Konec března** | Úhrada zbytku daně (pokud je splatná)          |
+| **Průběžně**     | Kontrolovat obrat (je-li pod/nad 1,75 mil. Kč) |
+| **Prosinci**     | Plánovat optimalizaci na příští rok            |
 
 
 
