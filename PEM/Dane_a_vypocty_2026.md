@@ -136,7 +136,6 @@ IT specialista (OSVČ) má 3 hlavní režimy zdanění:
 ---
 
 # DPPO: Daň z příjmů právnických osob (s.r.o.)
-# DPPO: Daň z příjmů právnických osob (s.r.o.)
 
 Pokud založíte **s.r.o.** (startup, softwarová firma):
 
@@ -206,11 +205,11 @@ Pokud založíte **s.r.o.** (startup, softwarová firma):
 | Termín           | Co dělat?                                      |
 | :--------------- | :--------------------------------------------- |
 | **Každý měsíc**  | Zaplatit sociální a zdravotní pojištění (OSVČ) |
-| **Každý měsíc**  | Nákup HW/služeb se DPH (pokud jsi plátce)      |
+| **Každý měsíc**  | Nákup HW/služeb s DPH (pokud jsi plátce)      |
 | **Konec února**  | Podání daňového přiznání za předchozí rok      |
 | **Konec března** | Úhrada zbytku daně (pokud je splatná)          |
 | **Průběžně**     | Kontrolovat obrat (je-li pod/nad 1,75 mil. Kč) |
-| **Prosinci**     | Plánovat optimalizaci na příští rok            |
+| **Prosinec**     | Plánovat optimalizaci na příští rok            |
 
 
 
