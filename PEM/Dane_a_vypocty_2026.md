@@ -24,7 +24,7 @@ Pro informatiky jsou klíčové dvě hlavní skupiny daní:
     - **DPH** (Daň z přidané hodnoty)
     - Spotřební daně (líh, tabák, paliva)
 
-**Důležité:** Od roku 2026 došlo k zásadní reformě! Registrační práh se snížil z 2 mil. Kč na **1,75 mil. Kč**.
+**Důležité:** Registrační práh pro povinné plátcovství DPH je **2 mil. Kč**.
 
 ---
 
@@ -41,7 +41,7 @@ Nejdůležitější daň pro podnikání v IT (nákup HW, prodej služeb/licenc�
 
 ### Kdy se musíte registrovat?
 
-Povinně, pokud obrat překročí **1 750 000 Kč** za 12 po sobě jdoucích měsíců.
+Povinně, pokud obrat překročí **2 000 000 Kč** za 12 po sobě jdoucích měsíců.
 
 ---
 
@@ -103,8 +103,8 @@ IT specialista (OSVČ) má 3 hlavní režimy zdanění:
     *   Super-jednoduché!
 3.  **Paušální daň (Flat Tax) - nový režim:**
     *   Jedna platba měsíčně zahrnuje daň, zdrav. i soc. pojištění.
-    *   **0 Kč pro příjmy do 400 000 Kč ročně** (nová hranice!)
-    *   Pak postupně: 5 472 Kč → 32 832 Kč (podle příjmů).
+    *   **Pro rok 2026 není varianta 0 Kč** (ani při nižších příjmech).
+    *   Měsíční částky: **I. pásmo 9 984 Kč, II. pásmo 16 745 Kč, III. pásmo 27 139 Kč**.
 
 ---
 
@@ -127,11 +127,11 @@ IT specialista (OSVČ) má 3 hlavní režimy zdanění:
 **Příjem z IT projektu:** 100 000 Kč
 
 ### Režim B: Paušální daň
-- Měsíční platba (příjem 100k/měsíc = 1,2 mil./rok): cca **11 000 Kč** (vše zahrnuto!)
+- Měsíční platba je podle pásma: **9 984 / 16 745 / 27 139 Kč** (vše zahrnuto)
 - Veškerá administrativa zautomatizovaná
 - Žádné vedení účetnictví
 
-**Pro 100k/měsíc:** Paušální daň (11k vs. 6k daň + pojištění)! (o asi ~700 Kč lol)
+**Pro 100k/měsíc:** výhodnost je nutné spočítat individuálně podle pásma a struktury příjmů.
 
 ---
 
@@ -165,14 +165,14 @@ Pokud založíte **s.r.o.** (startup, softwarová firma):
 ### 1. Výběr správného právního režimu
 | Příjem/rok | Nejlepší volba | Čistý zisk (%) |
 | :--- | :--- | :--- |
-| **0–400 k Kč** | Paušální daň OSVČ | 100% (0 Kč daň!) |
-| **400k–1,75 mil** | OSVČ (paušál 60%) | ~75–80% |
-| **>1,75 mil** | OSVČ nebo s.r.o. | závisí na struktuře |
+| **Do 1,5 mil. Kč** | Paušální daň OSVČ (I. pásmo) | Jednotná platba 9 984 Kč/měs. |
+| **1,5–2,0 mil. Kč** | OSVČ (paušál 60%) | ~75–80% |
+| **>2,0 mil** | OSVČ nebo s.r.o. | závisí na struktuře |
 
 ### 2. Timing DPH registrace
 
-- **Před 1,75 mil. Kč:** Není DPH povinný → nákupy jsou finální náklad
-- **Po 1,75 mil. Kč:** Povinný DPH → vrátí si DPH za nákupy
+- **Před 2,0 mil. Kč:** Není DPH povinný → nákupy jsou finální náklad
+- **Po 2,0 mil. Kč:** Povinný DPH → vrátí si DPH za nákupy
 
 **Dobrá praxe:** Sledovat obrat před dosažením prahu a včas se zaregistrovat!
 
@@ -208,7 +208,7 @@ Pokud založíte **s.r.o.** (startup, softwarová firma):
 | **Každý měsíc**  | Nákup HW/služeb s DPH (pokud jsi plátce)      |
 | **Konec února**  | Podání daňového přiznání za předchozí rok      |
 | **Konec března** | Úhrada zbytku daně (pokud je splatná)          |
-| **Průběžně**     | Kontrolovat obrat (je-li pod/nad 1,75 mil. Kč) |
+| **Průběžně**     | Kontrolovat obrat (je-li pod/nad 2,0 mil. Kč) |
 | **Prosinec**     | Plánovat optimalizaci na příští rok            |
 
 
@@ -219,11 +219,11 @@ Pokud založíte **s.r.o.** (startup, softwarová firma):
 
 | Metrika | Hodnota |
 | :--- | :--- |
-| **DPH - Standardní sazba** | 21% od **1 750 000 Kč**|
+| **DPH - Standardní sazba** | 21% od **2 000 000 Kč**|
 | **DPFO (zaměstnanec)** | 15% |
 | **DPPO (s.r.o.)** | 19% |
 | **OSVČ - Paušální výdaje (IT)** | 60% |
-| **OSVČ - Paušální daň (do 400k)** | **0 Kč**|
+| **OSVČ - Paušální daň 2026 (I. pásmo)** | **9 984 Kč / měsíc** |
 | **Sociální pojištění zaměstnance** | 9,2% |
 | **Zdravotní pojištění zaměstnance** | 4,5% |
 | **Minimální měsíční pojištění OSVČ** | ~5 821 Kč |
