@@ -58,7 +58,8 @@ def apply_filters(
     filters: dict[str, object],
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     # start_time, end_time = filters["time_range"]
-    mask = (data[TIME_COL] >= pd.Timestamp(start_time)) & (data[TIME_COL] <= pd.Timestamp(end_time))
+    # mask = (data[TIME_COL] >= pd.Timestamp(start_time)) & (data[TIME_COL] <= pd.Timestamp(end_time))
+    mask = pd.Series(True, index=data.index)
 
     for column_name, selected_values in (
         (GENDER_COL, filters["genders"]),
