@@ -36,7 +36,7 @@ def build_sidebar_filters(
 
     filters = {
         "mode": mode,
-        "time_range": time_range,
+        # "time_range": time_range,
         "genders": st.sidebar.multiselect("Pohlaví", genders, default=genders),
         "cities": st.sidebar.multiselect("Místo bydliště", cities, default=cities),
         "schools": st.sidebar.multiselect("Studovaná škola", schools, default=schools),
@@ -57,7 +57,7 @@ def apply_filters(
     subject_table: pd.DataFrame,
     filters: dict[str, object],
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    start_time, end_time = filters["time_range"]
+    # start_time, end_time = filters["time_range"]
     mask = (data[TIME_COL] >= pd.Timestamp(start_time)) & (data[TIME_COL] <= pd.Timestamp(end_time))
 
     for column_name, selected_values in (
