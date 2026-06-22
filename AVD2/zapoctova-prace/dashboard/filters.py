@@ -17,15 +17,15 @@ def build_sidebar_filters(
         index=0,
     )
 
-    min_time = data[TIME_COL].min().to_pydatetime()
-    max_time = data[TIME_COL].max().to_pydatetime()
-    time_range = st.sidebar.slider(
-        "Čas návštěvy",
-        min_value=min_time,
-        max_value=max_time,
-        value=(min_time, max_time),
-        format="HH:mm",
-    )
+    # min_time = data[TIME_COL].min().to_pydatetime()
+    # max_time = data[TIME_COL].max().to_pydatetime()
+    # time_range = st.sidebar.slider(
+    #     "Čas návštěvy",
+    #     min_value=min_time,
+    #     max_value=max_time,
+    #     value=(min_time, max_time),
+    #     format="HH:mm",
+    # )
 
     genders = sorted(data[GENDER_COL].dropna().unique().tolist())
     cities = sorted(data[CITY_COL].dropna().unique().tolist())
